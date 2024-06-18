@@ -5,7 +5,10 @@ function App() {
   return (
     <div>
       <Button variant="contained" color="primary">
-        Hello World
+        프라이머리 Button
+      </Button>
+      <Button variant="contained" color="secondary">
+        세컨더리 Button
       </Button>
       <Icon>add_circle</Icon>
     </div>
