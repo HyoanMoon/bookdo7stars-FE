@@ -1,7 +1,8 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 
-const PrivateRoute = () => {
-  return <div>PrivateRoute 내용 추가</div>;
+const PrivateRoute = ({ permissionLevel }) => {
+  return <Outlet />;
 };
 
 export default PrivateRoute;
