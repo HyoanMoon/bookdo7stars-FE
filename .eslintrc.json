@@ -36,6 +36,7 @@
       }
     ],
     "import/no-unresolved": "error",
+    "import/no-extraneous-dependencies": "off",
     "import/named": "off",
     "no-undef": "off"
   }

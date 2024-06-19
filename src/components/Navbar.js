@@ -18,7 +18,7 @@ function NavBar() {
     <div>
       {/*<CssBaseline />*/}
       <AppBar
-        position="statiic"
+        position="static"
         sx={{ top: 0, backgroundColor: '#fff', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <Box>
           <h2 style={{ color: 'black' }}>로고 이미지</h2>
