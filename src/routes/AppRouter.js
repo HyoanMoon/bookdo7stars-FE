@@ -38,8 +38,8 @@ const AppRouter = () => {
             <Route path="/success" element={<OrderCompletePage />} />
           </Route>
           <Route path="/account">
-            <Route path="/myShopping" element={<MyShoppingPage />} />
-            <Route path="/myInfo" element={<MyInfoPage />} />
+            <Route path="/myshopping" element={<MyShoppingPage />} />
+            <Route path="/myinfo" element={<MyInfoPage />} />
           </Route>
         </Route>
 
