@@ -1,39 +1,51 @@
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import SearchBook from './SearchBook';
+import { isFunctionLikeExpression } from 'eslint-plugin-react/lib/util/ast';
 
 const drawerWidth = 240;
-const navItems = ['Home', 'About', 'Contact'];
+const logIn = '로그인';
+const logOut = '로그아웃';
+const register = '회원가입';
+const cart = '장바구니';
 
 function NavBar() {
   return (
     <div>
-      <Box>
-        {/*<CssBaseline />*/}
-        <AppBar>
+      {/*<CssBaseline />*/}
+      <AppBar
+        position="statiic"
+        sx={{ top: 0, backgroundColor: '#fff', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box>
+          <h2 style={{ color: 'black' }}>로고 이미지</h2>
+        </Box>
+        <Box>
+          <SearchBook />
+        </Box>
+        <Box>
           <Toolbar>
             <Box>
-              {navItems.map((item) => (
-                <Button key={item} sx={{ color: '#fff' }}>
-                  {item}
-                </Button>
-              ))}
+              <Button key={logIn} sx={{ color: 'black' }}>
+                {logIn}
+              </Button>
+            </Box>
+            <Box>
+              <Button key={register} sx={{ color: 'black' }}>
+                {register}
+              </Button>
+            </Box>
+            <Box>
+              <Button key={cart} sx={{ color: 'black' }}>
+                {cart}
+              </Button>
             </Box>
           </Toolbar>
-        </AppBar>
-      </Box>
+        </Box>
+      </AppBar>
     </div>
   );
 }
