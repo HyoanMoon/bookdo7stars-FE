@@ -14,13 +14,14 @@ import MyInfoPage from '../page/MyInfoPage';
 import AdminProductPage from '../page/AdminProductPage';
 import AdminOrderPage from '../page/AdminOrderPage';
 import AdminDashBoardPage from '../page/AdminDashBoardPage';
+import AppLayout from '../Layout/AppLayout';
 
 const AppRouter = () => {
   return (
     <div>
       <Routes>
         {/* 메인, 상품 전체, 상품 상세 */}
-        <Route path="/" element={<MainPage />} />
+        <Route index element={<MainPage />} />
         <Route path="/books">
           <Route index element={<CategoryPage />} />
           <Route path=":id" element={<ProductDetailPage />} />
@@ -33,23 +34,19 @@ const AppRouter = () => {
         {/* 장바구니, 결제, 마이페이지 */}
         <Route element={<PrivateRoute permissionLevel="customer" />}>
           <Route path="/cart" element={<CartPage />} />
-          <Route path="/payment">
-            <Route index element={<PaymentPage />} />
-            <Route path="/success" element={<OrderCompletePage />} />
-          </Route>
-          <Route path="/account">
-            <Route path="/myshopping" element={<MyShoppingPage />} />
-            <Route path="/myinfo" element={<MyInfoPage />} />
-          </Route>
+
+          <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/payment/success" element={<OrderCompletePage />} />
+
+          <Route path="/account/myshopping" element={<MyShoppingPage />} />
+          <Route path="/account/myinfo" element={<MyInfoPage />} />
         </Route>
 
         {/* 어드민 */}
         <Route element={<PrivateRoute permissionLevel="admin" />}>
-          <Route path="/admin">
-            <Route path="/product" element={<AdminProductPage />} />
-            <Route path="/order" element={<AdminOrderPage />} />
-            <Route path="/dashboard" element={<AdminDashBoardPage />} />
-          </Route>
+          <Route path="/admin/product" element={<AdminProductPage />} />
+          <Route path="/admin/order" element={<AdminOrderPage />} />
+          <Route path="/admin/dashboard" element={<AdminDashBoardPage />} />
         </Route>
       </Routes>
     </div>
