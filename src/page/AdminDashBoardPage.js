@@ -207,7 +207,6 @@ function AdminDashBoardPage() {
           </Dialog>
 
           {/* 기타 섹션들 */}
-          {/* 더 많은 섹션을 필요에 따라 추가하세요 */}
         </Grid>
       </ContainerStyled>
     </Root>
