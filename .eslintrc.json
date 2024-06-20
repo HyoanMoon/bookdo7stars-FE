@@ -15,9 +15,16 @@
     "node": true,
     "es6": true
   },
-  "extends": ["plugin:prettier/recommended", "prettier", "plugin:import/errors",
-    "plugin:import/warnings"],
-  "plugins": ["import", "react-hooks"],
+  "extends": [
+    "plugin:prettier/recommended",
+    "prettier",
+    "plugin:import/errors",
+    "plugin:import/warnings"
+  ],
+  "plugins": [
+    "import",
+    "react-hooks"
+  ],
   "rules": {
     "prettier/prettier": "error",
     "max-len": [
