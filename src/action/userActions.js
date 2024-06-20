@@ -27,6 +27,7 @@ const loginWithGoogle = (token) => async (dispatch) => {
     if (response.status !== 200) throw new Error(response.error);
     sessionStorage.setItem('token', response.data.token);
     dispatch({ type: types.GOOGLE_LOGIN_SUCCESS, payload: response.data });
+    dispatch(commonUiActions.showToastMessage('Google login successful!', 'success'));
   } catch (error) {
     dispatch({ type: types.GOOGLE_LOGIN_FAIL, payload: error.error });
     dispatch(commonUiActions.showToastMessage(error.error, 'error'));
@@ -35,11 +36,11 @@ const loginWithGoogle = (token) => async (dispatch) => {
 
 // 회원가입.
 const registerUser =
-  ({ email, name, password }, Navigate) =>
+  ({ email, userName, password, role, level, address, phone }, Navigate) =>
   async (dispatch) => {
     try {
       dispatch({ type: types.REGISTER_USER_REQUEST });
-      const Response = await api.post('/user', { email, name, password });
+      const Response = await api.post('/user', { email, userName, password, role, level, address, phone });
       if (Response.status !== 200) throw new Error(Response.error);
       dispatch({ type: types.REGISTER_USER_SUCCESS, payload: Response.data });
       dispatch(commonUiActions.showToastMessage('Registration completed successfully.', 'success'));

@@ -33,11 +33,11 @@ const ResisterPage = () => {
       return;
     }
     setPasswordError('');
-    // if (!policy) {
-    //   setPolicyError(true);
-    //   return;
-    // }
-    const payload = { userName, email, password, address, phone, policy };
+    if (!policy) {
+      setPolicyError(true);
+      return;
+    }
+    const payload = { userName, email, password, confirmPassword, address, phone, policy };
     console.log(payload);
     dispatch(userActions.registerUser(payload, navigate));
   };
