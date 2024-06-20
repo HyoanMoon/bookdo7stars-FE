@@ -1,8 +1,9 @@
 import axios from 'axios';
 const LOCAL_BACKEND = process.env.REACT_APP_LOCAL_BACKEND;
 const BACKEND_PROXY = process.env.REACT_APP_BACKEND_PROXY;
+// NODE_ENV에 따른 백엔드 URL 설정
 const backendURL = process.env.NODE_ENV === 'production' ? BACKEND_PROXY : LOCAL_BACKEND;
-console.log(backendURL);
+
 const api = axios.create({
   baseURL: backendURL + '/api',
   headers: {
@@ -16,11 +17,15 @@ const api = axios.create({
 api.interceptors.request.use(
   (request) => {
     console.log('Starting Request', request);
-    request.headers.authorization = `Bearer ${sessionStorage.getItem('token')}`;
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      request.headers.authorization = `Bearer ${token}`;
+    }
     return request;
   },
   function (error) {
     console.log('REQUEST ERROR', error);
+    return Promise.reject(error);
   },
 );
 
@@ -29,7 +34,7 @@ api.interceptors.response.use(
     return response;
   },
   function (error) {
-    error = error.response.data;
+    error = error.response ? error.response.data : { message: 'Unknown error' };
     console.log('RESPONSE ERROR', error);
     return Promise.reject(error);
   },
