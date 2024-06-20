@@ -53,6 +53,10 @@ const registerUser =
 // 토큰 로그인.
 const loginWithToken = () => async (dispatch) => {
   try {
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+      return;
+    }
     dispatch({ type: types.LOGIN_WITH_TOKEN_REQUEST });
     const response = await api.get('/user/me');
     if (response.status !== 200) throw new Error(response.data.message);
