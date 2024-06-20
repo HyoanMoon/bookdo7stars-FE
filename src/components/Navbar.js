@@ -29,7 +29,10 @@ function NavBar({ user }) {
       <AppBar
         position="static"
         sx={{ top: 0, backgroundColor: '#fff', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Box>
+        <Box
+          onClick={() => {
+            navigate('/');
+          }}>
           <h2 style={{ color: 'black' }}>로고 이미지</h2>
         </Box>
         <Box>
@@ -54,17 +57,19 @@ function NavBar({ user }) {
                 </Button>
               )}
             </Box>
-            <Box>
-              <Button key={register} sx={{ color: 'black' }}>
-                <div
-                  onClick={() => {
-                    console.log('register!');
-                    navigate('/register');
-                  }}>
-                  {register}
-                </div>
-              </Button>
-            </Box>
+            {!user && (
+              <Box>
+                <Button key={register} sx={{ color: 'black' }}>
+                  <div
+                    onClick={() => {
+                      console.log('register!');
+                      navigate('/register');
+                    }}>
+                    {register}
+                  </div>
+                </Button>
+              </Box>
+            )}
             <Box>
               <Button key={cart} sx={{ color: 'black' }}>
                 {cart}

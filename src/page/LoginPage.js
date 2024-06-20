@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { userActions } from '../action/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import GoogleIcon from '@mui/icons-material/Google';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { GoogleLogin } from '@react-oauth/google';
 import '../App.css';
 

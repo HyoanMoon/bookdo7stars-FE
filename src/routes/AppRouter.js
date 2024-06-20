@@ -14,7 +14,7 @@ import MyInfoPage from '../page/MyInfoPage';
 import AdminProductPage from '../page/AdminProductPage';
 import AdminOrderPage from '../page/AdminOrderPage';
 import AdminDashBoardPage from '../page/AdminDashBoardPage';
-import AppLayout from '../Layout/AppLayout';
+import BooksGroupPage from '../page/BooksGroupPage';
 
 const AppRouter = () => {
   return (
@@ -22,9 +22,9 @@ const AppRouter = () => {
       <Routes>
         {/* 메인, 상품 전체, 상품 상세 */}
         <Route index element={<MainPage />} />
-
-        <Route path="/books/:categoryId" element={<CategoryPage />} />
-        <Route path="/book/:bookId" element={<BookDetailPage />} />
+        <Route path="/books/:categoryid" element={<CategoryPage />} />
+        <Route path="/book/:bookid" element={<BookDetailPage />} />
+        <Route path="/books/:querytype" element={<BooksGroupPage />} />
 
         {/* 로그인, 회원가입 */}
         <Route path="/login" element={<LoginPage />} />
