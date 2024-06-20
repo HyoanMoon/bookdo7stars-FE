@@ -24,7 +24,6 @@ const loginWithGoogle = (payload) => async (dispatch) => {
   try {
     dispatch({ type: types.REGISTER_USER_REQUEST });
     const Response = await api.post('/user', payload);
-    console.log('response', response.data);
     dispatch({ type: types.REGISTER_USER_SUCCESS, payload: Response.data });
     dispatch(commonUiActions.showToastMessage('Registration completed successfully.', 'success'));
     Navigate('/login');
