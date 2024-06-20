@@ -3,8 +3,6 @@ import {
   Box,
   Container,
   Grid,
-  Paper,
-  Typography,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -24,37 +22,10 @@ import {
   InputLabel,
   IconButton,
 } from '@mui/material';
-import { styled } from '@mui/system';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-
-// 스타일 설정
-const Root = styled('div')(({ theme }) => ({
-  display: 'flex',
-}));
-
-const ContainerStyled = styled(Container)(({ theme }) => ({
-  paddingTop: theme.spacing(4),
-  paddingBottom: theme.spacing(4),
-}));
-
-const PaperStyled = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(2),
-  display: 'flex',
-  overflow: 'auto',
-  flexDirection: 'column',
-  cursor: 'pointer', // 클릭 가능한 커서
-}));
-
-// 간단한 카드 컴포넌트
-function SimpleCard({ title, content, onClick }) {
-  return (
-    <PaperStyled onClick={onClick}>
-      <Typography variant="h6">{title}</Typography>
-      <Typography>{content}</Typography>
-    </PaperStyled>
-  );
-}
+import '../style/adminDashboardPageStyles.css'; // 스타일 파일 임포트
+import AdminDashboardCard from '../components/AdminDashboardCard';
 
 function AdminDashBoardPage() {
   const [open, setOpen] = useState(false);
@@ -92,41 +63,41 @@ function AdminDashBoardPage() {
   };
 
   return (
-    <Root>
-      <ContainerStyled maxWidth="lg">
+    <div className="root">
+      <Container className="containerStyled" maxWidth="lg">
         <Grid container spacing={3}>
           {/* 개요 섹션 */}
           <Grid item xs={12} md={4}>
-            <SimpleCard title="총 매출" content="₩100,000" />
+            <AdminDashboardCard title="총 매출" content="₩100,000" />
           </Grid>
           <Grid item xs={12} md={4}>
-            <SimpleCard title="신규 주문 수" content="15" />
+            <AdminDashboardCard title="신규 주문 수" content="15" />
           </Grid>
           <Grid item xs={12} md={4}>
-            <SimpleCard title="총 주문 수" content="150" />
+            <AdminDashboardCard title="총 주문 수" content="150" />
           </Grid>
 
           {/* 주문 관리 */}
           <Grid item xs={12}>
-            <SimpleCard title="최근 주문" content="최근 주문 내역을 여기에 표시합니다." />
+            <AdminDashboardCard title="최근 주문" content="최근 주문 내역을 여기에 표시합니다." />
           </Grid>
 
           {/* 고객 관리 */}
           <Grid item xs={12} md={6}>
-            <SimpleCard title="신규 가입 고객" content="5명" />
+            <AdminDashboardCard title="신규 가입 고객" content="5명" />
           </Grid>
           <Grid item xs={12} md={6}>
-            <SimpleCard title="고객 문의" content="3건" />
+            <AdminDashboardCard title="고객 문의" content="3건" />
           </Grid>
 
           {/* 재고 관리 */}
           <Grid item xs={12}>
-            <SimpleCard title="재고 부족 품목" content="재고가 부족한 품목을 여기에 표시합니다." />
+            <AdminDashboardCard title="재고 부족 품목" content="재고가 부족한 품목을 여기에 표시합니다." />
           </Grid>
 
           {/* 판매 분석 */}
           <Grid item xs={12}>
-            <SimpleCard title="판매 분석" content="판매 데이터를 여기에 표시합니다." onClick={handleClickOpen} />
+            <AdminDashboardCard title="판매 분석" content="판매 데이터를 여기에 표시합니다." onClick={handleClickOpen} />
           </Grid>
 
           {/* 모달 */}
@@ -163,7 +134,7 @@ function AdminDashBoardPage() {
                         </TableCell>
                         <TableCell>
                           <IconButton onClick={() => handleDelete(admin.id)} color="secondary">
-                            <DeleteIcon />
+                            <DeleteIcon className="deleteIcon" />
                           </IconButton>
                         </TableCell>
                       </TableRow>
@@ -208,8 +179,8 @@ function AdminDashBoardPage() {
 
           {/* 기타 섹션들 */}
         </Grid>
-      </ContainerStyled>
-    </Root>
+      </Container>
+    </div>
   );
 }
 

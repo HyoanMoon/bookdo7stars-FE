@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import Typography from '@mui/material/Typography';
+import { useLocation } from 'react-router';
 import NavBar from '../components/Navbar';
 import ToastMessage from '../components/ToastMessage';
 import { userActions } from '../action/userActions';
 import { useDispatch, useSelector } from 'react-redux';
+import Sidebar from '../components/Sidebar';
 
 const AppLayout = ({ children }) => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const { user } = useSelector((state) => state.user);
   useEffect(() => {
     dispatch(userActions.loginWithToken());
   }, []);
   return (
     <div>
-      <ToastMessage />
       <div
         style={{
           display: 'flex',
@@ -25,10 +26,17 @@ const AppLayout = ({ children }) => {
         }}>
         <h2 style={{ margin: 0, color: '#fff', textAlign: 'center' }}>100불 이상 주문 시 모든 주문 무료 배송 (Standard Shipping)</h2>
       </div>
-      <div>
-        <NavBar user={user} />
-        <div style={{ marginTop: '20px' }}>{children}</div>
-      </div>
+      {location.pathname.includes('admin') ? (
+        <div style={{ display: 'flex' }}>
+          <Sidebar />
+          <main style={{ flexGrow: 1, padding: '20px' }}>{children}</main>
+        </div>
+      ) : (
+        <div>
+          <NavBar />
+          <div style={{ marginTop: '20px' }}>{children}</div>
+        </div>
+      )}
     </div>
   );
 };
