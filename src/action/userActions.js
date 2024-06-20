@@ -8,7 +8,7 @@ const loginWithEmail = (payload) => async (dispatch) => {
   try {
     dispatch({ type: types.USER_LOGIN_REQUEST });
     const response = await api.post('/auth/login', payload);
-    console.log('response', response.data);
+    // console.log('response', response.data);
     dispatch({ type: types.USER_LOGIN_SUCCESS, payload: response.data });
     dispatch(commonUiActions.showToastMessage('로그인을 성공하셨습니다!', 'success'));
 
@@ -20,7 +20,18 @@ const loginWithEmail = (payload) => async (dispatch) => {
 };
 
 // 구글 로그인.
-const loginWithGoogle = () => async (dispatch) => {};
+const loginWithGoogle = (payload) => async (dispatch) => {
+  try {
+    dispatch({ type: types.REGISTER_USER_REQUEST });
+    const Response = await api.post('/user', payload);
+    console.log('response', response.data);
+    dispatch({ type: types.REGISTER_USER_SUCCESS, payload: Response.data });
+    dispatch(commonUiActions.showToastMessage('Registration completed successfully.', 'success'));
+    Navigate('/login');
+  } catch (error) {
+    dispatch({ type: types.REGISTER_USER_FAIL, payload: error });
+  }
+};
 
 // 회원가입.
 const registerUser = () => async (dispatch) => {};
