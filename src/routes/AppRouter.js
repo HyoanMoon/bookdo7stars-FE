@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 import MainPage from '../page/MainPage';
 import CategoryPage from '../page/CategoryPage';
-import ProductDetailPage from '../page/ProductDetailPage';
+import BookDetailPage from '../page/BookDetailPage';
 import LoginPage from '../page/LoginPage';
 import RegisterPage from '../page/RegisterPage';
 import CartPage from '../page/CartPage';
@@ -22,10 +22,9 @@ const AppRouter = () => {
       <Routes>
         {/* 메인, 상품 전체, 상품 상세 */}
         <Route index element={<MainPage />} />
-        <Route path="/books">
-          <Route index element={<CategoryPage />} />
-          <Route path=":id" element={<ProductDetailPage />} />
-        </Route>
+
+        <Route path="/books/:categoryId" element={<CategoryPage />} />
+        <Route path="/book/:bookId" element={<BookDetailPage />} />
 
         {/* 로그인, 회원가입 */}
         <Route path="/login" element={<LoginPage />} />
