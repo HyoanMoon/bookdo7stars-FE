@@ -1,10 +1,12 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import NavBar from '../components/Navbar';
+import ToastMessage from '../components/ToastMessage';
 
 const AppLayout = ({ children }) => {
   return (
     <div>
+      <ToastMessage />
       <div
         style={{
           display: 'flex',

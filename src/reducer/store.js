@@ -5,6 +5,7 @@ import orderReducer from './orderReducer';
 import userReducer from './userReducer';
 import cartReducer from './cartReducer';
 import favoriteReducer from './favoriteReducer';
+import commonUiReducer from './commonUIReducer';
 
 const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
     order: orderReducer,
     cart: cartReducer,
     favorite: favoriteReducer,
+    ui: commonUiReducer,
   },
 });
 
