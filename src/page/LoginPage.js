@@ -4,9 +4,23 @@ import { useNavigate } from 'react-router-dom';
 import { userActions } from '../action/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import GoogleIcon from '@mui/icons-material/Google';
+import { GoogleLogin } from '@react-oauth/google';
+import '../App.css';
+
 // import KakaoIcon from 'path-to-kakao-icon';
-import KakaoIcon from '@mui/icons-material/Circle';
+import FacebookIcon from '@mui/icons-material/Facebook';
 import GitHubIcon from '@mui/icons-material/GitHub';
+
+const buttonStyle = {
+  backgroundColor: '#4285f4',
+  color: '#ffffff',
+  border: 'none',
+  padding: '10px 15px',
+  fontSize: '16px',
+  fontWeight: 'bold',
+  cursor: 'pointer',
+  borderRadius: '4px',
+};
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -23,10 +37,16 @@ const LoginPage = () => {
     dispatch(userActions.loginWithEmail(payload));
   };
 
-  const handleOAuth = (provider) => {
-    console.log(`OAuth with ${provider}`);
-    // Implement OAuth logic here
+  const handleGoogleLogin = async (googleData) => {
+    console.log('구글로그인클릭!');
+    dispatch(userActions.loginWithGoogle(googleData.credential));
   };
+
+  // const handleGoogleSuccess = (googleData) => {
+  //   console.log('Google login successful:', googleData);
+  //   const token = googleData.credential;
+  //   dispatch(userActions.loginWithGoogle(token));
+  // };
 
   useEffect(() => {
     if (user) {
@@ -60,14 +80,32 @@ const LoginPage = () => {
           <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} onClick={() => navigate('/register')}>
             Go to Register
           </Button>
-          <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} startIcon={<GoogleIcon />} onClick={() => handleOAuth('Google')}>
-            Sign in with Google
-          </Button>
+          {/* 구글로그인 시작 */}
+          <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', mt: 1, mb: 2 }}>
+            <GoogleLogin
+              onSuccess={handleGoogleLogin}
+              onError={() => {}}
+              render={(renderProps) => (
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  color="primary"
+                  sx={{ mt: 1, mb: 2 }}
+                  startIcon={<GoogleIcon />}
+                  onClick={renderProps.handleGoogleLogin}></Button>
+              )}
+            />
+          </Box>
+          {/* <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} startIcon={<GoogleIcon />} onClick={handleGoogleLogin}> */}
+          {/* <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} startIcon={<GoogleIcon />} onSuccess={handleGoogleSuccess}> */}
+          {/* Sign in with Google */}
+          {/* </Button> */}
+          {/* 구글로그인 끝*/}
           <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} startIcon={<GitHubIcon />} onClick={() => handleOAuth('GitHub')}>
             Sign in with GitHub
           </Button>
-          <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} startIcon={<KakaoIcon />} onClick={() => handleOAuth('Kakao')}>
-            Sign in with Kakao
+          <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} startIcon={<FacebookIcon />} onClick={() => handleOAuth('Kakao')}>
+            Sign in with Facebook
           </Button>
         </Box>
       </Box>

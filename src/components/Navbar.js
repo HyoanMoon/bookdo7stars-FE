@@ -15,10 +15,9 @@ const logOut = '로그아웃';
 const register = '회원가입';
 const cart = '장바구니';
 
-function NavBar() {
+function NavBar({ user }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.user);
   const handleLogout = () => {
     dispatch(userActions.logout());
     navigate('/');
