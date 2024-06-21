@@ -6,10 +6,13 @@ import AdminPageProductDialog from '../components/AdminPageProductDialog';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { bookActions } from '../action/bookActions';
+import * as types from '../constants/book.constants';
 
 const AdminProductPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [editBook, setEditBook] = useState(null);
   const bookTableHead = ['Cover', 'ISBN', 'Title', 'Author', 'Stock', 'Publisher', 'Price', ''];
   const { bookList } = useSelector((state) => state.book);
   const [query, setQuery] = useSearchParams();
@@ -28,7 +31,6 @@ const AdminProductPage = () => {
     if (searchQuery.author === '') delete searchQuery.author;
     if (searchQuery.category === '') delete searchQuery.category;
     if (searchQuery.publisher === '') delete searchQuery.publisher;
-
     // console.log('searchQuery', searchQuery);
     const params = new URLSearchParams();
     Object.keys(searchQuery).forEach((key) => {
@@ -41,53 +43,33 @@ const AdminProductPage = () => {
     dispatch(bookActions.getBookList(searchQuery));
   }, [searchQuery, navigate, dispatch]);
 
+  // 검색한 값을 리셋하기.
   const resetSearch = () => {
     setSearchQuery({});
   };
-
   useEffect(() => {
     resetSearch();
   }, []);
 
-  // 다이얼로그 열기 및 상품 수정
-  const [openDialog, setOpenDialog] = useState(false);
-  const [editBook, setEditBook] = useState(null);
-
+  // 도서 생성 다이얼로그 열기.
   const handleOpenNewDialog = () => {
     setEditBook(null);
     setOpenDialog(true);
   };
 
-  const handleOpenEditDialog = (product) => {
-    setEditBook(product);
+  // 도서 수정 다이얼로그 열기.
+  const handleOpenEditDialog = (book) => {
+    setEditBook(book);
     setOpenDialog(true);
+    dispatch({ type: types.SET_SELECTED_BOOK, payload: book });
   };
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-    setEditBook(null);
-  };
-
-  // 상품 삭제
+  // 도서 삭제
   const handleDeleteProduct = (bookId) => {
     dispatch(bookActions.deleteBook(bookId));
-    console.log(`Deleting product with ID: ${bookId}`);
+    // console.log(`deleted bookId ${bookId}`);
   };
 
-  // 도서 더미 데이터
-  // const bookList = [
-  //   {
-  //     _id: '66740c453428f4d7dbe12b14',
-  //     isbn: 'K522931912',
-  //     title: '그늘 산책',
-  //     author: '김윤경 (지은이)',
-  //     description: '',
-  //     cover: 'https://www.taragrp.co.kr/wp-content/uploads/2022/07/도서-제본_01-2.png',
-  //     stockStatus: '예약판매',
-  //     publisher: '향출판사',
-  //     priceStandard: 18000,
-  //   },
-  // ];
   return (
     <Container>
       <Grid container>
@@ -113,7 +95,7 @@ const AdminProductPage = () => {
           />
 
           {/* 상품 다이얼로그 */}
-          <AdminPageProductDialog open={openDialog} handleClose={handleCloseDialog} editBook={editBook} setOpenDialog={setOpenDialog} />
+          <AdminPageProductDialog open={openDialog} editBook={editBook} setEditBook={setEditBook} setOpenDialog={setOpenDialog} />
         </Grid>
       </Grid>
     </Container>

@@ -25,3 +25,6 @@ export const BOOK_EDIT_FAIL = 'BOOK_EDIT_FAIL';
 
 // 카테고리.
 export const CATEGORY = ['정해진 카테고리들 채우기'];
+
+// 상품 수정할 때 상품 id값 불러오기.
+export const SET_SELECTED_BOOK = 'SET_SELECTED_BOOK';

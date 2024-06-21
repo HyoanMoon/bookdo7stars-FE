@@ -8,7 +8,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from '../src/reducer/store';
+import store from './reducer/store';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;

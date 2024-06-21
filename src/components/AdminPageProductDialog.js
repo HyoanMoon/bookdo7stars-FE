@@ -1,75 +1,82 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { bookActions } from '../action/bookActions';
 import CloudImageUpload from '../utils/CloudImageUpload';
 
-const AdminPageProductDialog = ({ open, handleClose, editBook, setOpenDialog }) => {
-  const dispatch = useDispatch();
-  const initialProductState = {
+const AdminPageProductDialog = ({ open, editBook, setEditBook, setOpenDialog }) => {
+  const initialBookState = {
     isbn: '',
     title: '',
     author: '',
-    stockStatus: '',
+    categoryName: '',
     publisher: '',
-    priceStandard: '',
     cover: '',
     description: '',
-    categoryName: '',
+    priceStandard: '',
     priceSales: '',
+    stockStatus: '',
   };
-
-  const [product, setProduct] = useState(initialProductState);
+  const dispatch = useDispatch();
+  const { error } = useSelector((state) => state.book);
+  const { selectedBook } = useSelector((state) => state.book);
+  const [bookForm, setBookForm] = useState(editBook || { ...initialBookState });
   const [imagePreview, setImagePreview] = useState('');
 
+  // 폼 불러오기.
   useEffect(() => {
     if (editBook) {
-      setProduct(editBook);
+      setBookForm(editBook);
       setImagePreview(editBook.cover);
     } else {
-      setProduct(initialProductState);
+      setBookForm({ ...initialBookState });
       setImagePreview('');
     }
   }, [editBook]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      [name]: value,
-    }));
-
-    if (name === 'cover') {
-      setImagePreview(value);
+  // 폼 필드 변경 핸들러.
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    if (name === 'StockStatus') {
+      value === '' ? '정상' : value;
     }
+    if (name === 'cover') setImagePreview(value);
+    setBookForm((prevBook) => ({ ...prevBook, [name]: value }));
   };
 
-  const handleSave = (event) => {
+  // 폼 이미지 업로드 핸들러.
+  const handleImageUpload = (newUrl) => {
+    setBookForm((prevBook) => ({ ...prevBook, cover: newUrl }));
+    newUrl ? setImagePreview('') : setImagePreview(editBook.cover);
+  };
+
+  // 도서 다이얼로그 닫기.
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setEditBook(null);
+    setBookForm({ ...initialBookState });
+    setImagePreview('');
+  };
+
+  // 폼 제출 핸들러.
+  const handleSubmit = (event) => {
     event.preventDefault();
-    if (editBook) {
-      // 상품 수정 로직
-      console.log('Updating product:', product);
-      dispatch(bookActions.updateBook(product));
-    } else {
-      // 새 상품 추가 로직
-      dispatch(bookActions.createBook(product));
-      console.log('Adding new product:', product);
-      setOpenDialog(false);
-    }
-    handleClose();
-  };
+    const { isbn, title, author, categoryName, publisher, cover, description, priceStandard, priceSales, stockStatus } = bookForm;
 
-  const handleImageUpload = (url) => {
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      cover: url,
-    }));
-    setImagePreview(url);
+    if (isbn?.trim() === '' || title?.trim() === '' || author?.trim() === '' || publisher?.trim() === '') {
+      return alert('폼이 비어 있습니다.');
+    }
+    if (editBook) {
+      dispatch(bookActions.updateBook({ ...bookForm }, selectedBook._id));
+    } else {
+      dispatch(bookActions.createBook({ ...bookForm }));
+    }
+    handleCloseDialog();
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-      <DialogTitle>{editBook ? 'Edit Product' : 'New Product'}</DialogTitle>
+    <Dialog open={open} onClose={handleCloseDialog} maxWidth="md" fullWidth>
+      <DialogTitle>{editBook ? '상품 수정' : '상품 추가'}</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
@@ -79,90 +86,99 @@ const AdminPageProductDialog = ({ open, handleClose, editBook, setOpenDialog }) 
           type="text"
           fullWidth
           variant="standard"
-          value={product?.isbn || ''}
+          value={bookForm?.isbn || ''}
           onChange={handleChange}
         />
-        <TextField margin="dense" name="title" label="Title" type="text" fullWidth variant="standard" value={product?.title || ''} onChange={handleChange} />
-        <TextField margin="dense" name="author" label="Author" type="text" fullWidth variant="standard" value={product?.author || ''} onChange={handleChange} />
+        <TextField margin="dense" name="title" label="도서명" type="text" fullWidth variant="standard" value={bookForm?.title || ''} onChange={handleChange} />
+        <TextField
+          margin="dense"
+          name="author"
+          label="저자 외"
+          type="text"
+          fullWidth
+          variant="standard"
+          value={bookForm?.author || ''}
+          onChange={handleChange}
+        />
         <TextField
           id="outlined-multiline-static"
           multiline
           margin="dense"
           name="description"
-          label="Description"
+          label="도서 설명"
           type="text"
           fullWidth
           variant="standard"
-          value={product?.description || ''}
+          value={bookForm?.description || ''}
           onChange={handleChange}
           rows={3}
         />
         <TextField
           margin="dense"
           name="categoryName"
-          label="Category"
+          label="카테고리"
           type="text"
           fullWidth
           variant="standard"
-          value={product?.categoryName || ''}
+          value={bookForm?.categoryName || ''}
           onChange={handleChange}
         />
         <TextField
           margin="dense"
           name="stockStatus"
-          label="Stock Status"
+          label="도서 재고"
           type="text"
           fullWidth
           variant="standard"
-          value={product?.stockStatus || ''}
+          value={bookForm?.stockStatus || ''}
           onChange={handleChange}
         />
         <TextField
           margin="dense"
           name="publisher"
-          label="Publisher"
+          label="출판사"
           type="text"
           fullWidth
           variant="standard"
-          value={product?.publisher || ''}
+          value={bookForm?.publisher || ''}
           onChange={handleChange}
         />
         <TextField
           margin="dense"
           name="priceStandard"
-          label="Standard Price"
+          label="정가"
           type="number"
           fullWidth
           variant="standard"
-          value={product?.priceStandard || ''}
+          value={bookForm?.priceStandard || ''}
           onChange={handleChange}
         />
         <TextField
           margin="dense"
           name="priceSales"
-          label="Sales Price"
+          label="판매가"
           type="number"
           fullWidth
           variant="standard"
-          value={product?.priceSales || ''}
+          value={bookForm?.priceSales || ''}
           onChange={handleChange}
         />
         <TextField
           margin="dense"
           name="cover"
-          label="Cover URL"
+          label="커버 이미지"
           type="text"
           fullWidth
           variant="outlined"
-          value={product?.cover || ''}
+          value={bookForm?.cover || ''}
           onChange={handleChange}
         />
         {imagePreview && <img src={imagePreview} alt="cover preview" style={{ width: '30%', height: 'auto', marginTop: '20px' }} />}
         <CloudImageUpload onUpload={handleImageUpload} />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSave}>Save</Button>
+        <Button onClick={handleCloseDialog}>Cancel</Button>
+        <Button onClick={handleSubmit}>Save</Button>
       </DialogActions>
     </Dialog>
   );
