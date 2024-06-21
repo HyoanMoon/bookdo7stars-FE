@@ -22,9 +22,9 @@ const createBook = (bookForm) => async (dispatch) => {
   try {
     dispatch({ type: types.BOOK_CREATE_REQUEST });
     const response = await api.post('/book', bookForm);
-    console.log('도서-생성-response', response);
+    // console.log('도서-생성-response', response);
     dispatch({ type: types.BOOK_CREATE_SUCCESS });
-    commonUiActions.showToastMessage('도서 상품을 추가 했습니다', 'success');
+    dispatch(commonUiActions.showToastMessage('도서 상품을 추가 했습니다', 'success'));
     dispatch(getBookList());
   } catch (err) {
     dispatch({ type: types.BOOK_CREATE_FAIL, payload: err.error });
@@ -37,7 +37,7 @@ const deleteBook = (id) => async (dispatch) => {
   try {
     dispatch({ type: types.BOOK_DELETE_REQUEST });
     const response = await api.delete(`/book/${id}`);
-    console.log('도서-삭제-response', response);
+    // console.log('도서-삭제-response', response);
     dispatch({ type: types.BOOK_DELETE_SUCCESS });
     dispatch(getBookList());
   } catch (err) {
