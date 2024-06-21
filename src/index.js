@@ -8,7 +8,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from '../src/reducer/store';
+import store from './reducer/store';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { GoogleOAuthProvider } from '@react-oauth/google';
 

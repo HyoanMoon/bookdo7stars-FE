@@ -31,3 +31,6 @@ export const BOOK_EDIT_FAIL = 'BOOK_EDIT_FAIL';
 // 도서 그룹.
 export const SET_CATEGORY_BOOKS = 'SET_CATEGORY_BOOKS';
 export const SET_BOOK_GROUP = 'SET_BOOK_GROUP';
+
+// 상품 수정할 때 상품 id값 불러오기.
+export const SET_SELECTED_BOOK = 'SET_SELECTED_BOOK';

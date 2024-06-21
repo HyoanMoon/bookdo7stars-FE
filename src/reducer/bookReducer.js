@@ -9,11 +9,21 @@ const initialState = {
   getBooksByCategoryError: null,
   getBooksByCategoryLoading: false,
   bookGroup: '',
+  loading: true,
+  error: '',
 };
 
 function bookReducer(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
+    case types.SET_SELECTED_BOOK:
+      return { ...state, loading: false, error: '', selectedBook: payload };
+    case types.BOOK_CREATE_REQUEST:
+      return { ...state, loading: true };
+      case types.BOOK_CREATE_SUCCESS:
+      return { ...state, loading: false, error: '' };
+    case types.BOOK_CREATE_FAIL:
+      return { ...state, loading: false, error: payload };
     case types.BOOK_GET_REQUEST:
     case types.GET_BOOK_DETAIL_REQUEST:
       return { ...state, getBooksLoading: true };
