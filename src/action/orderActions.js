@@ -5,7 +5,7 @@ import * as types from '../constants/order.constants';
 const createOrder = () => async (dispatch) => {};
 
 // 내 주문 조회.
-const getOrder = () => async (dispatch) => {};
+const getMyOrder = () => async (dispatch) => {};
 
 // 모든 주문 조회.
 const getOrderList = () => async (dispatch) => {};
@@ -15,7 +15,7 @@ const updateOrder = () => async (dispatch) => {};
 
 export const orderActions = {
   createOrder,
-  getOrder,
+  getMyOrder,
   getOrderList,
   updateOrder,
 };
