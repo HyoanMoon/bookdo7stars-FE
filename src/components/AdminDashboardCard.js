@@ -1,14 +1,28 @@
 import React from 'react';
-import { Paper, Typography } from '@mui/material';
-import '../style/adminDashboardPageStyles.css';
+import { Card, CardContent, Typography } from '@mui/material';
+import { styled } from '@mui/system';
 
-function AdminDashboardCard({ title, content, onClick }) {
+const HoverCard = styled(Card)({
+  transition: 'transform 0.2s, background-color 0.2s',
+  '&:hover': {
+    backgroundColor: '#C4D2A7',
+    transform: 'scale(1.05)',
+  },
+});
+
+const AdminDashboardCard = ({ title, content, onClick }) => {
   return (
-    <Paper className="paperStyled" onClick={onClick}>
-      <Typography variant="h6">{title}</Typography>
-      <Typography>{content}</Typography>
-    </Paper>
+    <HoverCard onClick={onClick}>
+      <CardContent>
+        <Typography variant="h5" component="h2">
+          {title}
+        </Typography>
+        <Typography variant="body2" component="p">
+          {content}
+        </Typography>
+      </CardContent>
+    </HoverCard>
   );
-}
+};
 
 export default AdminDashboardCard;

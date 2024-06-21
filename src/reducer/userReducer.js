@@ -1,8 +1,11 @@
 import * as types from '../constants/user.constants';
+
 const initialState = {
   loading: false,
   user: null,
   error: '',
+  users: [],
+  adminError: '',
 };
 
 function userReducer(state = initialState, action) {
@@ -12,21 +15,40 @@ function userReducer(state = initialState, action) {
     case types.REGISTER_USER_REQUEST:
     case types.GOOGLE_LOGIN_REQUEST:
     case types.LOGIN_WITH_TOKEN_REQUEST:
+    case types.GET_ADMIN_REQUEST:
+    case types.GET_All_USERS_REQUEST:
       return { ...state, loading: true };
+
     case types.USER_LOGIN_SUCCESS:
     case types.LOGIN_WITH_TOKEN_SUCCESS:
     case types.GOOGLE_LOGIN_SUCCESS:
       return { ...state, loading: false, user: payload, error: '' };
+
     case types.USER_LOGIN_FAIL:
     case types.REGISTER_USER_FAIL:
     case types.GOOGLE_LOGIN_FAIL:
+    case types.GET_ADMIN_FAIL:
+    case types.GET_All_USERS_FAIL:
       return { ...state, loading: false, error: payload };
+
     case types.USER_LOGOUT:
       return { ...state, user: null };
+
     case types.LOGIN_WITH_TOKEN_FAIL:
       return { ...state, loading: false };
-    // case types.DELETE_ERROR:
-    //   return { ...state, error: '' };
+
+    case types.GET_ADMIN_SUCCESS:
+    case types.GET_All_USERS_SUCCESS:
+      return { ...state, loading: false, users: payload, adminError: '' };
+
+    case types.REGISTER_USER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        users: [...state.users, payload],
+        error: '',
+      };
+
     default:
       return state;
   }
