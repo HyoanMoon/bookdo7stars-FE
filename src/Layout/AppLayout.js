@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import NavBar from '../components/Navbar';
 import CategoryBar from '../components/CategoryBar';
 import { useDispatch, useSelector } from 'react-redux';
 import ToastMessage from '../components/ToastMessage';
 import { userActions } from '../action/userActions';
 import { bookActions } from '../action/bookActions';
+import { useSearchParams } from 'react-router-dom';
 
 const AppLayout = ({ children }) => {
   const dispatch = useDispatch();

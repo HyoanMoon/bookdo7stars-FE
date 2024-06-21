@@ -34,3 +34,4 @@ export const SET_BOOK_GROUP = 'SET_BOOK_GROUP';
 
 // 상품 수정할 때 상품 id값 불러오기.
 export const SET_SELECTED_BOOK = 'SET_SELECTED_BOOK';
+export const SET_SEARCH_QUERY = 'SET_SEARCH_QUERY';

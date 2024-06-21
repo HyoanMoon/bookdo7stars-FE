@@ -14,7 +14,7 @@ const AdminProductPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [editBook, setEditBook] = useState(null);
   const bookTableHead = ['Cover', 'ISBN', 'Title', 'Author', 'Stock', 'Publisher', 'Price', ''];
-  const { bookList } = useSelector((state) => state.book);
+  const { books } = useSelector((state) => state.book);
   const [query, setQuery] = useSearchParams();
   const fields = ['isbn', 'title', 'author', 'category', 'publisher'];
 
@@ -88,7 +88,7 @@ const AdminProductPage = () => {
 
           {/* 상품 테이블 */}
           <AdminPageProductTable
-            bookList={bookList}
+            bookList={books}
             bookTableHead={bookTableHead}
             handleOpenEditDialog={handleOpenEditDialog}
             handleDeleteProduct={handleDeleteProduct}

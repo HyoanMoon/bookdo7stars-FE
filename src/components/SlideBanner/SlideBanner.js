@@ -2,8 +2,9 @@ import React from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import './slideBanner.css';
+import './SlideBanner.css';
 import Box from '@mui/material/Box';
+import { Card } from '@mui/material';
 
 const SlideBanner = ({ books }) => {
   const settings = {
@@ -13,7 +14,7 @@ const SlideBanner = ({ books }) => {
     infinite: true,
     speed: 500,
     centerPadding: '60px',
-    slidesToShow: 3,
+    slidesToShow: 4,
     slidesToScroll: 3,
     autoplay: true,
     autoplaySpeed: 4000,
@@ -24,8 +25,19 @@ const SlideBanner = ({ books }) => {
       <Slider {...settings}>
         {books.map((book, index) => (
           <div key={index}>
-            <Box>
-              <img src={book.cover} alt={book.title} style={{ width: '100%', height: '300px', objectFit: 'contain' }} />
+            <Box
+              sx={{
+                width: 217,
+                height: 325,
+                marginRight: 2,
+                borderRadius: 2,
+                backgroundColor: 'primary.main',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'space-around',
+              }}>
+              <img src={book.cover} alt={book.title} style={{ width: '100%', height: 300, objectFit: 'contain', borderRadius: 2 }} />
             </Box>
           </div>
         ))}
