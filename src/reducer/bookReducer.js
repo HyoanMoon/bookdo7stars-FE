@@ -1,13 +1,14 @@
 import * as types from '../constants/book.constants';
 const initialState = {
   books: [],
-  groupBooks: [],
+  originalBooks: [],
+  categoryBooks: [],
   getBooksError: null,
   getBooksLoading: false,
-  getBooksByGroupError: null,
-  getBooksByGroupLoading: false,
-  group: null,
   selectedBook: null,
+  getBooksByCategoryError: null,
+  getBooksByCategoryLoading: false,
+  bookGroup: '',
 };
 
 function bookReducer(state = initialState, action) {
@@ -17,16 +18,21 @@ function bookReducer(state = initialState, action) {
     case types.GET_BOOK_DETAIL_REQUEST:
       return { ...state, getBooksLoading: true };
     case types.BOOK_GET_SUCCESS:
-      return { ...state, getBooksLoading: false, books: payload.books };
+      return { ...state, getBooksLoading: false, books: payload.books, originalBooks: payload.books };
     case types.BOOK_GET_FAIL:
     case types.GET_BOOK_DETAIL_FAIL:
       return { ...state, getBooksLoading: false, books: [], getBooksError: payload };
-    case types.BOOK_GET_BY_GROUP_REQUEST:
-      return { ...state, getBooksLoading: true };
-    case types.BOOK_GET_BY_GROUP_SUCCESS:
-      return { ...state, getBooksByGroupLoading: false, groupBooks: payload.books };
-    case types.BOOK_GET_BY_GROUP_FAIL:
-      return { ...state, getBooksByGroupLoading: false, groupBooks: [], getBooksByGroupError: payload };
+    case types.BOOK_GET_BY_CATEGORY_REQUEST:
+      return { ...state, getBooksByCategoryLoading: true };
+    case types.BOOK_GET_BY_CATEGORY_SUCCESS:
+      console.log('VVVVV', payload);
+      return { ...state, getBooksByCategoryLoading: false, books: state.books, categoryBooks: payload.data };
+    case types.BOOK_GET_BY_CATEGORY_FAIL:
+      return { ...state, getBooksByCategoryLoading: false, groupBooks: [], getBooksByCategoryError: payload };
+    case types.SET_CATEGORY_BOOKS:
+      return { categoryBooks: payload };
+    case types.SET_BOOK_GROUP:
+      return { bookGroup: payload };
     case types.GET_BOOK_DETAIL_SUCCESS:
       console.log('[북리듀서] 셀렉티드북의 페이로드 잘 들어오는 지: ', payload.data);
       return { ...state, getBooksLoading: false, selectedBook: payload.data };

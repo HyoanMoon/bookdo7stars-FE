@@ -15,7 +15,10 @@ const getCategoryList = (query) => async (dispatch) => {
     console.error(err);
   }
 };
-
+const setSelectedCategory = (category) => (dispatch) => {
+  dispatch({ type: types.SET_SELECTED_CATEGORY, payload: category });
+};
 export const categoryActions = {
   getCategoryList,
+  setSelectedCategory,
 };

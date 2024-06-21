@@ -5,10 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import CategoryPopOver from './CategoryPopOver';
 import { useNavigate } from 'react-router-dom';
+import { bookActions } from '../action/bookActions';
 
 const CategoryBar = ({ books }) => {
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.category);
+  const { bookGroup } = useSelector((state) => state.book);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -25,12 +27,13 @@ const CategoryBar = ({ books }) => {
     setAnchorEl(null);
   };
 
-  const queryTypes = [];
-  books.map((book) => {
-    if (!queryTypes.includes(book.queryType)) {
-      queryTypes.push(book.queryType);
-    }
-  });
+  // const queryTypes = [];
+  // books.map((book) => {
+  //   if (!queryTypes.includes(book.queryType)) {
+  //     queryTypes.push(book.queryType);
+  //   }
+  // });
+  const queryTypes = ['ItemNewAll', 'ItemNewSpecial', 'BestSeller', 'BlogBest'];
   const bookGroups = {
     ItemNewAll: '새로 나온 책',
     ItemNewSpecial: '특별 신간',
@@ -38,7 +41,6 @@ const CategoryBar = ({ books }) => {
     BlogBest: '블로그 베스트',
   };
   const groups = [];
-  console.log(bookGroups['ItemNewAll']);
 
   queryTypes.map((q) => {
     if (bookGroups[q]) {
@@ -51,9 +53,10 @@ const CategoryBar = ({ books }) => {
   };
 
   const goToAllBooksOfGroup = (group) => {
-    console.log(group);
     const queryType = getKeyByValue(bookGroups, group);
-    navigate(`/books/${queryType.toLowerCase()}`);
+    console.log(queryType);
+    dispatch(bookActions.setBookGroup(queryType));
+    navigate(`/?queryType=${queryType}`);
   };
 
   return (

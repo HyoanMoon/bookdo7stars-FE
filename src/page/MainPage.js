@@ -9,17 +9,29 @@ import SlideBanner from '../components/SlideBanner';
 
 const MainPage = () => {
   const dispatch = useDispatch();
-  const { books } = useSelector((state) => state.book);
+  const { books, bookGroup, categoryBooks } = useSelector((state) => state.book);
+  const { selectedCategory } = useSelector((state) => state.category);
   const [query] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState({
-    name: query.get('title') || '',
+    title: query.get('title') || '',
+    author: query.get('author') || '',
+    bookGroup: bookGroup || '',
+    isbn: query.get('isbn') || '',
   });
   useEffect(() => {
     dispatch(bookActions.getBookList({ ...searchQuery }));
   }, [searchQuery]);
 
+  console.log(selectedCategory);
+  useEffect(() => {
+    if (selectedCategory) {
+      console.log('das sollte ausgeführt werden');
+      dispatch(bookActions.getBookListByCategory({ ...searchQuery }, selectedCategory.categoryId));
+    }
+  }, [searchQuery, selectedCategory]);
+
   if (!books) {
-    return <NotFoundPage />;
+    return;
   }
 
   const bestRankedBooks = [];
@@ -29,6 +41,14 @@ const MainPage = () => {
     }
   });
   const topBestRankedBooks = bestRankedBooks.slice(0, 10);
+  console.log('categoryBooks', categoryBooks);
+
+  let toBeShowedBooks;
+  if (!selectedCategory) {
+    toBeShowedBooks = books;
+  } else {
+    toBeShowedBooks = categoryBooks;
+  }
 
   return (
     <Container sx={{ width: '100vw', display: 'flex', flexDirection: 'column' }}>
@@ -42,7 +62,7 @@ const MainPage = () => {
           gap: '10px',
           marginTop: '100px',
         }}>
-        {books.map((book) => (
+        {toBeShowedBooks.map((book) => (
           <BookCard key={book._id} book={book} />
         ))}
       </div>

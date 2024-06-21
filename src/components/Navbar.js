@@ -9,6 +9,8 @@ import { isFunctionLikeExpression } from 'eslint-plugin-react/lib/util/ast';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../action/userActions';
+import { categoryActions } from '../action/categoryActions';
+import { bookActions } from '../action/bookActions';
 const drawerWidth = 240;
 const logIn = '로그인';
 const logOut = '로그아웃';
@@ -32,6 +34,9 @@ function NavBar({ user }) {
         <Box
           onClick={() => {
             navigate('/');
+            dispatch(bookActions.getBookList({}));
+            dispatch(categoryActions.setSelectedCategory(null));
+            dispatch(bookActions.setCategoryBooks([]));
           }}>
           <h2 style={{ color: 'black' }}>로고 이미지</h2>
         </Box>

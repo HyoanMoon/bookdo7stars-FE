@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
-import Typography from '@mui/material/Typography';
 import NavBar from '../components/Navbar';
 import CategoryBar from '../components/CategoryBar';
-import { bookActions } from '../action/bookActions';
 import { useDispatch, useSelector } from 'react-redux';
 import ToastMessage from '../components/ToastMessage';
 import { userActions } from '../action/userActions';
+import { bookActions } from '../action/bookActions';
 
 const AppLayout = ({ children }) => {
   const dispatch = useDispatch();
@@ -13,10 +12,15 @@ const AppLayout = ({ children }) => {
   useEffect(() => {
     dispatch(userActions.loginWithToken());
   }, []);
-  const { books } = useSelector((state) => state.book);
+  const { books, bookGroup } = useSelector((state) => state.book);
+
   useEffect(() => {
-    dispatch(bookActions.getBookList());
-  }, []);
+    if (bookGroup) {
+      dispatch(bookActions.getBookList({ queryType: bookGroup }));
+    } else {
+      dispatch(bookActions.getBookList({}));
+    }
+  }, [bookGroup]);
   return (
     <div>
       <ToastMessage />
