@@ -1,7 +1,15 @@
 import React from 'react';
 
 const MainPage = () => {
-  return <div></div>;
+  return (
+    <>
+      {/* <Banner />
+      <Notice />
+      <NewBook />
+      <BestSeller />
+      <ThemeBook /> */}
+    </>
+  );
 };
 
 export default MainPage;
