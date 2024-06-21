@@ -20,7 +20,7 @@ function bookReducer(state = initialState, action) {
       return { ...state, loading: false, error: '', selectedBook: payload };
     case types.BOOK_CREATE_REQUEST:
       return { ...state, loading: true };
-      case types.BOOK_CREATE_SUCCESS:
+    case types.BOOK_CREATE_SUCCESS:
       return { ...state, loading: false, error: '' };
     case types.BOOK_CREATE_FAIL:
       return { ...state, loading: false, error: payload };
