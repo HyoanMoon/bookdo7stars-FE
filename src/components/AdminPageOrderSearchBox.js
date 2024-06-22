@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Grid, Select, MenuItem, InputLabel } from '@mui/material';
-import { subDays, format } from 'date-fns';
+import { subDays, format, isValid } from 'date-fns';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -38,18 +38,13 @@ const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery, resetSearch }) =
     setEndDate(end);
   };
 
-  // const onCheckEnter = (event, option) => {
-  //   if (event && event.key === 'Enter') {
-  //     event.preventDefault();
-  //     setSearchQuery({ ...searchQuery, [option]: event.target.value });
-  //   }
-  // };
-
-  const formattedStartDate = startDate ? format(startDate, 'yyyy-MM-dd') : null;
-  const formattedEndDate = endDate ? format(endDate, 'yyyy-MM-dd') : null;
-  const handleSearch = (event, option) => {
+  const handleSearch = (event) => {
     event.preventDefault();
-    setSearchQuery({ ...searchQuery, [option]: event.target.value, startDate: formattedStartDate, endDate: formattedEndDate });
+    if (startDate && endDate && isValid(new Date(startDate)) && isValid(new Date(endDate))) {
+      setSearchQuery({ ...searchQuery, startDate: format(new Date(startDate), 'yyyy-MM-dd'), endDate: format(new Date(endDate), 'yyyy-MM-dd') });
+    } else {
+      setSearchQuery({ ...searchQuery, startDate: null, endDate: null });
+    }
   };
 
   return (
