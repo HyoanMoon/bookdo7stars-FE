@@ -3,10 +3,9 @@ import { Box, Typography, Link, Grid } from '@mui/material';
 
 const Footer = () => {
   return (
-    // <Box sx={{ backgroundColor: 'primary.main', color: 'white', padding: '20px', marginTop: '6rem', minHeight: '100vh' }}>
-
-    <Box sx={{ backgroundColor: 'primary.main', color: 'white', padding: '20px', marginTop: '6rem' }}>
+    <Box sx={{ backgroundColor: 'secondary.main', color: 'white', padding: '20px', marginTop: '20px', bottom: '0', width: '100%' }}>
       <Grid container spacing={2}>
+        {/* textAlign="center" */}
         <Grid item xs={12} sm={4}>
           <Typography variant="h6">Company</Typography>
           <Typography variant="body2">

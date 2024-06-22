@@ -73,25 +73,20 @@ const MainPage = () => {
 
   return (
     <>
-      <Box sx={{ marginBottom: '30px', marginTop: '60px' }}>
-        <CarouselSlide books={topBestRankedBooks} />
+      <Box>
+        <CarouselSlide />
       </Box>
-
-      <Container sx={{ width: '100vw', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-        {/* <Box sx={{ marginBottom: '30px', marginTop: '60px' }}>
-          <SlideBanner books={topBestRankedBooks} />
-        </Box> */}
-        <Box sx={{ marginBottom: '30px', marginTop: '60px' }}>
-          <BooksCarousel books={newSpecialBooks.slice(0, 10)} title={'화제의 신작'} sx={{}} />
+      <Container>
+        <Box>
+          <BooksCarousel books={newSpecialBooks.slice(0, 10)} title={'화제의 신작'} />
         </Box>
-        <Box sx={{ marginBottom: '30px', marginTop: '60px' }}>
-          <BookContainer books={bestSeller.slice(0, 10)} categories={bestSellerCategories} title={'베스트 셀러'} sx={{ height: 500 }} />
+        <Box>
+          <BookContainer books={bestSeller.slice(0, 10)} categories={bestSellerCategories} title={'베스트 셀러'} />
         </Box>
-        <Box sx={{ marginTop: '400px' }}>
-          <BookContainer books={newAllBooks.slice(0, 5)} categories={newAllBooksCategories} title={'신간'} sx={{ height: 500 }} />
+        <Box>
+          <BookContainer books={newAllBooks.slice(0, 5)} categories={newAllBooksCategories} title={'신간'} />
         </Box>
       </Container>
-      {/* <Footer /> */}
     </>
   );
 };

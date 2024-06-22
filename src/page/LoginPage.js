@@ -56,7 +56,7 @@ const LoginPage = () => {
   }, [user]);
 
   return (
-    <Container maxWidth="xs">
+    <Container>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 8 }}>
         <Typography component="h1" variant="h5">
           Login
