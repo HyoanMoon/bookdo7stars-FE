@@ -2,7 +2,9 @@ import api from '../utils/api';
 import * as types from '../constants/cart.constants';
 
 // 장바구니 아이템 추가.
-const addToCart = () => async (dispatch) => {};
+const addToCart =
+  ({ id, qty }) =>
+  async (dispatch) => {};
 
 // 장바구니 아이템 조회.
 const getCartList = () => async (dispatch) => {};
