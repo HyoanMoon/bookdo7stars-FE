@@ -45,5 +45,14 @@
     "import/no-unresolved": "error",
     "import/named": "off",
     "no-undef": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
   }
+
 }
