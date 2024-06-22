@@ -12,7 +12,7 @@ const BookSlider = ({ books }) => {
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
-      items: 5,
+      items: 7,
     },
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
@@ -30,7 +30,7 @@ const BookSlider = ({ books }) => {
 
   return (
     <Box sx={{ mt: 2, height: '300px', marginTop: '30px' }}>
-      <Carousel responsive={responsive} customLeftArrow={<CustomLeftArrow />} customRightArrow={<CustomRightArrow />}>
+      <Carousel containerClass="carousel-container" responsive={responsive} customLeftArrow={<CustomLeftArrow />} customRightArrow={<CustomRightArrow />}>
         {books.map((book, index) => (
           <Box key={index} sx={{ display: 'flex', justifyContent: 'center' }}>
             <BookCard book={book} />

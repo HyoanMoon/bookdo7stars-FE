@@ -1,26 +1,28 @@
-import { Box, Container, Grid, Typography, Tab, Tabs } from '@mui/material';
+import { Box, Container, Grid, Typography, Tab, Tabs, Button, IconButton } from '@mui/material';
 import BookSlider from '../BookSlider/BookSlider';
 import React, { useState } from 'react';
 import BookCard from '../BookCard';
+import { AddCircleOutline } from '@mui/icons-material';
 
-const BestSeller = ({ books, categories, sx }) => {
+const BookContainer = ({ books, categories, sx, title }) => {
   const [selectedCategory, setSelectedCategory] = useState('전체');
 
   const handleCategoryChange = (event, newValue) => {
-    console.log(event, newValue);
     setSelectedCategory(newValue);
   };
-  console.log(selectedCategory);
-  console.log(categories);
 
   const filteredBooks = selectedCategory === '전체' ? books : books.filter((book) => book.categoryName.includes(selectedCategory));
 
-  console.log(filteredBooks);
   return (
-    <Container sx={{ ...sx, width: '100%', marginTop: '50px' }}>
-      <Typography variant="h3" component="div" gutterBottom sx={{ fontWeight: 'bold', marginTop: '50px' }}>
-        분야별 베스트 셀러
-      </Typography>
+    <div style={{ ...sx, width: '100%', marginTop: '50px' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Typography variant="h3" component="div" gutterBottom sx={{ fontWeight: 'bold', marginTop: '50px', display: 'flex', alignItems: 'center' }}>
+          {title}
+        </Typography>
+        <Button variant="outlined" size="large" endIcon={<AddCircleOutline />}>
+          더보기
+        </Button>
+      </Box>
       <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: '20px' }}>
         <Tabs
           value={selectedCategory}
@@ -50,13 +52,13 @@ const BestSeller = ({ books, categories, sx }) => {
       </Box>
       <Grid container spacing={2}>
         {filteredBooks.map((book) => (
-          <Grid key={book._id} item xs={12} sm={6} md={4} lg={3}>
+          <Grid key={book._id} item xs={12} sm={6} md={4} lg={2.4}>
             <BookCard key={book._id} book={book} />
           </Grid>
         ))}
       </Grid>
-    </Container>
+    </div>
   );
 };
 
-export default BestSeller;
+export default BookContainer;

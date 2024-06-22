@@ -4,7 +4,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './SlideBanner.css';
 import Box from '@mui/material/Box';
-import { Card } from '@mui/material';
+import { Card, Container } from '@mui/material';
 
 const SlideBanner = ({ books }) => {
   const settings = {
@@ -21,7 +21,7 @@ const SlideBanner = ({ books }) => {
   };
 
   return (
-    <div className="slider-container" style={{ backgroundColor: '#608020', width: '100%' }}>
+    <Container className="slider-container" sx={{ backgroundColor: '#608020', width: '100%', borderRadius: 2 }}>
       <Slider {...settings}>
         {books.map((book, index) => (
           <div key={index}>
@@ -42,7 +42,7 @@ const SlideBanner = ({ books }) => {
           </div>
         ))}
       </Slider>
-    </div>
+    </Container>
   );
 };
 

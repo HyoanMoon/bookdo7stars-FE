@@ -6,11 +6,12 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import SearchBook from './SearchBook';
 import { isFunctionLikeExpression } from 'eslint-plugin-react/lib/util/ast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../action/userActions';
 import { categoryActions } from '../action/categoryActions';
 import { bookActions } from '../action/bookActions';
+import { useEffect, useState } from 'react';
 const drawerWidth = 240;
 const logIn = '로그인';
 const logOut = '로그아웃';
@@ -25,6 +26,44 @@ function NavBar({ user }) {
     navigate('/');
   };
   console.log('Navbar', user);
+
+  const [query, setQuery] = useSearchParams();
+  const fields = ['isbn', 'title', 'author', 'category', 'publisher'];
+
+  const totalField = fields.reduce((total, item) => {
+    total[item] = query.get(item) || '';
+    return total;
+  }, {});
+  const [searchQuery, setSearchQuery] = useState(totalField);
+  // console.log('totalField', totalField);
+
+  useEffect(() => {
+    if (searchQuery.isbn === '') delete searchQuery.isbn;
+    if (searchQuery.title === '') delete searchQuery.title;
+    if (searchQuery.author === '') delete searchQuery.author;
+    if (searchQuery.category === '') delete searchQuery.category;
+    if (searchQuery.publisher === '') delete searchQuery.publisher;
+    // console.log('searchQuery', searchQuery);
+    const params = new URLSearchParams();
+    Object.keys(searchQuery).forEach((key) => {
+      const value = searchQuery[key];
+      if (value !== undefined && value !== '') {
+        params.append(key, value);
+      }
+    });
+    const query = params.toString();
+    navigate('?' + query);
+    dispatch(bookActions.getBookList(searchQuery));
+  }, [searchQuery, navigate, dispatch]);
+
+  // 검색한 값을 리셋하기.
+  const resetSearch = () => {
+    setSearchQuery({});
+  };
+  useEffect(() => {
+    resetSearch();
+  }, []);
+
   return (
     <div>
       {/*<CssBaseline />*/}
@@ -41,44 +80,46 @@ function NavBar({ user }) {
           <h2 style={{ color: 'black' }}>로고 이미지</h2>
         </Box>
         <Box>
-          <SearchBook />
+          <SearchBook searchQuery={searchQuery} setSearchQuery={setSearchQuery} fields={fields} resetSearch={resetSearch} />
         </Box>
         <Box>
           <Toolbar>
-            <Box>
-              {!user ? (
-                <Button key={logIn} sx={{ color: 'black' }}>
-                  <div
-                    onClick={() => {
-                      console.log('loginin!');
-                      navigate('/login');
-                    }}>
-                    {logIn}
-                  </div>
-                </Button>
-              ) : (
-                <Button key={logOut} sx={{ color: 'black' }}>
-                  <div onClick={handleLogout}>{logOut}</div>
-                </Button>
-              )}
-            </Box>
-            {!user && (
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
               <Box>
-                <Button key={register} sx={{ color: 'black' }}>
-                  <div
-                    onClick={() => {
-                      console.log('register!');
-                      navigate('/register');
-                    }}>
-                    {register}
-                  </div>
+                {!user ? (
+                  <Button variant="outlined" size="medium" key={logIn} sx={{ color: 'primary', marginRight: '5px' }}>
+                    <div
+                      onClick={() => {
+                        console.log('loginin!');
+                        navigate('/login');
+                      }}>
+                      {logIn}
+                    </div>
+                  </Button>
+                ) : (
+                  <Button variant="outlined" size="medium" key={logOut} sx={{ color: 'primary', marginRight: '5px' }}>
+                    <div onClick={handleLogout}>{logOut}</div>
+                  </Button>
+                )}
+              </Box>
+              {!user && (
+                <Box>
+                  <Button variant="outlined" size="medium" key={register} sx={{ color: 'primary', marginRight: '5px' }}>
+                    <div
+                      onClick={() => {
+                        console.log('register!');
+                        navigate('/register');
+                      }}>
+                      {register}
+                    </div>
+                  </Button>
+                </Box>
+              )}
+              <Box>
+                <Button variant="outlined" size="medium" key={cart} sx={{ color: 'primary' }}>
+                  {cart}
                 </Button>
               </Box>
-            )}
-            <Box>
-              <Button key={cart} sx={{ color: 'black' }}>
-                {cart}
-              </Button>
             </Box>
           </Toolbar>
         </Box>

@@ -1,55 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import BookCard from '../components/BookCard';
-import { Container } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { bookActions } from '../action/bookActions';
 import NotFoundPage from './NotFoundPage';
 import SlideBanner from '../components/SlideBanner/SlideBanner';
-import SpecialNewBooks from '../components/SpecialNewBooks/SpecialNewBooks';
-import BestSeller from '../components/Bestseller/BestSeller';
+import BooksCarousel from '../components/BooksCarousel/BooksCarousel';
+import BookContainer from '../components/BookContainer/BookContainer';
 
 const MainPage = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { books, bookGroup, categoryBooks } = useSelector((state) => state.book);
-  const { selectedCategory } = useSelector((state) => state.category);
-
-  const fields = ['isbn', 'title', 'author', 'category', 'publisher'];
-  const [selectedField, setSelectedField] = useState(fields[0]);
-  const [query] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState({
-    title: query.get('title') || '',
-    author: query.get('author') || '',
-    isbn: query.get('isbn') || '',
-    publisher: query.get('publisher') || '',
-  });
-  const handleChange = (event) => {
-    event.preventDefault();
-    setSelectedField(event.target.value);
-  };
-  const resetSearch = () => {
-    setSearchQuery({});
-  };
-  useEffect(() => {
-    resetSearch();
-  }, []);
-
-  useEffect(() => {
-    dispatch(bookActions.getBookList({ ...searchQuery }));
-  }, [searchQuery]);
-
-  console.log(selectedCategory);
-  useEffect(() => {
-    if (selectedCategory) {
-      console.log('das sollte ausgeführt werden');
-      dispatch(bookActions.getBookListByCategory({ ...searchQuery }, selectedCategory.categoryId));
-    }
-  }, [searchQuery, selectedCategory]);
 
   if (!books) {
     return;
   }
+
+  // BlogBestBooks
+  const blogBestBooks = books.filter((book) => {
+    return book.queryType === 'BlogBest';
+  });
+
+  // bestSeller
+  const bestSeller = books.filter((book) => {
+    return book.queryType === 'BestSeller';
+  });
+
+  // newSpecialBooks
+  const newSpecialBooks = books.filter((book) => {
+    return book.queryType === 'ItemNewSpecial';
+  });
+
+  // newAllBooks
+  const newAllBooks = books.filter((book) => {
+    return book.queryType === 'ItemNewAll';
+  });
 
   const bestRankedBooks = [];
   books.map((book) => {
@@ -58,56 +43,47 @@ const MainPage = () => {
     }
   });
   const topBestRankedBooks = bestRankedBooks.slice(0, 10);
-  console.log('categoryBooks', categoryBooks);
 
-  let toBeShowedBooks;
-  if (!selectedCategory) {
-    toBeShowedBooks = books;
-  } else {
-    toBeShowedBooks = categoryBooks;
-  }
+  const getCategories = (books) => {
+    const categoriesOfGroup = books.map((book) => {
+      return book.categoryName.split('>')[1];
+    });
+    const _categories = [];
+    categoriesOfGroup.map((cat) => {
+      if (!_categories.includes(cat)) {
+        _categories.push(cat);
+      }
+    });
+    const categories = [];
+    const all = { id: '전체', label: '전체' };
+    categories.push(all);
+    _categories.map((c) => {
+      const cat = { id: c, label: c };
+      return categories.push(cat);
+    });
+    return categories;
+  };
 
-  const bestSeller = books.filter((book) => {
-    return book.queryType === 'BlogBest';
-  });
-
-  const bestSellerCategory = bestSeller.map((book) => {
-    return book.categoryName.split('>')[1];
-  });
-  const bestSellerCat = [];
-  bestSellerCategory.map((cat) => {
-    if (!bestSellerCat.includes(cat)) {
-      bestSellerCat.push(cat);
-    }
-  });
-  const bestSellerCategories = [];
-  const all = { id: '전체', label: '전체' };
-  bestSellerCategories.push(all);
-  bestSellerCat.map((c) => {
-    const cat = { id: c, label: c };
-    return bestSellerCategories.push(cat);
-  });
-
-  console.log(bestSellerCategories);
+  // category object for category-slide-bar
+  const newAllBooksCategories = getCategories(newAllBooks);
+  const newSpecialBooksCategories = getCategories(newSpecialBooks);
+  const bestSellerCategories = getCategories(bestSeller);
+  const blogBestBooksCategories = getCategories(blogBestBooks);
 
   return (
-    <Container sx={{ width: '100vw', display: 'flex', flexDirection: 'column' }}>
-      <SlideBanner books={topBestRankedBooks} />
-      <SpecialNewBooks books={toBeShowedBooks.slice(0, 10)} sx={{ backgroundColor: 'primary.light' }} />
-      <BestSeller books={bestSeller} categories={bestSellerCategories} sx={{ height: 500 }} />
-      {/*<div*/}
-      {/*  style={{*/}
-      {/*    display: 'flex',*/}
-      {/*    flexDirection: 'row',*/}
-      {/*    justifyContent: 'space-around',*/}
-      {/*    flexWrap: 'wrap', // 카드가 화면을 벗어나지 않도록 줄바꿈*/}
-      {/*    gap: '10px',*/}
-      {/*    marginTop: '100px',*/}
-      {/*  }}>*/}
-      {/*  {toBeShowedBooks.map((book) => (*/}
-      {/*    <BookCard key={book._id} book={book} />*/}
-      {/*  ))}*/}
-      {/*</div>*/}
+    <Container sx={{ width: '100vw', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      <Box sx={{ marginBottom: '30px', marginTop: '60px' }}>
+        <SlideBanner books={topBestRankedBooks} />
+      </Box>
+      <Box sx={{ marginBottom: '30px', marginTop: '60px' }}>
+        <BooksCarousel books={newSpecialBooks.slice(0, 10)} title={'화제의 신작'} sx={{ backgroundColor: 'primary.light' }} />
+      </Box>
+      <Box sx={{ marginBottom: '30px', marginTop: '60px' }}>
+        <BookContainer books={bestSeller.slice(0, 10)} categories={bestSellerCategories} title={'베스트 셀러'} sx={{ height: 500 }} />
+      </Box>
+      <Box sx={{ marginTop: '400px' }}>
+        <BookContainer books={newAllBooks.slice(0, 5)} categories={newAllBooksCategories} title={'신간'} sx={{ height: 500 }} />
+      </Box>
     </Container>
   );
 };

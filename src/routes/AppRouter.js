@@ -15,6 +15,7 @@ import AdminProductPage from '../page/AdminProductPage';
 import AdminOrderPage from '../page/AdminOrderPage';
 import AdminDashBoardPage from '../page/AdminDashBoardPage';
 import BooksGroupPage from '../page/BooksGroupPage';
+import SearchedBooksPage from '../page/SearchedBooksPage';
 
 const AppRouter = () => {
   return (
@@ -24,6 +25,7 @@ const AppRouter = () => {
         <Route index element={<MainPage />} />
         <Route path="/books/:categoryid" element={<CategoryPage />} />
         <Route path="/book/:bookid" element={<BookDetailPage />} />
+        <Route path="/?query" element={<SearchedBooksPage />} />
 
         {/* 로그인, 회원가입 */}
         <Route path="/login" element={<LoginPage />} />
