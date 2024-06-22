@@ -50,6 +50,7 @@ const AdminOrderPage = () => {
     resetSearch();
   }, []);
 
+  // 쿼리 url.
   const filteredOrders = orderList.filter((order) => {
     const orderDate = new Date(order.createdAt);
     const startDate = searchQuery.startDate ? new Date(searchQuery.startDate) : null;

@@ -22,7 +22,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const AdminPageOrderTable = ({ orderTableHead, orderList }) => {
+const AdminPageOrderTable = ({ orderTableHead, orderList, handleOpenOrderDialog }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -55,14 +55,14 @@ const AdminPageOrderTable = ({ orderTableHead, orderList }) => {
             {orderList.length > 0 ? (
               orderList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => (
                 <StyledTableRow key={order.id}>
-                  <StyledTableCell>{index + 1}</StyledTableCell>
-                  <StyledTableCell>{order.id}</StyledTableCell>
-                  <StyledTableCell>{order.createdAt}</StyledTableCell>
-                  <StyledTableCell>{order.email}</StyledTableCell>
-                  <StyledTableCell>{order.books}</StyledTableCell>
-                  <StyledTableCell>{order.address}</StyledTableCell>
-                  <StyledTableCell>{order.totalPrice}</StyledTableCell>
-                  <StyledTableCell>{order.status}</StyledTableCell>
+                  <StyledTableCell onClick={handleOpenOrderDialog}>{index + 1}</StyledTableCell>
+                  <StyledTableCell onClick={handleOpenOrderDialog}>{order.id}</StyledTableCell>
+                  <StyledTableCell onClick={handleOpenOrderDialog}>{order.createdAt}</StyledTableCell>
+                  <StyledTableCell onClick={handleOpenOrderDialog}>{order.email}</StyledTableCell>
+                  <StyledTableCell onClick={handleOpenOrderDialog}>{order.books}</StyledTableCell>
+                  <StyledTableCell onClick={handleOpenOrderDialog}>{order.address}</StyledTableCell>
+                  <StyledTableCell onClick={handleOpenOrderDialog}>{order.totalPrice}</StyledTableCell>
+                  <StyledTableCell onClick={handleOpenOrderDialog}>{order.status}</StyledTableCell>
                 </StyledTableRow>
               ))
             ) : (

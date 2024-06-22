@@ -1,128 +1,105 @@
 // import React, { useState } from 'react';
-// import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, Grid, Typography } from '@mui/material';
+// import {
+//   Dialog,
+//   DialogTitle,
+//   DialogContent,
+//   DialogActions,
+//   Button,
+//   Table,
+//   TableBody,
+//   TableCell,
+//   TableContainer,
+//   TableHead,
+//   TableRow,
+//   FormControl,
+//   InputLabel,
+//   Select,
+//   MenuItem,
+//   Typography,
+// } from '@mui/material';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { ORDER_STATUS } from '../constants/order.constants';
+// import { orderActions } from '../action/orderActions';
+// import { currencyFormat } from '../utils/number';
 
-// const AdminPageOrderDialog = ({ open, handleClose, orderDetails }) => {
-//   const initialBookState = {
-//     isbn: '',
-//     title: '',
-//     author: '',
-//     categoryName: '',
-//     publisher: '',
-//     cover: '',
-//     description: '',
-//     priceStandard: '',
-//     priceSales: '',
-//     stockStatus: '',
+// const AdminPageOrderDialog = ({ open, handleClose, filteredOrders }) => {
+//   const selectedOrder = useSelector((state) => state.order.selectedOrder);
+//   const [orderStatus, setOrderStatus] = useState(filteredOrders?.status || '');
+//   const dispatch = useDispatch();
+
+//   const handleStatusChange = (event) => {
+//     setOrderStatus(event.target.value);
 //   };
 
-//   const [bookForm, setBookForm] = useState(editBook || { ...initialBookState });
+//   const submitStatus = (event) => {
+//     event.preventDefault();
+//     dispatch(orderActions.updateOrder(selectedOrder._id, orderStatus));
+//     handleClose();
+//   };
+
+//   // if (!selectedOrder) {
+//   //   return null;
+//   // }
 
 //   return (
-//     <Dialog open={open} onClose={handleCloseDialog} maxWidth="md" fullWidth>
-//       <DialogTitle>{editBook ? '상품 수정' : '상품 추가'}</DialogTitle>
+//     <Dialog open={open} onClose={handleClose}>
+//       <DialogTitle>Order Detail</DialogTitle>
 //       <DialogContent>
-//         <TextField
-//           autoFocus
-//           margin="dense"
-//           name="isbn"
-//           label="ISBN"
-//           type="text"
-//           fullWidth
-//           variant="standard"
-//           value={bookForm?.isbn || ''}
-//           onChange={handleChange}
-//         />
-//         <TextField margin="dense" name="title" label="도서명" type="text" fullWidth variant="standard" value={bookForm?.title || ''} onChange={handleChange} />
-//         <TextField
-//           margin="dense"
-//           name="author"
-//           label="저자 외"
-//           type="text"
-//           fullWidth
-//           variant="standard"
-//           value={bookForm?.author || ''}
-//           onChange={handleChange}
-//         />
-//         <TextField
-//           id="outlined-multiline-static"
-//           multiline
-//           margin="dense"
-//           name="description"
-//           label="도서 설명"
-//           type="text"
-//           fullWidth
-//           variant="standard"
-//           value={bookForm?.description || ''}
-//           onChange={handleChange}
-//           rows={3}
-//         />
-//         <TextField
-//           margin="dense"
-//           name="categoryName"
-//           label="카테고리"
-//           type="text"
-//           fullWidth
-//           variant="standard"
-//           value={bookForm?.categoryName || ''}
-//           onChange={handleChange}
-//         />
-//         <TextField
-//           margin="dense"
-//           name="stockStatus"
-//           label="도서 재고"
-//           type="text"
-//           fullWidth
-//           variant="standard"
-//           value={bookForm?.stockStatus || ''}
-//           onChange={handleChange}
-//         />
-//         <TextField
-//           margin="dense"
-//           name="publisher"
-//           label="출판사"
-//           type="text"
-//           fullWidth
-//           variant="standard"
-//           value={bookForm?.publisher || ''}
-//           onChange={handleChange}
-//         />
-//         <TextField
-//           margin="dense"
-//           name="priceStandard"
-//           label="정가"
-//           type="number"
-//           fullWidth
-//           variant="standard"
-//           value={bookForm?.priceStandard || ''}
-//           onChange={handleChange}
-//         />
-//         <TextField
-//           margin="dense"
-//           name="priceSales"
-//           label="판매가"
-//           type="number"
-//           fullWidth
-//           variant="standard"
-//           value={bookForm?.priceSales || ''}
-//           onChange={handleChange}
-//         />
-//         <TextField
-//           margin="dense"
-//           name="cover"
-//           label="커버 이미지"
-//           type="text"
-//           fullWidth
-//           variant="outlined"
-//           value={bookForm?.cover || ''}
-//           onChange={handleChange}
-//         />
-//         {imagePreview && <img src={imagePreview} alt="cover preview" style={{ width: '30%', height: 'auto', marginTop: '20px' }} />}
-//         <CloudImageUpload onUpload={handleImageUpload} />
+//         {/* <Typography>예약번호: {filteredOrders.orderNum}</Typography> */}
+//         {/* <Typography>주문날짜: {filteredOrders.createdAt.slice(0, 10)}</Typography> */}
+//         {/* <Typography>이메일: {filteredOrders.userId.email}</Typography> */}
+//         {/* <Typography>주소: {filteredOrders.shipTo.address + ' ' + filteredOrders.shipTo.city}</Typography> */}
+//         {/* <Typography>연락처: {`${filteredOrders.contact.firstName} ${filteredOrders.contact.lastName} ${filteredOrders.contact.contact}`}</Typography> */}
+//         <Typography>주문내역</Typography>
+//         <TableContainer>
+//           <Table>
+//             <TableHead>
+//               <TableRow>
+//                 <TableCell>ID</TableCell>
+//                 <TableCell>Name</TableCell>
+//                 <TableCell>Unit Price</TableCell>
+//                 <TableCell>Qty</TableCell>
+//                 <TableCell>Price</TableCell>
+//               </TableRow>
+//             </TableHead>
+//             <TableBody>
+//               {filteredOrders.items.map((item) => (
+//                 <TableRow key={item._id}>
+//                   <TableCell>{item._id}</TableCell>
+//                   <TableCell>{item.productId.name}</TableCell>
+//                   <TableCell>{currencyFormat(item.price)}</TableCell>
+//                   <TableCell>{item.qty}</TableCell>
+//                   <TableCell>{currencyFormat(item.price * item.qty)}</TableCell>
+//                 </TableRow>
+//               ))}
+//               <TableRow>
+//                 <TableCell colSpan={4}>총계:</TableCell>
+//                 <TableCell>{currencyFormat(filteredOrders.totalPrice)}</TableCell>
+//               </TableRow>
+//             </TableBody>
+//           </Table>
+//         </TableContainer>
+//         <form onSubmit={submitStatus}>
+//           <FormControl fullWidth margin="normal">
+//             <InputLabel>Status</InputLabel>
+//             <Select value={orderStatus} onChange={handleStatusChange}>
+//               {ORDER_STATUS.map((status, index) => (
+//                 <MenuItem key={index} value={status.toLowerCase()}>
+//                   {status}
+//                 </MenuItem>
+//               ))}
+//             </Select>
+//           </FormControl>
+//           <DialogActions>
+//             <Button onClick={handleClose} color="secondary">
+//               닫기
+//             </Button>
+//             <Button type="submit" color="primary">
+//               저장
+//             </Button>
+//           </DialogActions>
+//         </form>
 //       </DialogContent>
-//       <DialogActions>
-//         <Button onClick={handleCloseDialog}>Cancel</Button>
-//         <Button onClick={handleSubmit}>Save</Button>
-//       </DialogActions>
 //     </Dialog>
 //   );
 // };
