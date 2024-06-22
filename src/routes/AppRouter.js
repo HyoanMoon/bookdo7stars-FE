@@ -14,18 +14,21 @@ import MyInfoPage from '../page/MyInfoPage';
 import AdminProductPage from '../page/AdminProductPage';
 import AdminOrderPage from '../page/AdminOrderPage';
 import AdminDashBoardPage from '../page/AdminDashBoardPage';
-import BooksGroupPage from '../page/BooksGroupPage';
 import SearchedBooksPage from '../page/SearchedBooksPage';
+import BooksGroupPage from '../components/BooksGroupPage/BooksGroupPage';
+import EditorPage from '../page/EditorPage';
 
 const AppRouter = () => {
   return (
-    <div>
+    <div style={{ height: '100%' }}>
       <Routes>
         {/* 메인, 상품 전체, 상품 상세 */}
         <Route index element={<MainPage />} />
         <Route path="/books/:categoryid" element={<CategoryPage />} />
         <Route path="/book/:bookid" element={<BookDetailPage />} />
         <Route path="/search" element={<SearchedBooksPage />} />
+        <Route path="/books/group/:bookGroup" element={<BooksGroupPage />} />
+        <Route path="/books/editor-recommend" element={<EditorPage />} />
 
         {/* 로그인, 회원가입 */}
         <Route path="/login" element={<LoginPage />} />

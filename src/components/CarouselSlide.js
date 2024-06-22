@@ -13,7 +13,7 @@ const CarouselSlide = () => {
   };
 
   return (
-    <div style={{ width: '100vw', overflow: 'hidden' }}>
+    <div style={{ overflow: 'hidden' }}>
       <Carousel showArrows={false} infiniteLoop={true} showThumbs={false} showStatus={false} autoPlay={true} interval={3000}>
         <div onClick={(e) => handleImageClick('6674551e57dd26116151c617', e)}>
           <img src="/carousel/cr1.png" alt="Slide 1" style={{ width: '100%' }} />

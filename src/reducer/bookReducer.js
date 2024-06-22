@@ -1,7 +1,7 @@
 import * as types from '../constants/book.constants';
 const initialState = {
   books: [],
-  originalBooks: [],
+  groupBooks: [],
   categoryBooks: [],
   getBooksError: null,
   getBooksLoading: false,
@@ -16,6 +16,13 @@ const initialState = {
 function bookReducer(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
+    case types.BOOK_GET_BY_GROUP_REQUEST:
+      return { ...state, loading: true };
+    case types.BOOK_GET_BY_GROUP_SUCCESS:
+      console.log('xxxx', payload.books);
+      return { ...state, loading: false, groupBooks: payload.books };
+    case types.BOOK_GET_BY_GROUP_FAIL:
+      return { ...state, loading: false, error: payload };
     case types.SET_SELECTED_BOOK:
       return { ...state, loading: false, error: '', selectedBook: payload };
     case types.BOOK_CREATE_REQUEST:
@@ -28,7 +35,7 @@ function bookReducer(state = initialState, action) {
     case types.GET_BOOK_DETAIL_REQUEST:
       return { ...state, getBooksLoading: true };
     case types.BOOK_GET_SUCCESS:
-      return { ...state, getBooksLoading: false, books: payload.books, originalBooks: payload.books };
+      return { ...state, getBooksLoading: false, books: payload.books };
     case types.BOOK_GET_FAIL:
     case types.GET_BOOK_DETAIL_FAIL:
       return { ...state, getBooksLoading: false, books: [], getBooksError: payload };

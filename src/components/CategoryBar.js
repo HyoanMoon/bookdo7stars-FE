@@ -36,7 +36,7 @@ const CategoryBar = ({ books }) => {
   const queryTypes = ['ItemNewAll', 'ItemNewSpecial', 'BestSeller', 'BlogBest'];
   const bookGroups = {
     ItemNewAll: '새로 나온 책',
-    ItemNewSpecial: '특별 신간',
+    ItemNewSpecial: '화제의 신간',
     BestSeller: '베스트 셀러',
     BlogBest: '블로그 베스트',
   };
@@ -54,16 +54,14 @@ const CategoryBar = ({ books }) => {
 
   const goToAllBooksOfGroup = (group) => {
     const queryType = getKeyByValue(bookGroups, group);
-    console.log(queryType);
-    dispatch(bookActions.setBookGroup(queryType));
-    navigate(`/?queryType=${queryType}`);
+    navigate(`/books/group/${queryType}`);
   };
 
   return (
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" component="div" onClick={handleMouseEnter} sx={{ cursor: 'pointer' }}>
-          카테고리
+          전체 카테고리
         </Typography>
         <CategoryPopOver categories={categories} handleClose={handleClose} anchorEl={anchorEl} />
         <Box sx={{ display: 'flex', justifyContent: 'space-around', width: '80%' }}>

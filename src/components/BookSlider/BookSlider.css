@@ -3,9 +3,9 @@
     background-color: transparent;
     border: none;
     color: #608020;
-    font-size: 2rem;
-    opacity: 30%;
-    padding: 10px;
+    font-size: 3rem;
+    opacity: 40%;
+    /*padding: 10px;*/
     position: absolute;
     top: 50%;
     transform: translateY(-50%);

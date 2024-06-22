@@ -1,7 +1,7 @@
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import * as React from 'react';
-import { InputAdornment } from '@mui/material';
+import { Box, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
@@ -39,40 +39,43 @@ const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch }) => {
   };
 
   return (
-    <div>
-      <TextField select label="Search by" value={selectedField} onChange={handleChange} variant="standard" sx={{ mt: 1, width: '11ch' }}>
-        {fields.map((item) => (
-          <MenuItem key={item} value={item}>
-            {item}
-          </MenuItem>
-        ))}
-      </TextField>
-      <FormControl>
-        <TextField
-          variant="filled"
-          placeholder={'찾으시는 상품을 검색하세요.'}
-          color="success"
-          focused
-          value={searchQuery[selectedField] || ''}
-          onChange={(event) => setSearchQuery({ [selectedField]: event.target.value })}
-          onKeyPress={handleKeyPress}
-          sx={{ backgroundColor: '#fff', width: '500px' }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </FormControl>
-      <IconButton type="button" sx={{ mt: 3 }} aria-label="reset" onClick={resetSearch}>
-        <RefreshIcon />
-      </IconButton>
-      <IconButton type="button" sx={{ mt: 3 }} aria-label="search" onClick={handleSearch}>
-        <SearchIcon />
-      </IconButton>
-    </div>
+    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+      <Box sx={{ width: '7vw' }}>
+        <TextField select label="Search by" value={selectedField} onChange={handleChange} variant="standard" sx={{ mt: 1, width: '11ch', textAlign: 'center' }}>
+          {fields.map((item) => (
+            <MenuItem key={item} value={item}>
+              {item}
+            </MenuItem>
+          ))}
+        </TextField>
+      </Box>
+      <Box>
+        <FormControl sx={{ width: '60vw' }}>
+          <TextField
+            variant="filled"
+            placeholder={'찾으시는 상품을 검색하세요.'}
+            color="success"
+            focused
+            value={searchQuery[selectedField] || ''}
+            onChange={(event) => setSearchQuery({ [selectedField]: event.target.value })}
+            onKeyPress={handleKeyPress}
+            sx={{ backgroundColor: '#fff' }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </FormControl>
+      </Box>
+      <Box sx={{ width: '3vw' }}>
+        <IconButton type="button" aria-label="reset" onClick={resetSearch}>
+          <RefreshIcon />
+        </IconButton>
+      </Box>
+    </Box>
   );
 };
 

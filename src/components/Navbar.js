@@ -25,7 +25,6 @@ function NavBar({ user }) {
     dispatch(userActions.logout());
     navigate('/');
   };
-  console.log('Navbar', user);
 
   const [query, setQuery] = useSearchParams();
   const fields = ['isbn', 'title', 'author', 'category', 'publisher'];
@@ -67,23 +66,21 @@ function NavBar({ user }) {
   return (
     <div>
       {/*<CssBaseline />*/}
-      <AppBar
-        position="static"
-        sx={{ top: 0, backgroundColor: '#fff', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+      <AppBar position="static" sx={{ top: 0, backgroundColor: '#fff', alignItems: 'center', display: 'flex', flexDirection: 'row' }}>
         <Box
           onClick={() => {
             navigate('/');
             dispatch(bookActions.getBookList({}));
             dispatch(categoryActions.setSelectedCategory(null));
             dispatch(bookActions.setCategoryBooks([]));
-          }}>
-          {/* <h2 style={{ color: 'black' }}>로고 이미지</h2> */}
-          <img src="/logo.png" alt="로고 이미지" style={{ color: '#d3ddbd', borderRadius: '3px', height: '7rem', margin: '0.7rem' }} />
+          }}
+          sx={{ padding: 2, width: '10vw' }}>
+          <img src="/logo.png" alt="로고 이미지" style={{ color: '#d3ddbd', borderRadius: '3px', height: '7rem' }} />
         </Box>
-        <Box>
+        <Box sx={{ padding: 2, width: '70vw' }}>
           <SearchBook searchQuery={searchQuery} setSearchQuery={setSearchQuery} fields={fields} resetSearch={resetSearch} />
         </Box>
-        <Box>
+        <Box sx={{ width: '20vw', display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
           <Toolbar>
             <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
               <Box>

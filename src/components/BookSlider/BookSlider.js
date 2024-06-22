@@ -29,7 +29,7 @@ const BookSlider = ({ books }) => {
   };
 
   return (
-    <Box sx={{ mt: 2, height: '300px', marginTop: '30px' }}>
+    <Box sx={{ mt: 2, height: '300px' }}>
       <Carousel containerClass="carousel-container" responsive={responsive} customLeftArrow={<CustomLeftArrow />} customRightArrow={<CustomRightArrow />}>
         {books.map((book, index) => (
           <Box key={index} sx={{ display: 'flex', justifyContent: 'center' }}>

@@ -10,7 +10,6 @@ import { commonUiActions } from './commonUiAction';
 const getBookList = (query) => async (dispatch) => {
   try {
     dispatch({ type: types.BOOK_GET_REQUEST });
-    console.log('QUERY', query);
     const response = await api.get('/book', {
       params: { ...query },
     });
@@ -21,14 +20,25 @@ const getBookList = (query) => async (dispatch) => {
   }
 };
 
+const getBookListByGroup = (bookGroup) => async (dispatch) => {
+  try {
+    dispatch({ type: types.BOOK_GET_BY_GROUP_REQUEST });
+    console.log('group', bookGroup);
+    const response = await api.get(`/book/group/${bookGroup}`);
+    console.log('response', response.data);
+    dispatch({ type: types.BOOK_GET_BY_GROUP_SUCCESS, payload: response.data });
+  } catch (err) {
+    dispatch({ type: types.BOOK_GET_BY_GROUP_FAIL, payload: err });
+    console.error(err);
+  }
+};
+
 const getBookListByCategory = (query, categoryId) => async (dispatch) => {
   try {
-    console.log('CCCCCC');
     dispatch({ type: types.BOOK_GET_BY_CATEGORY_REQUEST });
     const response = await api.get(`/book/${categoryId}`, {
       params: { ...query },
     });
-    console.log(response.data);
 
     dispatch({ type: types.BOOK_GET_BY_CATEGORY_SUCCESS, payload: response.data });
   } catch (err) {
@@ -99,12 +109,14 @@ const setCategoryBooks = (payload) => (dispatch) => {
   dispatch({ type: types.SET_CATEGORY_BOOKS, payload });
 };
 const setBookGroup = (payload) => (dispatch) => {
+  console.log('setBookGroup', payload);
   dispatch({ type: types.SET_BOOK_GROUP, payload });
 };
 
 export const bookActions = {
   getBookList,
   getBookListByCategory,
+  getBookListByGroup,
   getBookDetail,
   createBook,
   deleteBook,
