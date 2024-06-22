@@ -18,6 +18,9 @@ export const UPDATE_ORDER_REQUEST = 'UPDATE_ORDER_REQUEST';
 export const UPDATE_ORDER_SUCCESS = 'UPDATE_ORDER_SUCCESS';
 export const UPDATE_ORDER_FAIL = 'UPDATE_ORDER_FAIL';
 
+// 주문 상태.
+export const ORDER_STATUS = ['preparing', 'shipping', 'delivered', 'refund'];
+
 export const badgeBg = {
   // 아래 항목을 채워주세요.
   // preparing:

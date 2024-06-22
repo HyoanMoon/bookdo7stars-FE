@@ -52,18 +52,22 @@ const AdminPageOrderTable = ({ orderTableHead, orderList }) => {
 
           {/* 테이블 바디 */}
           <TableBody>
-            {orderList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => (
-              <StyledTableRow key={order.id}>
-                <StyledTableCell>{index + 1}</StyledTableCell>
-                <StyledTableCell>{order.id}</StyledTableCell>
-                <StyledTableCell>{order.createdAt}</StyledTableCell>
-                <StyledTableCell>{order.email}</StyledTableCell>
-                <StyledTableCell>{order.books}</StyledTableCell>
-                <StyledTableCell>{order.address}</StyledTableCell>
-                <StyledTableCell>{order.totalPrice}</StyledTableCell>
-                <StyledTableCell>{order.status}</StyledTableCell>
-              </StyledTableRow>
-            ))}
+            {orderList.length > 0 ? (
+              orderList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => (
+                <StyledTableRow key={order.id}>
+                  <StyledTableCell>{index + 1}</StyledTableCell>
+                  <StyledTableCell>{order.id}</StyledTableCell>
+                  <StyledTableCell>{order.createdAt}</StyledTableCell>
+                  <StyledTableCell>{order.email}</StyledTableCell>
+                  <StyledTableCell>{order.books}</StyledTableCell>
+                  <StyledTableCell>{order.address}</StyledTableCell>
+                  <StyledTableCell>{order.totalPrice}</StyledTableCell>
+                  <StyledTableCell>{order.status}</StyledTableCell>
+                </StyledTableRow>
+              ))
+            ) : (
+              <StyledTableCell style={{ textAlign: 'center' }}>주문이 존재하지 않습니다.</StyledTableCell>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
