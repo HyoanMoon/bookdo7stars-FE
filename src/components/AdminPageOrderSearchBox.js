@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Grid, Select, MenuItem, InputLabel } from '@mui/material';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { subDays, format } from 'date-fns';
+import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { subDays } from 'date-fns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery }) => {
+const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery, resetSearch }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [selectedOption, setSelectedOption] = useState('orderID');
@@ -14,20 +15,20 @@ const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery }) => {
     let start, end;
     switch (range) {
       case 'today':
-        start = today;
-        end = today;
+        start = new Date();
+        end = new Date();
         break;
       case 'week':
         start = subDays(today, 7);
-        end = today;
+        end = new Date();
         break;
       case 'month':
         start = subDays(today, 30);
-        end = today;
+        end = new Date();
         break;
       case '3months':
         start = subDays(today, 90);
-        end = today;
+        end = new Date();
         break;
       default:
         start = null;
@@ -37,18 +38,24 @@ const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery }) => {
     setEndDate(end);
   };
 
-  const onCheckEnter = (event, option) => {
-    if (event && event.key === 'Enter') {
-      event.preventDefault();
-      setSearchQuery({ ...searchQuery, [option]: event.target.value });
-    }
-  };
+  // const onCheckEnter = (event, option) => {
+  //   if (event && event.key === 'Enter') {
+  //     event.preventDefault();
+  //     setSearchQuery({ ...searchQuery, [option]: event.target.value });
+  //   }
+  // };
+
+  const formattedStartDate = startDate ? format(startDate, 'yyyy-MM-dd') : null;
+  const formattedEndDate = endDate ? format(endDate, 'yyyy-MM-dd') : null;
 
   const handleSearch = (event, option) => {
     event.preventDefault();
-    setSearchQuery({ ...searchQuery, [option]: event.target.value });
-    console.log('searchQuery', searchQuery);
-    console.log('startDate', startDate);
+    setSearchQuery({
+      ...searchQuery,
+      [option]: event.target.value,
+      startDate: formattedStartDate,
+      endDate: formattedEndDate,
+    });
   };
 
   return (
@@ -89,7 +96,7 @@ const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery }) => {
               <Grid container>
                 {/* 날짜 지정 검색 */}
                 <Grid item xs={12} sm={4}>
-                  <DatePicker
+                  <DesktopDatePicker
                     label="Start Date"
                     value={startDate}
                     onChange={(newValue) => setStartDate(newValue)}
@@ -97,7 +104,7 @@ const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery }) => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={4}>
-                  <DatePicker
+                  <DesktopDatePicker
                     label="End Date"
                     value={endDate}
                     onChange={(newValue) => setEndDate(newValue)}
@@ -112,7 +119,12 @@ const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery }) => {
           <InputLabel sx={{ height: '4ch' }}>상세 조건</InputLabel>
           <Grid container>
             <Grid item xs={12} sm={2}>
-              <Select value={selectedOption} onChange={(event) => setSelectedOption(event.target.value)} fullWidth>
+              <Select
+                value={selectedOption}
+                onChange={(event) => {
+                  setSelectedOption(event.target.value);
+                }}
+                fullWidth>
                 <MenuItem value="orderID">주문 번호</MenuItem>
                 <MenuItem value="userEmail">구매자</MenuItem>
               </Select>
@@ -122,7 +134,7 @@ const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery }) => {
                 label={selectedOption}
                 variant="outlined"
                 fullWidth
-                onKeyPress={onCheckEnter}
+                // onKeyPress={onCheckEnter}
                 value={searchQuery[selectedOption] || ''}
                 placeholder="값을 입력해주세요."
                 // sx={{ height: '10px', width: '20ch', '& input': { height: '7px' } }}
@@ -135,6 +147,9 @@ const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery }) => {
             <Grid item xs={12} sm={8}>
               <Button variant="contained" color="primary" fullWidth sx={{ ml: 1, width: '30ch', height: '55px' }} onClick={handleSearch}>
                 Search
+              </Button>
+              <Button variant="contained" color="primary" fullWidth sx={{ ml: 1, width: '30ch', height: '55px' }} onClick={resetSearch}>
+                Reset
               </Button>
             </Grid>
           </Grid>
