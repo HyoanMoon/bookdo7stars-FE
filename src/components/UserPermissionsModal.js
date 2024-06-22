@@ -22,7 +22,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-const UserPermissionsModal = ({ open, handleClose, userData, handleNameChange, handleRoleChange, handleLevelChange, handleDelete }) => {
+const UserPermissionsModal = ({ open, handleClose, userData, handleLevelChange, handleDelete, handleEdit }) => {
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
       <DialogTitle>사용자 권한 관리</DialogTitle>
@@ -44,21 +44,17 @@ const UserPermissionsModal = ({ open, handleClose, userData, handleNameChange, h
                 <TableRow key={user._id}>
                   <TableCell>{user._id}</TableCell>
                   <TableCell>
-                    <TextField value={user.userName} onChange={(event) => handleNameChange(user._id, event)} variant="outlined" size="small" />
+                    <TextField name="userName" value={user.userName} variant="outlined" size="small" />
                   </TableCell>
                   <TableCell>
                     <FormControl variant="outlined" size="small" fullWidth>
-                      <InputLabel>역할</InputLabel>
-                      <Select value={user.role} onChange={(event) => handleRoleChange(user._id, event)} label="역할">
-                        <MenuItem value="customer">Customer</MenuItem>
-                        <MenuItem value="admin">Admin</MenuItem>
-                      </Select>
+                      <TextField name="role" value={user.role} label="역할" readOnly />
                     </FormControl>
                   </TableCell>
                   <TableCell>
                     <FormControl variant="outlined" size="small" fullWidth>
                       <InputLabel>레벨</InputLabel>
-                      <Select value={user.level} onChange={(event) => handleLevelChange(user._id, event)} label="레벨">
+                      <Select name="level" value={user.level} onChange={(event) => handleLevelChange(user._id, event)} label="레벨">
                         <MenuItem value="bronze">Bronze</MenuItem>
                         <MenuItem value="silver">Silver</MenuItem>
                         <MenuItem value="gold">Gold</MenuItem>
@@ -67,12 +63,14 @@ const UserPermissionsModal = ({ open, handleClose, userData, handleNameChange, h
                     </FormControl>
                   </TableCell>
                   <TableCell>
-                    <IconButton color="primary">
-                      <EditIcon className="edit-icon " />
-                    </IconButton>
-                    <IconButton onClick={() => handleDelete(user._id)} color="secondary">
-                      <DeleteIcon className="deleteIcon" />
-                    </IconButton>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <IconButton color="primary" onClick={() => handleEdit(user._id)}>
+                        <EditIcon className="edit-icon" />
+                      </IconButton>
+                      <IconButton onClick={() => handleDelete(user._id)} color="secondary">
+                        <DeleteIcon className="deleteIcon" />
+                      </IconButton>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Grid, TextField, IconButton } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Container, Grid } from '@mui/material';
 import { Line, Pie, Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import '../style/adminDashboardPageStyles.css';
@@ -67,18 +66,6 @@ function AdminDashBoardPage() {
     ],
   };
 
-  const userData = {
-    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-    datasets: [
-      {
-        label: '신규 가입자 수',
-        data: [5, 10, 8, 12],
-        borderColor: '#8e5ea2',
-        fill: false,
-      },
-    ],
-  };
-
   const inquiryData = {
     labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
     datasets: [
@@ -86,6 +73,47 @@ function AdminDashBoardPage() {
         label: '고객 문의 수',
         data: [2, 4, 6, 8],
         backgroundColor: '#FF6384',
+      },
+    ],
+  };
+
+  // 각 달의 가입자 수 계산
+  const getMonthlySignups = (year, month) => {
+    return localUserData.filter((user) => {
+      const date = new Date(user.createdAt);
+      return date.getFullYear() === year && date.getMonth() === month;
+    }).length;
+  };
+
+  const today = new Date();
+  const currentMonth = today.getMonth(); // 현재 월 (0이 1월이므로 0부터 시작)
+  const currentYear = today.getFullYear();
+
+  const lastMonth = (currentMonth - 1 + 12) % 12;
+  const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
+  const twoMonthsAgo = (currentMonth - 2 + 12) % 12;
+  const twoMonthsAgoYear = currentMonth <= 1 ? currentYear - 1 : currentYear;
+
+  const threeMonthsAgo = (currentMonth - 3 + 12) % 12;
+  const threeMonthsAgoYear = currentMonth <= 2 ? currentYear - 1 : currentYear;
+
+  const currentMonthSignups = getMonthlySignups(currentYear, currentMonth);
+  const lastMonthSignups = getMonthlySignups(lastMonthYear, lastMonth);
+  const twoMonthsAgoSignups = getMonthlySignups(twoMonthsAgoYear, twoMonthsAgo);
+  const threeMonthsAgoSignups = getMonthlySignups(threeMonthsAgoYear, threeMonthsAgo);
+
+  // 월 이름 배열
+  const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+
+  const signupData = {
+    labels: [monthNames[threeMonthsAgo], monthNames[twoMonthsAgo], monthNames[lastMonth], monthNames[currentMonth]],
+    datasets: [
+      {
+        label: `${currentYear}년 가입자 수`,
+        data: [threeMonthsAgoSignups, twoMonthsAgoSignups, lastMonthSignups, currentMonthSignups],
+        backgroundColor: ['#ff9800', '#4caf50', '#2196f3', '#f44336'],
+        barThickness: 15, // 막대 너비 설정
       },
     ],
   };
@@ -106,32 +134,9 @@ function AdminDashBoardPage() {
     setOpenAdminModal(false);
   };
 
-  const handleEmailChange = (id, event) => {
-    setLocalAdminData(localAdminData.map((admin) => (admin._id === id ? { ...admin, email: event.target.value } : admin)));
-  };
-
-  const handlePasswordChange = (id, event) => {
-    setLocalAdminData(localAdminData.map((admin) => (admin._id === id ? { ...admin, password: event.target.value } : admin)));
-  };
-
-  const handleNameChange = (id, event) => {
-    setLocalAdminData(localAdminData.map((admin) => (admin._id === id ? { ...admin, userName: event.target.value } : admin)));
-  };
-
-  const handleRoleChange = (id, event) => {
-    setLocalAdminData(localAdminData.map((admin) => (admin._id === id ? { ...admin, role: event.target.value } : admin)));
-  };
-
-  const handleUserNameChange = (id, event) => {
-    setLocalUserData(localUserData.map((user) => (user._id === id ? { ...user, userName: event.target.value } : user)));
-  };
-
-  const handleUserRoleChange = (id, event) => {
-    setLocalUserData(localUserData.map((user) => (user._id === id ? { ...user, role: event.target.value } : user)));
-  };
-
-  const handleUserLevelChange = (id, event) => {
-    setLocalUserData(localUserData.map((user) => (user._id === id ? { ...user, level: event.target.value } : user)));
+  const handleUserChange = (id, event) => {
+    const { name, value } = event.target;
+    setLocalUserData((prevUserData) => prevUserData.map((user) => (user._id === id ? { ...user, [name]: value } : user)));
   };
 
   const handleDelete = (id) => {
@@ -142,6 +147,15 @@ function AdminDashBoardPage() {
   const handleAddAdmin = () => {
     dispatch(userActions.registerAdmin(newAdmin));
     setNewAdmin({ userName: '', email: '', password: '', role: 'admin' });
+  };
+
+  // Edit 버튼을 클릭했을 때 dispatch 액션을 처리하는 함수
+  const handleEdit = (id) => {
+    const user = localUserData.find((user) => user._id === id);
+    if (user) {
+      // 원하는 Redux 액션을 dispatch합니다.
+      dispatch(userActions.updateUserLevel(user._id, user.level));
+    }
   };
 
   // 관리자 카드의 내용을 동적으로 생성
@@ -171,15 +185,10 @@ function AdminDashBoardPage() {
 
             {/* 고객 관리 */}
             <Grid item xs={12} md={6}>
-              <AdminDashboardCard title="신규 가입 고객" content={<Line data={userData} />} />
+              <AdminDashboardCard title="신규 가입 고객" content={<Bar data={signupData} />} />
             </Grid>
             <Grid item xs={12} md={6}>
               <AdminDashboardCard title="고객 문의" content={<Bar data={inquiryData} />} />
-            </Grid>
-
-            {/* 재고 관리 */}
-            <Grid item xs={12}>
-              <AdminDashboardCard title="재고 부족 품목" content="재고가 부족한 품목을 여기에 표시합니다." />
             </Grid>
 
             {/* 권한 관리 */}
@@ -195,10 +204,9 @@ function AdminDashBoardPage() {
               open={openUserModal}
               handleClose={handleCloseUserModal}
               userData={localUserData}
-              handleNameChange={handleUserNameChange}
-              handleRoleChange={handleUserRoleChange}
-              handleLevelChange={handleUserLevelChange}
+              handleLevelChange={handleUserChange}
               handleDelete={handleDelete}
+              handleEdit={handleEdit} // handleEdit 함수 전달
             />
 
             {/* 어드민 권한 모달 컴포넌트 */}
@@ -207,10 +215,10 @@ function AdminDashBoardPage() {
               handleClose={handleCloseAdminModal}
               adminData={localAdminData}
               newAdmin={newAdmin}
-              handleEmailChange={handleEmailChange}
-              handlePasswordChange={handlePasswordChange}
-              handleNameChange={handleNameChange}
-              handleRoleChange={handleRoleChange}
+              handleEmailChange={handleUserChange}
+              handlePasswordChange={handleUserChange}
+              handleNameChange={handleUserChange}
+              handleRoleChange={handleUserChange}
               handleDelete={handleDelete}
               handleAddAdmin={handleAddAdmin}
               setNewAdmin={setNewAdmin}

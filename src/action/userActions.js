@@ -119,6 +119,21 @@ const getAllUser = () => async (dispatch) => {
   }
 };
 
+const updateUserLevel = (id, level) => async (dispatch) => {
+  try {
+    dispatch({ type: types.USER_LEVEL_EDIT_REQUEST });
+
+    const response = await api.put(`/user/${id}`, { level }); // PUT 요청으로 변경
+    console.log('response for user', response);
+
+    if (response.status !== 200) throw new Error(response.data.message);
+
+    dispatch({ type: types.USER_LEVEL_EDIT_SUCCESS, payload: response.data.user });
+  } catch (error) {
+    dispatch({ type: types.USER_LEVEL_EDIT_FAIL, payload: error.message });
+  }
+};
+
 export const userActions = {
   loginWithEmail,
   loginWithGoogle,
@@ -129,4 +144,5 @@ export const userActions = {
   adminUser,
   registerAdmin,
   getAllUser,
+  updateUserLevel,
 };

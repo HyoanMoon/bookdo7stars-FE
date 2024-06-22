@@ -17,11 +17,13 @@ function userReducer(state = initialState, action) {
     case types.LOGIN_WITH_TOKEN_REQUEST:
     case types.GET_ADMIN_REQUEST:
     case types.GET_All_USERS_REQUEST:
+    case types.USER_LEVEL_EDIT_REQUEST:
       return { ...state, loading: true };
 
     case types.USER_LOGIN_SUCCESS:
     case types.LOGIN_WITH_TOKEN_SUCCESS:
     case types.GOOGLE_LOGIN_SUCCESS:
+    case types.USER_LEVEL_EDIT_SUCCESS:
       return { ...state, loading: false, user: payload, error: '' };
 
     case types.USER_LOGIN_FAIL:
@@ -29,6 +31,7 @@ function userReducer(state = initialState, action) {
     case types.GOOGLE_LOGIN_FAIL:
     case types.GET_ADMIN_FAIL:
     case types.GET_All_USERS_FAIL:
+    case types.USER_LEVEL_EDIT_FAIL:
       return { ...state, loading: false, error: payload };
 
     case types.USER_LOGOUT:
