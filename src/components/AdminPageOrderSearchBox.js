@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Grid, Select, MenuItem, InputLabel } from '@mui/material';
 import { subDays, format, isValid } from 'date-fns';
-import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 
 const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery, resetSearch }) => {
   const [startDate, setStartDate] = useState(null);
@@ -87,18 +87,16 @@ const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery, resetSearch }) =
                   <DesktopDatePicker
                     label="Start Date"
                     value={startDate}
-                    fullWidth
                     onChange={(newValue) => setStartDate(newValue)}
-                    renderInput={(params) => <TextField {...params} fullWidth />}
+                    slotProps={{ textField: { fullWidth: true } }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={4}>
                   <DesktopDatePicker
                     label="End Date"
                     value={endDate}
-                    fullWidth
                     onChange={(newValue) => setEndDate(newValue)}
-                    renderInput={(params) => <TextField {...params} fullWidth />}
+                    slotProps={{ textField: { fullWidth: true } }}
                   />
                 </Grid>
               </Grid>
@@ -134,11 +132,11 @@ const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery, resetSearch }) =
             </Grid>
 
             {/* 검색 버튼 */}
-            <Grid item xs={12} sm={8} spacing={2}>
+            <Grid item xs={12} sm={8}>
               <Button variant="contained" color="primary" fullWidth sx={{ ml: 1, width: '30ch', height: '55px' }} onClick={handleSearch}>
                 Search
               </Button>
-              <Button variant="contained" color="primary" fullWidth sx={{ ml: 1, width: '30ch', height: '55px' }} onClick={resetSearch}>
+              <Button variant="contained" color="primary" fullWidth sx={{ ml: 1, ml: 1, width: '30ch', height: '55px' }} onClick={resetSearch}>
                 Reset
               </Button>
             </Grid>
