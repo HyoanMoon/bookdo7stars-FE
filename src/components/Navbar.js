@@ -77,7 +77,8 @@ function NavBar({ user }) {
             dispatch(categoryActions.setSelectedCategory(null));
             dispatch(bookActions.setCategoryBooks([]));
           }}>
-          <h2 style={{ color: 'black' }}>로고 이미지</h2>
+          {/* <h2 style={{ color: 'black' }}>로고 이미지</h2> */}
+          <img src="/logo.png" alt="로고 이미지" style={{ borderRadius: '3px', height: '7rem', margin: '0.7rem' }} />
         </Box>
         <Box>
           <SearchBook searchQuery={searchQuery} setSearchQuery={setSearchQuery} fields={fields} resetSearch={resetSearch} />

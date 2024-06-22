@@ -19,7 +19,7 @@ const BookContainer = ({ books, categories, sx, title }) => {
         <Typography variant="h3" component="div" gutterBottom sx={{ fontWeight: 'bold', marginTop: '50px', display: 'flex', alignItems: 'center' }}>
           {title}
         </Typography>
-        <Button variant="outlined" size="large" endIcon={<AddCircleOutline />}>
+        <Button size="large" endIcon={<AddCircleOutline />}>
           더보기
         </Button>
       </Box>

@@ -6,10 +6,10 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 const BookToCart = () => {
   return (
     <Box display="flex" alignItems="center" gap={2}>
-      <Button variant="contained" color="primary" startIcon={<AddShoppingCartIcon />} sx={{ flexGrow: 1 }}>
+      <Button variant="contained" color="primary" startIcon={<AddShoppingCartIcon />} sx={{ height: '60px', flexGrow: 1 }}>
         ADD TO CART
       </Button>
-      <Button variant="outlined" color="primary" startIcon={<FavoriteBorderIcon />} sx={{ flexGrow: 1 }}>
+      <Button variant="outlined" color="primary" startIcon={<FavoriteBorderIcon />} sx={{ height: '60px', flexGrow: 1 }}>
         WISH
       </Button>
     </Box>

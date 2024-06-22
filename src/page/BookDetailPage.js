@@ -9,6 +9,7 @@ import BookDetailInfo from '../components/BookDetailPage/BookDetailInfo';
 import BookDescription from '../components/BookDetailPage/BookDescription';
 import { useDispatch, useSelector } from 'react-redux';
 import { bookActions } from '../action/bookActions';
+import Info3 from '../components/BookDetailPage/Info3';
 // import ClipLoader from 'react-spinners/ClipLoader';
 
 const BookDetailPage = () => {
@@ -39,8 +40,11 @@ const BookDetailPage = () => {
             <BookToCart />
             <BookDetailInfo pubDate={selectedBook.pubDate} isbn={selectedBook.isbn} />
           </Grid>
-          <Grid item xs={12} sm={12} md={12}>
+          {/* <Grid item xs={12} sm={12} md={12}>
             <BookDescription description={selectedBook.description} />
+          </Grid> */}
+          <Grid item xs={12} sm={12} md={12}>
+            <Info3 description={selectedBook.description} />
           </Grid>
         </Grid>
       </Container>

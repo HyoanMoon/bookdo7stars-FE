@@ -18,6 +18,22 @@ const store = configureStore({
     ui: commonUiReducer,
     category: categoryReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      immutableCheck: false, // ImmutableStateInvariantMiddleware 비활성화
+      serializableCheck: false,
+    }),
 });
 
 export default store;
+
+// import { configureStore } from '@reduxjs/toolkit';
+
+// const store = configureStore({
+//   reducer: rootReducer,
+//   middleware: (getDefaultMiddleware) =>
+//     getDefaultMiddleware({
+//       immutableCheck: false, // ImmutableStateInvariantMiddleware 비활성화
+//       serializableCheck: false,
+//     }),
+// });

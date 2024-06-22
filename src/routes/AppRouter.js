@@ -25,7 +25,7 @@ const AppRouter = () => {
         <Route index element={<MainPage />} />
         <Route path="/books/:categoryid" element={<CategoryPage />} />
         <Route path="/book/:bookid" element={<BookDetailPage />} />
-        <Route path="/?query" element={<SearchedBooksPage />} />
+        <Route path="/search" element={<SearchedBooksPage />} />
 
         {/* 로그인, 회원가입 */}
         <Route path="/login" element={<LoginPage />} />

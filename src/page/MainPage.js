@@ -8,7 +8,8 @@ import NotFoundPage from './NotFoundPage';
 import SlideBanner from '../components/SlideBanner/SlideBanner';
 import BooksCarousel from '../components/BooksCarousel/BooksCarousel';
 import BookContainer from '../components/BookContainer/BookContainer';
-
+import CarouselSlide from '../components/CarouselSlide';
+import Footer from '../components/Footer/Footer';
 const MainPage = () => {
   const { books, bookGroup, categoryBooks } = useSelector((state) => state.book);
 
@@ -71,20 +72,29 @@ const MainPage = () => {
   const blogBestBooksCategories = getCategories(blogBestBooks);
 
   return (
-    <Container sx={{ width: '100vw', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+    <>
       <Box sx={{ marginBottom: '30px', marginTop: '60px' }}>
-        <SlideBanner books={topBestRankedBooks} />
+        <CarouselSlide books={topBestRankedBooks} />
       </Box>
-      <Box sx={{ marginBottom: '30px', marginTop: '60px' }}>
-        <BooksCarousel books={newSpecialBooks.slice(0, 10)} title={'화제의 신작'} sx={{ backgroundColor: 'primary.light' }} />
-      </Box>
-      <Box sx={{ marginBottom: '30px', marginTop: '60px' }}>
-        <BookContainer books={bestSeller.slice(0, 10)} categories={bestSellerCategories} title={'베스트 셀러'} sx={{ height: 500 }} />
-      </Box>
-      <Box sx={{ marginTop: '400px' }}>
-        <BookContainer books={newAllBooks.slice(0, 5)} categories={newAllBooksCategories} title={'신간'} sx={{ height: 500 }} />
-      </Box>
-    </Container>
+
+      <Container sx={{ width: '100vw', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        {/* <Box sx={{ marginBottom: '30px', marginTop: '60px' }}>
+          <SlideBanner books={topBestRankedBooks} />
+        </Box> */}
+        <Box sx={{ marginBottom: '30px', marginTop: '60px' }}>
+          <BooksCarousel books={newSpecialBooks.slice(0, 10)} title={'화제의 신작'} sx={{}} />
+        </Box>
+        <Box sx={{ marginBottom: '30px', marginTop: '60px' }}>
+          <BookContainer books={bestSeller.slice(0, 10)} categories={bestSellerCategories} title={'베스트 셀러'} sx={{ height: 500 }} />
+        </Box>
+        <Box sx={{ marginTop: '400px' }}>
+          <BookContainer books={newAllBooks.slice(0, 5)} categories={newAllBooksCategories} title={'신간'} sx={{ height: 500 }} />
+        </Box>
+      </Container>
+      {/* <Footer /> */}
+    </>
   );
 };
 export default MainPage;
+
+//backgroundColor: 'primary.light'

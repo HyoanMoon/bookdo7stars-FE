@@ -6,6 +6,7 @@ import ToastMessage from '../components/ToastMessage';
 import { userActions } from '../action/userActions';
 import { bookActions } from '../action/bookActions';
 import { useSearchParams } from 'react-router-dom';
+import Footer from '../components/Footer/Footer';
 
 const AppLayout = ({ children }) => {
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ const AppLayout = ({ children }) => {
         <CategoryBar books={books} />
         <div style={{ marginTop: '20px' }}>{children}</div>
       </div>
+      <Footer />
     </div>
   );
 };
