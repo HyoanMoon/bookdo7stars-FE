@@ -19,7 +19,7 @@ const cart = '장바구니';
 function NavBar({ user }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  console.log('userrr : ', user);
   const handleLogout = () => {
     dispatch(userActions.logout());
     navigate('/');
@@ -34,6 +34,14 @@ function NavBar({ user }) {
   }, {});
 
   const [searchQuery, setSearchQuery] = useState(totalField);
+
+  const goToMyPage = () => {
+    navigate('/account/myinfo');
+  };
+
+  const goToAdminPage = () => {
+    navigate('/admin/dashboard');
+  };
 
   const handleSearch = (newSearchQuery) => {
     const params = new URLSearchParams();
@@ -89,11 +97,25 @@ function NavBar({ user }) {
                   </Button>
                 </Box>
               )}
+              {user && user.user?.role === 'customer' && (
+                <Box>
+                  <Button onClick={goToMyPage} variant="outlined" size="medium" key={cart} sx={{ color: 'primary', marginRight: '5px' }}>
+                    마이페이지
+                  </Button>
+                </Box>
+              )}
               <Box>
-                <Button variant="outlined" size="medium" key={cart} sx={{ color: 'primary' }}>
+                <Button variant="outlined" size="medium" key={cart} sx={{ color: 'primary', marginRight: '5px' }}>
                   {cart}
                 </Button>
               </Box>
+              {user && user.user?.role === 'admin' && (
+                <Box>
+                  <Button onClick={goToAdminPage} variant="outlined" size="medium" key={cart} sx={{ color: 'primary' }}>
+                    admin
+                  </Button>
+                </Box>
+              )}
             </Box>
           </Toolbar>
         </Box>
