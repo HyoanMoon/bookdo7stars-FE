@@ -1,6 +1,6 @@
 import * as types from '../constants/book.constants';
 const initialState = {
-  books: [],
+  bookList: [],
   groupBooks: [],
   categoryBooks: [],
   getBooksError: null,
@@ -41,14 +41,14 @@ function bookReducer(state = initialState, action) {
     case types.GET_BOOK_DETAIL_REQUEST:
       return { ...state, getBooksLoading: true };
     case types.BOOK_GET_SUCCESS:
-      return { ...state, getBooksLoading: false, books: payload.books };
+      return { ...state, getBooksLoading: false, bookList: payload.books };
     case types.BOOK_GET_FAIL:
     case types.GET_BOOK_DETAIL_FAIL:
-      return { ...state, getBooksLoading: false, books: [], getBooksError: payload };
+      return { ...state, getBooksLoading: false, bookList: [], getBooksError: payload };
     case types.BOOK_GET_BY_CATEGORY_REQUEST:
       return { ...state, getBooksByCategoryLoading: true };
     case types.BOOK_GET_BY_CATEGORY_SUCCESS:
-      return { ...state, getBooksByCategoryLoading: false, books: state.books, categoryBooks: payload.data };
+      return { ...state, getBooksByCategoryLoading: false, bookList: state.bookList, categoryBooks: payload.data };
     case types.BOOK_GET_BY_CATEGORY_FAIL:
       return { ...state, getBooksByCategoryLoading: false, groupBooks: [], getBooksByCategoryError: payload };
     case types.SET_BOOK_GROUP:
@@ -56,6 +56,8 @@ function bookReducer(state = initialState, action) {
     case types.GET_BOOK_DETAIL_SUCCESS:
       console.log('[북리듀서] 셀렉티드북의 페이로드 잘 들어오는 지: ', payload.data);
       return { ...state, getBooksLoading: false, selectedBook: payload.data };
+    case types.RESET_BOOK_BY_CATEGORY:
+      return { ...state, categoryBooks: payload };
 
     default:
       return state;

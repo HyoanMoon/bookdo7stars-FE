@@ -5,7 +5,7 @@ import { AddCircleOutline } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-const BookContainer = ({ books, categories, sx, title }) => {
+const BookContainer = ({ bookList, categories, sx, title }) => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('전체');
 
@@ -13,8 +13,8 @@ const BookContainer = ({ books, categories, sx, title }) => {
     setSelectedCategory(newValue);
   };
 
-  const filteredBooks = selectedCategory === '전체' ? books : books.filter((book) => book.categoryName.includes(selectedCategory));
-  const bookGroup = books[0]?.queryType;
+  const filteredBooks = selectedCategory === '전체' ? bookList : bookList.filter((book) => book.categoryName.includes(selectedCategory));
+  const bookGroup = bookList[0]?.queryType;
   const onClickMore = (bookGroup) => {
     if (title === '에디터 추천') {
       navigate(`/books/editor-recommend`);

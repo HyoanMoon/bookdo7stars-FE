@@ -15,8 +15,9 @@ const AppLayout = ({ children }) => {
     dispatch(userActions.loginWithToken());
   }, []);
 
-  const { books, bookGroup } = useSelector((state) => state.book);
+  const { bookList, bookGroup } = useSelector((state) => state.book);
 
+  console.log(bookList);
   useEffect(() => {
     if (bookGroup) {
       dispatch(bookActions.getBookList({ queryType: bookGroup }));
@@ -40,7 +41,7 @@ const AppLayout = ({ children }) => {
       </div>
       <div>
         <NavBar user={user} />
-        <CategoryBar books={books} />
+        <CategoryBar bookList={bookList} />
         <div style={{ marginTop: '20px' }}>{children}</div>
       </div>
       <Footer />

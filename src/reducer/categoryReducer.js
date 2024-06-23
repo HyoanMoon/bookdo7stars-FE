@@ -5,6 +5,7 @@ const initialState = {
   getCategoriesLoading: false,
   selectedCategory: null,
   selectedCategoryPath: null,
+  selectedCategoryId: null,
 };
 
 function categoryReducer(state = initialState, action) {
@@ -20,6 +21,8 @@ function categoryReducer(state = initialState, action) {
       return { ...state, selectedCategory: payload };
     case types.SET_SELECTED_CATEGORY_PATH:
       return { ...state, selectedCategoryPath: payload };
+    case types.SET_SELECTED_CATEGORY_ID:
+      return { ...state, selectedCategoryId: payload };
     default:
       return state;
   }

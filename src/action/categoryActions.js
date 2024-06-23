@@ -21,8 +21,13 @@ const setSelectedCategory = (category) => (dispatch) => {
 const setSelectedCategoryPath = (category) => (dispatch) => {
   dispatch({ type: types.SET_SELECTED_CATEGORY_PATH, payload: category });
 };
+
+const setSelectedCategoryId = (id) => (dispatch) => {
+  dispatch({ type: types.SET_SELECTED_CATEGORY_ID, payload: id });
+};
 export const categoryActions = {
   getCategoryList,
   setSelectedCategory,
   setSelectedCategoryPath,
+  setSelectedCategoryId,
 };

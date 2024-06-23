@@ -5,17 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import CategoryPopOver from './CategoryPopOver';
 import { useNavigate } from 'react-router-dom';
-import { bookActions } from '../action/bookActions';
 import { getCategoryHierarchy } from '../_helper/getCategoryHierarchy';
 import { getSubCategories } from '../_helper/getSubCategories';
-import { Popper } from '@mui/base';
 import { getKeyByValue } from '../_helper/getKeyByValue';
 import { getBookGroupArray } from '../_helper/getBookGroupArray';
 
-const CategoryBar = ({ books }) => {
+const CategoryBar = ({ bookList }) => {
   const dispatch = useDispatch();
-  const { categories } = useSelector((state) => state.category);
-  const { bookGroup } = useSelector((state) => state.book);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -37,7 +33,7 @@ const CategoryBar = ({ books }) => {
   const id = canBeOpen ? 'transition-popper' : undefined;
 
   const totalCategories = [];
-  books.map((book) => {
+  bookList.map((book) => {
     return totalCategories.push(book.categoryName);
   });
   const categoryHierarchy = getCategoryHierarchy(totalCategories);
@@ -84,7 +80,6 @@ const CategoryBar = ({ books }) => {
       navigate(`/books/group/${queryType}`);
     }
   };
-  console.log(thirdAllSubCategories);
 
   return (
     <AppBar position="static">

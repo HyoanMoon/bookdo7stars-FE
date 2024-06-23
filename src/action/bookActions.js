@@ -101,6 +101,9 @@ const updateBook = (bookForm, id) => async (dispatch) => {
 const setBookGroup = (payload) => (dispatch) => {
   dispatch({ type: types.SET_BOOK_GROUP, payload });
 };
+const resetBookListByCategory = (payload) => (dispatch) => {
+  dispatch({ type: types.RESET_BOOK_BY_CATEGORY, payload });
+};
 
 export const bookActions = {
   getBookList,
@@ -111,4 +114,5 @@ export const bookActions = {
   deleteBook,
   updateBook,
   setBookGroup,
+  resetBookListByCategory,
 };

@@ -10,13 +10,13 @@ import { getGroupNameInKorean } from '../../_helper/getGroupNameInKorean';
 
 const BooksGroupPage = () => {
   const dispatch = useDispatch();
-  const { books, groupBooks } = useSelector((state) => state.book);
+  const { bookList, groupBooks } = useSelector((state) => state.book);
   const [category, setCategory] = useState('국내도서');
 
   const bookGroup = useParams();
 
   const totalCategories = [];
-  books.map((book) => {
+  bookList.map((book) => {
     return totalCategories.push(book.categoryName);
   });
 
@@ -26,7 +26,7 @@ const BooksGroupPage = () => {
     }
   }, [bookGroup]);
 
-  if (!books) {
+  if (!bookList) {
     return;
   }
   if (!groupBooks || !bookGroup) {
@@ -81,7 +81,7 @@ const BooksGroupPage = () => {
         {/* 오른쪽 칼럼 (2:10 비율) */}
         <Grid item xs={10}>
           <Box>
-            <BooksGroupContainer books={groupBooksByCategory} title={groupNameInKorean} />
+            <BooksGroupContainer bookList={groupBooksByCategory} title={groupNameInKorean} />
           </Box>
         </Grid>
       </Grid>

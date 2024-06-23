@@ -4,15 +4,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import BooksAllContainer from './BooksAllContainer';
 
 const BooksAllPage = () => {
-  const { books } = useSelector((state) => state.book);
+  const { bookList } = useSelector((state) => state.book);
 
-  if (!books) {
+  if (!bookList) {
     return;
   }
   return (
     <Container sx={{ width: '100vw', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
       <Box sx={{ marginBottom: '50px', marginTop: '10px' }}>
-        <BooksAllContainer books={books} title="전체 도서" />
+        <BooksAllContainer bookList={bookList} title="전체 도서" />
       </Box>
     </Container>
   );

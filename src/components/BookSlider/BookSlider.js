@@ -8,7 +8,7 @@ import 'react-multi-carousel/lib/styles.css';
 import './BookSlider.css';
 import CustomRightArrow from './CustomRightArrow';
 import CustomLeftArrow from './CustomLeftArrow';
-const BookSlider = ({ books }) => {
+const BookSlider = ({ bookList }) => {
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -31,7 +31,7 @@ const BookSlider = ({ books }) => {
   return (
     <Box sx={{ mt: 2, height: '300px' }}>
       <Carousel containerClass="carousel-container" responsive={responsive} customLeftArrow={<CustomLeftArrow />} customRightArrow={<CustomRightArrow />}>
-        {books.map((book, index) => (
+        {bookList.map((book, index) => (
           <Box key={index} sx={{ display: 'flex', justifyContent: 'center' }}>
             <BookCard book={book} />
           </Box>

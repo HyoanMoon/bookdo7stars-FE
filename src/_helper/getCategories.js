@@ -1,5 +1,5 @@
-export function getCategories(books) {
-  const categoriesOfGroup = books.map((book) => {
+export function getCategories(bookList) {
+  const categoriesOfGroup = bookList.map((book) => {
     return book.categoryName.split('>')[1];
   });
 

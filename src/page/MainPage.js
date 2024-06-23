@@ -7,29 +7,29 @@ import BookContainer from '../components/BookContainer/BookContainer';
 import CarouselSlide from '../components/CarouselSlide';
 import { getCategories } from '../_helper/getCategories';
 const MainPage = () => {
-  const { books } = useSelector((state) => state.book);
+  const { bookList } = useSelector((state) => state.book);
 
-  if (!books) {
+  if (!bookList) {
     return;
   }
 
   // BlogBestBooks
-  const blogBestBooks = books.filter((book) => {
+  const blogBestBooks = bookList.filter((book) => {
     return book.queryType === 'BlogBest';
   });
 
   // bestSeller
-  const bestSeller = books.filter((book) => {
+  const bestSeller = bookList.filter((book) => {
     return book.queryType === 'BestSeller';
   });
 
   // newSpecialBooks
-  const newSpecialBooks = books.filter((book) => {
+  const newSpecialBooks = bookList.filter((book) => {
     return book.queryType === 'ItemNewSpecial';
   });
 
   // newAllBooks
-  const newAllBooks = books.filter((book) => {
+  const newAllBooks = bookList.filter((book) => {
     return book.queryType === 'ItemNewAll';
   });
 
@@ -69,16 +69,16 @@ const MainPage = () => {
         }}>
         >
         <Box>
-          <BooksCarousel books={newSpecialBooks.slice(0, 10)} title={'화제의 신작'} />
+          <BooksCarousel bookList={newSpecialBooks.slice(0, 10)} title={'화제의 신작'} />
         </Box>
         <Box>
-          <BookContainer books={bestSeller.slice(0, 12)} categories={bestSellerCategories} title={'베스트 셀러'} />
+          <BookContainer bookList={bestSeller.slice(0, 12)} categories={bestSellerCategories} title={'베스트 셀러'} />
         </Box>
         <Box>
-          <BooksCarousel books={newAllBooks.slice(0, 100)} categories={newAllBooksCategories} title={'신간 도서'} />
+          <BooksCarousel bookList={newAllBooks.slice(0, 100)} categories={newAllBooksCategories} title={'신간 도서'} />
         </Box>
         <Box>
-          <BookContainer books={bestSeller.slice(7, 11)} title={'에디터 추천'} />
+          <BookContainer bookList={bestSeller.slice(7, 11)} title={'에디터 추천'} />
         </Box>
       </Container>
     </>

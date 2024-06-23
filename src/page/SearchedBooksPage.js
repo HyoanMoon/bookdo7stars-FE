@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import NotFoundPage from './NotFoundPage';
 
 const SearchedBooksPage = () => {
-  const { books } = useSelector((state) => state.book);
+  const { bookList } = useSelector((state) => state.book);
   const [searchParams] = useSearchParams();
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [visibleBooks, setVisibleBooks] = useState([]);
@@ -18,8 +18,8 @@ const SearchedBooksPage = () => {
     // Extract query parameters
     const query = Object.fromEntries([...searchParams.entries()]);
 
-    // Filter books based on query parameters
-    const filtered = books.filter((book) => {
+    // Filter bookList based on query parameters
+    const filtered = bookList.filter((book) => {
       return Object.keys(query).every((key) => {
         if (key === 'total') {
           return (
@@ -37,7 +37,7 @@ const SearchedBooksPage = () => {
 
     setFilteredBooks(filtered);
     setVisibleBooks(filtered.slice(0, booksPerPage));
-  }, [books, searchParams]);
+  }, [bookList, searchParams]);
 
   const handleShowMore = () => {
     const nextPage = page + 1;

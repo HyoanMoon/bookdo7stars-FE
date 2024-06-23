@@ -7,24 +7,25 @@ import CategoryList from './CategoryList/CategoryList';
 import BooksGroupContainer from './BooksGroupPage/BooksGroupContainer';
 const CategoryPage = () => {
   const dispatch = useDispatch();
-  const { books, categoryBooks } = useSelector((state) => state.book);
-  const { selectedCategoryPath } = useSelector((state) => state.category);
+  const { bookList, categoryBooks } = useSelector((state) => state.book);
+  const { selectedCategoryPath, selectedCategoryId } = useSelector((state) => state.category);
   const [category, setCategory] = useState('국내도서');
   const [isCategoryItemClicked, setIsCategoryItemClicked] = useState(false);
-  const params = useParams();
   const totalCategories = [];
-  books.map((book) => {
+  bookList.map((book) => {
     return totalCategories.push(book.categoryName);
   });
 
   useEffect(() => {
-    if (params.categoryid) {
-      dispatch(bookActions.getBookListByCategory(params.categoryid));
-      setIsCategoryItemClicked(false);
-    }
-  }, [params.categoryid]);
+    if (selectedCategoryId) {
+      console.log('유즈이펙트 시', selectedCategoryId);
 
-  if (!books) {
+      dispatch(bookActions.getBookListByCategory(selectedCategoryId));
+    }
+    setIsCategoryItemClicked(false);
+  }, [selectedCategoryId]);
+
+  if (!bookList) {
     return;
   }
   if (!categoryBooks) {
@@ -35,29 +36,38 @@ const CategoryPage = () => {
     setIsCategoryItemClicked(true);
     setCategory(categoryPath);
   };
+  console.log(selectedCategoryPath, isCategoryItemClicked);
 
+  let title;
   let booksByCategory = [];
+  if (selectedCategoryPath && !isCategoryItemClicked && categoryBooks) {
+    title = selectedCategoryPath + ` (${categoryBooks.length})`;
+    if (categoryBooks.length === 0) {
+      title = '해당 카테고리 ' + `${selectedCategoryPath}` + ' 에는 현재 0개의 도서가 있습니다.';
+    }
+  }
+
   if (selectedCategoryPath && !isCategoryItemClicked) {
-    books.map((book) => {
+    bookList.map((book) => {
       if (book.categoryName.includes(selectedCategoryPath)) {
         booksByCategory.push(book);
       }
     });
+    title = selectedCategoryPath + ` (${booksByCategory.length})`;
+    if (booksByCategory.length === 0) {
+      title = '해당 카테고리 ' + `${selectedCategoryPath}` + ' 에는 현재 0개의 도서가 있습니다.';
+    }
   }
-  if (isCategoryItemClicked || selectedCategoryPath) {
-    books.map((book) => {
+  if (isCategoryItemClicked && !selectedCategoryPath) {
+    bookList.map((book) => {
       if (book.categoryName.includes(category)) {
         booksByCategory.push(book);
       }
     });
-  }
-
-  let title;
-  if (booksByCategory.length !== 0) {
-    title = category;
-  }
-  if (categoryBooks.length !== 0) {
-    title = selectedCategoryPath;
+    title = category + ` (${booksByCategory.length})`;
+    if (booksByCategory.length === 0) {
+      title = '해당 카테고리 ' + `${category}` + ' 에는 현재 0 개의 도서가 있습니다.';
+    }
   }
 
   if (booksByCategory.length === 0 && categoryBooks.length === 0) {
@@ -102,7 +112,7 @@ const CategoryPage = () => {
         {/* 오른쪽 칼럼 (2:10 비율) */}
         <Grid item xs={10}>
           <Box>
-            <BooksGroupContainer books={selectedCategoryPath ? booksByCategory : categoryBooks} title={title} />
+            <BooksGroupContainer bookList={selectedCategoryPath ? booksByCategory : categoryBooks} title={title} />
           </Box>
         </Grid>
       </Grid>

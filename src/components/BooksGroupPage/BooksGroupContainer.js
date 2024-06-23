@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { bookActions } from '../../action/bookActions';
 import { useDispatch } from 'react-redux';
 
-const BooksGroupContainer = ({ books, title }) => {
+const BooksGroupContainer = ({ bookList, title }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [selectedCategory, setSelectedCategory] = useState('전체');
@@ -25,12 +25,12 @@ const BooksGroupContainer = ({ books, title }) => {
     setSelectedCategory(newValue);
   };
 
-  const filteredBooks = selectedCategory === '전체' ? books : books.filter((book) => book.categoryName.includes(selectedCategory));
+  const filteredBooks = selectedCategory === '전체' ? bookList : bookList.filter((book) => book.categoryName.includes(selectedCategory));
 
   return (
     <Container>
       <Box sx={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-        <Typography variant="h3" component="div" gutterBottom sx={{ fontWeight: 'bold', textAlign: 'center', margin: '0px' }}>
+        <Typography variant="h4" component="div" gutterBottom sx={{ fontWeight: 'bold', textAlign: 'center', margin: '0px' }}>
           {title}
         </Typography>
       </Box>

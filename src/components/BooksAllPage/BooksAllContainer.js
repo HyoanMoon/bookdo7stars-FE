@@ -2,15 +2,15 @@ import { Box, Container, Grid, Typography, IconButton, Pagination } from '@mui/m
 import React, { useState } from 'react';
 import BookCard from '../BookCard';
 
-const BooksAllContainer = ({ books, title }) => {
+const BooksAllContainer = ({ bookList, title }) => {
   const [page, setPage] = useState(1);
   const booksPerPage = 50;
 
   // 총 페이지 수 계산
-  const pageCount = Math.ceil(books.length / booksPerPage);
+  const pageCount = Math.ceil(bookList.length / booksPerPage);
 
   // 현재 페이지에 해당하는 책들
-  const displayedBooks = books.slice((page - 1) * booksPerPage, page * booksPerPage);
+  const displayedBooks = bookList.slice((page - 1) * booksPerPage, page * booksPerPage);
 
   const handlePageChange = (event, value) => {
     setPage(value);

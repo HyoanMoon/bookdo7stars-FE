@@ -6,7 +6,7 @@ import './SlideBanner.css';
 import Box from '@mui/material/Box';
 import { Card, Container } from '@mui/material';
 
-const SlideBanner = ({ books }) => {
+const SlideBanner = ({ bookList }) => {
   const settings = {
     className: 'center',
     center: true,
@@ -23,7 +23,7 @@ const SlideBanner = ({ books }) => {
   return (
     <Container className="slider-container" sx={{ backgroundColor: '#608020', width: '100%', borderRadius: 2 }}>
       <Slider {...settings}>
-        {books.map((book, index) => (
+        {bookList.map((book, index) => (
           <div key={index}>
             <Box
               sx={{

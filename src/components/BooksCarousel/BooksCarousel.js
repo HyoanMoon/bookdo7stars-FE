@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { AddCircleOutline } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
-const BooksCarousel = ({ books, title, categories, sx }) => {
+const BooksCarousel = ({ bookList, title, categories, sx }) => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('전체');
 
@@ -12,8 +12,8 @@ const BooksCarousel = ({ books, title, categories, sx }) => {
     setSelectedCategory(newValue);
   };
 
-  const filteredBooks = selectedCategory === '전체' ? books : books.filter((book) => book.categoryName.includes(selectedCategory));
-  const bookGroup = books[0]?.queryType;
+  const filteredBooks = selectedCategory === '전체' ? bookList : bookList.filter((book) => book.categoryName.includes(selectedCategory));
+  const bookGroup = bookList[0]?.queryType;
   const onClickMore = (bookGroup) => {
     navigate(`/books/group/${bookGroup}`);
   };
@@ -44,7 +44,7 @@ const BooksCarousel = ({ books, title, categories, sx }) => {
                 더보기
               </Button>
             </Box>
-            <BookSlider books={books} />
+            <BookSlider bookList={bookList} />
           </Box>
         </Container>
       ) : (
@@ -102,7 +102,7 @@ const BooksCarousel = ({ books, title, categories, sx }) => {
                 ))}
               </Tabs>
             </Box>
-            <BookSlider books={filteredBooks} />
+            <BookSlider bookList={filteredBooks} />
           </Box>
         </Container>
       )}

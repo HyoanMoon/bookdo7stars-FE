@@ -15,16 +15,22 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
     const newPath = [firstCategory, secondCategory, thirdCategory];
     let categoryPath = newPath.join('>');
     categoryPath = '국내도서>' + categoryPath;
-    let categoryId;
+    let categoryid;
     categories.find((category) => {
       if (category.categoryName === categoryPath) {
-        categoryId = category.categoryId;
+        categoryid = category.categoryId;
       }
     });
-    if (categoryId) {
-      dispatch(bookActions.getBookListByCategory(categoryId));
-      navigate(`/books/all/category`);
+    if (categoryid) {
+      dispatch(categoryActions.setSelectedCategoryId(categoryid));
+      dispatch(categoryActions.setSelectedCategoryPath(categoryPath));
+      dispatch(bookActions.getBookListByCategory(categoryid));
+    } else {
+      dispatch(categoryActions.setSelectedCategoryId(null));
+      dispatch(categoryActions.setSelectedCategoryPath(null));
+      dispatch(bookActions.resetBookListByCategory([]));
     }
+    navigate(`/books/all/category`);
     handlePopperClose();
   };
 
