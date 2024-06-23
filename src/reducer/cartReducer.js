@@ -1,4 +1,5 @@
 import * as types from '../constants/cart.constants';
+
 const initialState = {
   loading: false,
   error: '',
@@ -6,6 +7,7 @@ const initialState = {
   selectedItem: {},
   cartItemCount: 0,
   totalPrice: 0,
+  user: {},
 };
 
 function cartReducer(state = initialState, action) {
@@ -16,12 +18,12 @@ function cartReducer(state = initialState, action) {
       return { ...state, loading: true };
 
     case types.GET_CART_LIST_SUCCESS:
-      console.log('payload', payload);
       return {
         ...state,
         loading: false,
-        cartList: payload,
-        totalPrice: payload.reduce((total, item) => (total += item.productId.price * item.qty), 0),
+        cartList: payload.items,
+        user: payload.user,
+        totalPrice: payload.items.reduce((total, item) => total + item.bookId.priceSales * item.qty, 0),
       };
 
     case types.GET_CART_LIST_FAIL:
