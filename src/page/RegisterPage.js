@@ -19,15 +19,12 @@ const ResisterPage = () => {
   const [policy, setPolicy] = useState(false);
 
   const handlePolicyChange = (event) => {
-    console.log('여기는 handlePolicyChange이다!');
     const { name, value, checked, type } = event.target;
     setPolicy(checked);
-    console.log('여기는 handlePolicyChange이다!', 'name은', name, 'value는', value, checked, type);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('회원가입 페이지에서 핸들서브밋 클릭했네요');
     if (password !== confirmPassword) {
       alert("Passwords don't match.");
       return;
@@ -38,7 +35,6 @@ const ResisterPage = () => {
       return;
     }
     const payload = { userName, email, password, confirmPassword, address, phone, policy };
-    console.log(payload);
     dispatch(userActions.registerUser(payload, navigate));
   };
 

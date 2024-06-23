@@ -62,7 +62,6 @@ const loginWithGithub = (code, navigate) => async (dispatch) => {
   try {
     dispatch({ type: types.GITHUB_LOGIN_REQUEST });
     const response = await api.get('/auth/github', { params: { code } });
-    console.log('[github ]-->', response.data);
     dispatch({ type: types.GITHUB_LOGIN_SUCCESS, payload: response.data });
     sessionStorage.setItem('token', response.data.token);
     dispatch(loginWithToken());

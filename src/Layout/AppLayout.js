@@ -17,7 +17,6 @@ const AppLayout = ({ children }) => {
 
   const { bookList, bookGroup } = useSelector((state) => state.book);
 
-  console.log(bookList);
   useEffect(() => {
     if (bookGroup) {
       dispatch(bookActions.getBookList({ queryType: bookGroup }));

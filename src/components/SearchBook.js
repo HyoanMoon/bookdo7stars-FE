@@ -9,7 +9,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom';
 
-const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch }) => {
+const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch, isMobile, theme }) => {
   const [selectedField, setSelectedField] = useState(fields[0]);
   const [inputValue, setInputValue] = useState('');
 
@@ -22,11 +22,9 @@ const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch }) => {
   const handleSearch = () => {
     const queryValue = searchQuery[selectedField] || '';
     if (queryValue.trim() === '') {
-      console.log('Navigating to: /');
       navigate('/');
     } else {
       const searchPath = `/search?${selectedField}=${queryValue}`;
-      console.log('Navigating to:', searchPath);
       // Reset the search query to keep only the selected field
       const newSearchQuery = { [selectedField]: queryValue };
       setSearchQuery(newSearchQuery);
@@ -47,9 +45,15 @@ const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch }) => {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-      <Box sx={{ width: '7vw' }}>
-        <TextField select label="Search by" value={selectedField} onChange={handleChange} variant="standard" sx={{ mt: 1, width: '11ch', textAlign: 'center' }}>
+    <Box sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: 'center' }}>
+      <Box sx={{ width: isMobile ? '100%' : '7vw', mb: isMobile ? 2 : 0 }}>
+        <TextField
+          select
+          label="Search by"
+          value={selectedField}
+          onChange={handleChange}
+          variant="standard"
+          sx={{ width: isMobile ? '100%' : '11ch', textAlign: 'center' }}>
           {fields.map((item) => (
             <MenuItem key={item} value={item}>
               {item}
@@ -57,8 +61,8 @@ const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch }) => {
           ))}
         </TextField>
       </Box>
-      <Box>
-        <FormControl sx={{ width: '60vw' }}>
+      <Box sx={{ width: isMobile ? '80%' : '60vw', mb: isMobile ? 2 : 0 }}>
+        <FormControl sx={{ width: '100%' }}>
           <TextField
             variant="filled"
             placeholder={'찾으시는 상품을 검색하세요.'}
@@ -78,7 +82,7 @@ const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch }) => {
           />
         </FormControl>
       </Box>
-      <Box sx={{ width: '3vw' }}>
+      <Box sx={{ width: isMobile ? '100%' : '3vw', display: 'flex', justifyContent: isMobile ? 'center' : 'flex-start' }}>
         <IconButton type="button" aria-label="reset" onClick={handleReset}>
           <RefreshIcon />
         </IconButton>

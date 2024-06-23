@@ -13,8 +13,6 @@ const OauthCallbackPage = () => {
       const searchParams = new URLSearchParams(location.search);
       const code = searchParams.get('code');
       const state = searchParams.get('state');
-      console.log('들어온 코드: ', code);
-      console.log('들어온 상태: ', provider);
 
       if (code && provider === 'kakao') {
         dispatch(userActions.loginWithKakao(code, navigate));

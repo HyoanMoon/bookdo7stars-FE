@@ -9,6 +9,7 @@ import { userActions } from '../action/userActions';
 import { categoryActions } from '../action/categoryActions';
 import { bookActions } from '../action/bookActions';
 import SearchBook from './SearchBook';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 const logIn = '로그인';
 const logOut = '로그아웃';
@@ -16,9 +17,11 @@ const register = '회원가입';
 const cart = '장바구니';
 
 function NavBar() {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleLogout = () => {
     dispatch(userActions.logout());
@@ -60,25 +63,32 @@ function NavBar() {
     setSearchQuery({});
   };
 
-  console.log('user', user);
   return (
     <div>
-      <AppBar position="static" sx={{ top: 0, backgroundColor: '#fff', alignItems: 'center', display: 'flex', flexDirection: 'row' }}>
+      <AppBar position="static" sx={{ top: 0, backgroundColor: '#fff', alignItems: 'center', flexDirection: 'row', padding: isMobile ? 1 : 2 }}>
         <Box
           onClick={() => {
             navigate('/');
             dispatch(bookActions.getBookList({}));
             dispatch(categoryActions.setSelectedCategory(null));
           }}
-          sx={{ padding: 2, width: '10vw' }}>
-          <img src="/logo.png" alt="로고 이미지" style={{ color: '#d3ddbd', borderRadius: '3px', height: '7rem' }} />
+          sx={{ padding: 1, width: isMobile ? '20vw' : '10vw' }}>
+          <img src="/logo.png" alt="로고 이미지" style={{ color: '#d3ddbd', borderRadius: '3px', height: isMobile ? '4rem' : '7rem' }} />
         </Box>
-        <Box sx={{ padding: 2, width: '70vw' }}>
-          <SearchBook searchQuery={searchQuery} setSearchQuery={setSearchQuery} fields={fields} resetSearch={resetSearch} handleSearch={handleSearch} />
+        <Box sx={{ padding: 1, width: isMobile ? '100%' : '70vw' }}>
+          <SearchBook
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            fields={fields}
+            resetSearch={resetSearch}
+            handleSearch={handleSearch}
+            isMobile={isMobile}
+            theme={theme}
+          />
         </Box>
-        <Box sx={{ width: '20vw', display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+        <Box sx={{ width: isMobile ? '100%' : '20vw', display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
           <Toolbar>
-            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Box sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'center', alignItems: 'center', gap: isMobile ? 1 : 2 }}>
               <Box>
                 {!user ? (
                   <Button variant="outlined" size="medium" key={logIn} sx={{ color: 'primary', marginRight: '5px' }}>

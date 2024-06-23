@@ -61,7 +61,6 @@ const CategoryBar = ({ bookList }) => {
     BlogBest: '블로그 베스트',
   };
   const groups = getBookGroupArray(queryTypes, bookGroups);
-  console.log(groups);
   groups.push('전체 도서');
   const index = groups.indexOf('전체 도서');
 

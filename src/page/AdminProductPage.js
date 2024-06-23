@@ -23,7 +23,6 @@ const AdminProductPage = () => {
     return total;
   }, {});
   const [searchQuery, setSearchQuery] = useState(totalField);
-  // console.log('totalField', totalField);
 
   useEffect(() => {
     if (searchQuery.isbn === '') delete searchQuery.isbn;
@@ -31,7 +30,6 @@ const AdminProductPage = () => {
     if (searchQuery.author === '') delete searchQuery.author;
     if (searchQuery.category === '') delete searchQuery.category;
     if (searchQuery.publisher === '') delete searchQuery.publisher;
-    // console.log('searchQuery', searchQuery);
     const params = new URLSearchParams();
     Object.keys(searchQuery).forEach((key) => {
       const value = searchQuery[key];
@@ -67,7 +65,6 @@ const AdminProductPage = () => {
   // 도서 삭제
   const handleDeleteProduct = (bookId) => {
     dispatch(bookActions.deleteBook(bookId));
-    // console.log(`deleted bookId ${bookId}`);
   };
 
   return (

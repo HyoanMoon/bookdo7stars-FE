@@ -38,7 +38,6 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
     const newPath = [firstCategory, secondCategory];
     let categoryPath = newPath.join('>');
     categoryPath = '국내도서>' + categoryPath;
-    console.log(categoryPath);
     dispatch(categoryActions.setSelectedCategoryPath(categoryPath));
     navigate(`/books/all/category`);
     handlePopperClose();

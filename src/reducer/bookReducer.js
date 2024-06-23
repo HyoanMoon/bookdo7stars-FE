@@ -54,7 +54,6 @@ function bookReducer(state = initialState, action) {
     case types.SET_BOOK_GROUP:
       return { bookGroup: payload };
     case types.GET_BOOK_DETAIL_SUCCESS:
-      console.log('[북리듀서] 셀렉티드북의 페이로드 잘 들어오는 지: ', payload.data);
       return { ...state, getBooksLoading: false, selectedBook: payload.data };
     case types.RESET_BOOK_BY_CATEGORY:
       return { ...state, categoryBooks: payload };

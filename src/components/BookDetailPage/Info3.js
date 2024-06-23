@@ -58,7 +58,6 @@ const Info3 = () => {
   const handleReviewSubmit = (event) => {
     event.preventDefault();
     // Handle review submission logic here
-    console.log('Review submitted:', review);
     setReview(''); // Clear the form
   };
 

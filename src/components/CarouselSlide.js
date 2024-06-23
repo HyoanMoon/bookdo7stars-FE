@@ -8,7 +8,6 @@ const CarouselSlide = () => {
 
   const handleImageClick = (id, event) => {
     event.stopPropagation();
-    console.log('[캐러셀슬라이드] 핸들이미지클릭이 클릭되었습니다.');
     navigate(`/book/${id}`);
   };
 

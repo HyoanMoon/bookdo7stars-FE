@@ -18,8 +18,6 @@ const CategoryPage = () => {
 
   useEffect(() => {
     if (selectedCategoryId) {
-      console.log('유즈이펙트 시', selectedCategoryId);
-
       dispatch(bookActions.getBookListByCategory(selectedCategoryId));
     }
     setIsCategoryItemClicked(false);
@@ -36,7 +34,6 @@ const CategoryPage = () => {
     setIsCategoryItemClicked(true);
     setCategory(categoryPath);
   };
-  console.log(selectedCategoryPath, isCategoryItemClicked);
 
   let title;
   let booksByCategory = [];
@@ -73,7 +70,6 @@ const CategoryPage = () => {
   if (booksByCategory.length === 0 && categoryBooks.length === 0) {
     title = '해당 카테고리에는 책이 없습니다.';
   }
-  console.log('title', title);
 
   return (
     <Container

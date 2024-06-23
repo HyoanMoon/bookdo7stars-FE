@@ -67,7 +67,6 @@ const MainPage = () => {
           padding: 0,
           margin: 'auto',
         }}>
-        >
         <Box>
           <BooksCarousel bookList={newSpecialBooks.slice(0, 10)} title={'화제의 신작'} />
         </Box>
