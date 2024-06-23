@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 import MainPage from '../page/MainPage';
-import CategoryPage from '../page/CategoryPage';
+import CategoryPage from '../components/CategoryPage';
 import BookDetailPage from '../page/BookDetailPage';
 import LoginPage from '../page/LoginPage';
 import RegisterPage from '../page/RegisterPage';
@@ -19,6 +19,7 @@ import BooksGroupPage from '../components/BooksGroupPage/BooksGroupPage';
 import EditorPage from '../page/EditorPage';
 import OauthCallbackPage from '../page/OauthCallbackPage';
 // import SocialLoginCallback from '../utils/SocialLoginCallback';
+import BooksAllPage from '../components/BooksAllPage/BooksAllPage';
 
 const AppRouter = () => {
   return (
@@ -26,9 +27,10 @@ const AppRouter = () => {
       <Routes>
         {/* 메인, 상품 전체, 상품 상세 */}
         <Route index element={<MainPage />} />
-        <Route path="/books/:categoryid" element={<CategoryPage />} />
+        <Route path="/books/category/:categoryid" element={<CategoryPage />} />
         <Route path="/book/:bookid" element={<BookDetailPage />} />
         <Route path="/search" element={<SearchedBooksPage />} />
+        <Route path="/books/all" element={<BooksAllPage />} />
         <Route path="/books/group/:bookGroup" element={<BooksGroupPage />} />
         <Route path="/books/editor-recommend" element={<EditorPage />} />
 

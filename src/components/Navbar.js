@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../action/userActions';
 import { categoryActions } from '../action/categoryActions';
 import { bookActions } from '../action/bookActions';
-import { useState } from 'react';
 import SearchBook from './SearchBook';
 
 const logIn = '로그인';
@@ -61,6 +60,7 @@ function NavBar() {
     setSearchQuery({});
   };
 
+  console.log('user', user);
   return (
     <div>
       <AppBar position="static" sx={{ top: 0, backgroundColor: '#fff', alignItems: 'center', display: 'flex', flexDirection: 'row' }}>

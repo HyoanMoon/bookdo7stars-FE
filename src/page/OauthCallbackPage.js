@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector, Provider } from 'react-redux';
 import { userActions } from '../action/userActions';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const OauthCallbackPage = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { provider } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleSocialLoginCallback = async () => {

@@ -20,7 +20,6 @@ function bookReducer(state = initialState, action) {
       return { ...state, loading: true };
 
     case types.BOOK_GET_BY_GROUP_SUCCESS:
-      console.log('xxxx', payload.books);
       return { ...state, loading: false, groupBooks: payload.books };
 
     case types.BOOK_GET_BY_GROUP_FAIL:
@@ -53,8 +52,6 @@ function bookReducer(state = initialState, action) {
       return { ...state, getBooksByCategoryLoading: false, books: state.books, categoryBooks: payload.data };
     case types.BOOK_GET_BY_CATEGORY_FAIL:
       return { ...state, getBooksByCategoryLoading: false, groupBooks: [], getBooksByCategoryError: payload };
-    case types.SET_CATEGORY_BOOKS:
-      return { categoryBooks: payload };
     case types.SET_BOOK_GROUP:
       return { bookGroup: payload };
     case types.GET_BOOK_DETAIL_SUCCESS:

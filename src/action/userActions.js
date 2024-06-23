@@ -1,8 +1,7 @@
 import axios from 'axios';
-import api from '../utils/api';
-
 import * as types from '../constants/user.constants';
 import { commonUiActions } from './commonUiAction';
+import api from '../utils/api';
 
 const loginWithToken = () => async (dispatch) => {
   try {

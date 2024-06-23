@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { bookActions } from '../../action/bookActions';
 import { useDispatch } from 'react-redux';
 
-const BookContainer = ({ books, categories, sx, title }) => {
+const BooksGroupContainer = ({ books, title }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [selectedCategory, setSelectedCategory] = useState('전체');
@@ -31,57 +31,56 @@ const BookContainer = ({ books, categories, sx, title }) => {
   return (
     <Container
       sx={{
-        ...sx,
-        width: '100%',
+        width: '1400px',
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
         borderRadius: 2,
         paddingLeft: '0px',
         paddingRight: '0px',
-        backgroundColor: '#b5c791',
+        backgroundColor: 'red',
       }}>
       <Box sx={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
         <Typography variant="h3" component="div" gutterBottom sx={{ width: '400px', height: '60px', fontWeight: 'bold', textAlign: 'center', margin: '0px' }}>
           {title}
         </Typography>
       </Box>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: '20px' }}>
-        <Tabs
-          value={selectedCategory}
-          onChange={handleCategoryChange}
-          aria-label="category tabs"
-          allowScrollButtonsMobile
-          variant="scrollable" // 탭 스크롤 가능
-          indicatorColor="primary" // 선택된 탭의 인디케이터 색상 설정
-          textColor="primary"
-          scrollbuttons="auto"
-          sx={{
-            paddingLeft: '0px',
-            '& .MuiTabs-scrollable': {
-              // 탭의 전체 너비 조정
-              maxWidth: '100%', // 전체 너비 사용
-              width: 'auto', // 자동으로 너비 설정
-            },
-          }}>
-          // 탭 텍스트 색상 설정
-          {categories.map((category) => (
-            <Tab
-              key={category.id}
-              label={category.label}
-              value={category.id}
-              sx={{
-                fontSize: '1rem', // 폰트 사이즈 설정
-                '&.Mui-selected': {
-                  fontWeight: 'bold', // 선택된 탭 폰트 볼드 처리
-                  borderBottom: '2px solid #608020', // 선택된 탭에 밑줄 스타일
-                  transition: 'border-bottom 0.3s ease', // 밑줄에 트랜지션 적용
-                },
-              }}
-            />
-          ))}
-        </Tabs>
-      </Box>
+      {/*<Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: '20px' }}>*/}
+      {/*  <Tabs*/}
+      {/*    value={selectedCategory}*/}
+      {/*    onChange={handleCategoryChange}*/}
+      {/*    aria-label="category tabs"*/}
+      {/*    allowScrollButtonsMobile*/}
+      {/*    variant="scrollable" // 탭 스크롤 가능*/}
+      {/*    indicatorColor="primary" // 선택된 탭의 인디케이터 색상 설정*/}
+      {/*    textColor="primary"*/}
+      {/*    scrollbuttons="auto"*/}
+      {/*    sx={{*/}
+      {/*      paddingLeft: '0px',*/}
+      {/*      '& .MuiTabs-scrollable': {*/}
+      {/*        // 탭의 전체 너비 조정*/}
+      {/*        maxWidth: '100%', // 전체 너비 사용*/}
+      {/*        width: 'auto', // 자동으로 너비 설정*/}
+      {/*      },*/}
+      {/*    }}>*/}
+      {/*    // 탭 텍스트 색상 설정*/}
+      {/*    {categories.map((category) => (*/}
+      {/*      <Tab*/}
+      {/*        key={category.id}*/}
+      {/*        label={category.label}*/}
+      {/*        value={category.id}*/}
+      {/*        sx={{*/}
+      {/*          fontSize: '1rem', // 폰트 사이즈 설정*/}
+      {/*          '&.Mui-selected': {*/}
+      {/*            fontWeight: 'bold', // 선택된 탭 폰트 볼드 처리*/}
+      {/*            borderBottom: '2px solid #608020', // 선택된 탭에 밑줄 스타일*/}
+      {/*            transition: 'border-bottom 0.3s ease', // 밑줄에 트랜지션 적용*/}
+      {/*          },*/}
+      {/*        }}*/}
+      {/*      />*/}
+      {/*    ))}*/}
+      {/*  </Tabs>*/}
+      {/*</Box>*/}
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
         <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           {filteredBooks.slice(0, displayCount).map((book) => (
@@ -109,4 +108,4 @@ const BookContainer = ({ books, categories, sx, title }) => {
   );
 };
 
-export default BookContainer;
+export default BooksGroupContainer;
