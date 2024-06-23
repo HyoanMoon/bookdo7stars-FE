@@ -1,23 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import BookCard from '../BookCard';
+import React, { useEffect } from 'react';
 import { Box, Container } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { bookActions } from '../../action/bookActions';
-import NotFoundPage from '../../page/NotFoundPage';
-import SlideBanner from '../SlideBanner/SlideBanner';
-import BooksCarousel from '../BooksCarousel/BooksCarousel';
-import BookContainer from '../BookContainer/BookContainer';
-
 import { getCategories } from '../../_helper/getCategories';
 import { getGroupNameInKorean } from '../../_helper/getGroupNameInKorean';
 import BooksGroupContainer from './BooksGroupContainer';
+
 const BooksGroupPage = () => {
   const dispatch = useDispatch();
   const { books, groupBooks } = useSelector((state) => state.book);
-  const bookGroup = useParams();
 
-  console.log(bookGroup);
+  const bookGroup = useParams();
+  console.log('[BooksGroupPage에서]파람스로 받아온 bookGroup: ', bookGroup);
 
   useEffect(() => {
     if (bookGroup) {

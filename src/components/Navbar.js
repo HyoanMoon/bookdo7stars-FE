@@ -3,16 +3,14 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import SearchBook from './SearchBook';
-import { isFunctionLikeExpression } from 'eslint-plugin-react/lib/util/ast';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { userActions } from '../action/userActions';
 import { categoryActions } from '../action/categoryActions';
 import { bookActions } from '../action/bookActions';
-import { useEffect, useState } from 'react';
-const drawerWidth = 240;
+import { useState } from 'react';
+import SearchBook from './SearchBook';
+
 const logIn = '로그인';
 const logOut = '로그아웃';
 const register = '회원가입';
@@ -21,51 +19,41 @@ const cart = '장바구니';
 function NavBar({ user }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleLogout = () => {
     dispatch(userActions.logout());
     navigate('/');
   };
 
-  const [query, setQuery] = useSearchParams();
+  const [query] = useSearchParams();
   const fields = ['isbn', 'title', 'author', 'category', 'publisher'];
 
   const totalField = fields.reduce((total, item) => {
     total[item] = query.get(item) || '';
     return total;
   }, {});
-  const [searchQuery, setSearchQuery] = useState(totalField);
-  // console.log('totalField', totalField);
 
-  useEffect(() => {
-    if (searchQuery.isbn === '') delete searchQuery.isbn;
-    if (searchQuery.title === '') delete searchQuery.title;
-    if (searchQuery.author === '') delete searchQuery.author;
-    if (searchQuery.category === '') delete searchQuery.category;
-    if (searchQuery.publisher === '') delete searchQuery.publisher;
-    // console.log('searchQuery', searchQuery);
+  const [searchQuery, setSearchQuery] = useState(totalField);
+
+  const handleSearch = (newSearchQuery) => {
     const params = new URLSearchParams();
-    Object.keys(searchQuery).forEach((key) => {
-      const value = searchQuery[key];
+    Object.keys(newSearchQuery).forEach((key) => {
+      const value = newSearchQuery[key];
       if (value !== undefined && value !== '') {
         params.append(key, value);
       }
     });
     const query = params.toString();
     navigate('?' + query);
-    dispatch(bookActions.getBookList(searchQuery));
-  }, [searchQuery, navigate, dispatch]);
+    dispatch(bookActions.getBookList(newSearchQuery));
+  };
 
-  // 검색한 값을 리셋하기.
   const resetSearch = () => {
     setSearchQuery({});
   };
-  useEffect(() => {
-    resetSearch();
-  }, []);
 
   return (
     <div>
-      {/*<CssBaseline />*/}
       <AppBar position="static" sx={{ top: 0, backgroundColor: '#fff', alignItems: 'center', display: 'flex', flexDirection: 'row' }}>
         <Box
           onClick={() => {
@@ -78,7 +66,7 @@ function NavBar({ user }) {
           <img src="/logo.png" alt="로고 이미지" style={{ color: '#d3ddbd', borderRadius: '3px', height: '7rem' }} />
         </Box>
         <Box sx={{ padding: 2, width: '70vw' }}>
-          <SearchBook searchQuery={searchQuery} setSearchQuery={setSearchQuery} fields={fields} resetSearch={resetSearch} />
+          <SearchBook searchQuery={searchQuery} setSearchQuery={setSearchQuery} fields={fields} resetSearch={resetSearch} handleSearch={handleSearch} />
         </Box>
         <Box sx={{ width: '20vw', display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
           <Toolbar>
@@ -86,13 +74,7 @@ function NavBar({ user }) {
               <Box>
                 {!user ? (
                   <Button variant="outlined" size="medium" key={logIn} sx={{ color: 'primary', marginRight: '5px' }}>
-                    <div
-                      onClick={() => {
-                        console.log('loginin!');
-                        navigate('/login');
-                      }}>
-                      {logIn}
-                    </div>
+                    <div onClick={() => navigate('/login')}>{logIn}</div>
                   </Button>
                 ) : (
                   <Button variant="outlined" size="medium" key={logOut} sx={{ color: 'primary', marginRight: '5px' }}>
@@ -103,13 +85,7 @@ function NavBar({ user }) {
               {!user && (
                 <Box>
                   <Button variant="outlined" size="medium" key={register} sx={{ color: 'primary', marginRight: '5px' }}>
-                    <div
-                      onClick={() => {
-                        console.log('register!');
-                        navigate('/register');
-                      }}>
-                      {register}
-                    </div>
+                    <div onClick={() => navigate('/register')}>{register}</div>
                   </Button>
                 </Box>
               )}

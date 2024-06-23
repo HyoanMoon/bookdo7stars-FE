@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router-dom';
 
 const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch }) => {
   const [selectedField, setSelectedField] = useState(fields[0]);
+  const [inputValue, setInputValue] = useState('');
+
   const navigate = useNavigate();
 
   const handleChange = (event) => {
@@ -36,6 +38,12 @@ const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch }) => {
     if (event.key === 'Enter') {
       handleSearch();
     }
+  };
+
+  const handleReset = () => {
+    setInputValue('');
+    resetSearch();
+    navigate('/');
   };
 
   return (
@@ -71,7 +79,7 @@ const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch }) => {
         </FormControl>
       </Box>
       <Box sx={{ width: '3vw' }}>
-        <IconButton type="button" aria-label="reset" onClick={resetSearch}>
+        <IconButton type="button" aria-label="reset" onClick={handleReset}>
           <RefreshIcon />
         </IconButton>
       </Box>
