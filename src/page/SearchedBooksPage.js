@@ -21,6 +21,16 @@ const SearchedBooksPage = () => {
     // Filter books based on query parameters
     const filtered = books.filter((book) => {
       return Object.keys(query).every((key) => {
+        if (key === 'total') {
+          return (
+            book.isbn.includes(query.total) ||
+            book.title.includes(query.total) ||
+            book.author.includes(query.total) ||
+            book.publisher.includes(query.total) ||
+            book.queryType.includes(query.total) ||
+            book.categoryId.includes(query.total)
+          );
+        }
         return book[key] && book[key].includes(query[key]);
       });
     });

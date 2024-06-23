@@ -38,7 +38,8 @@ const BookDetailPage = () => {
           <Grid item xs={6} sm={12} md={8}>
             <BookBasicInfo title={selectedBook.title} author={selectedBook.author} publisher={selectedBook.publisher} price={selectedBook.priceStandard} />
             <BookToCart />
-            <BookDetailInfo pubDate={selectedBook.pubDate} isbn={selectedBook.isbn} />
+            {/* <BookDetailInfo pubDate={selectedBook.pubDate} isbn={selectedBook.isbn} /> */}
+            여기에 다음 API
           </Grid>
           {/* <Grid item xs={12} sm={12} md={12}>
             <BookDescription description={selectedBook.description} />

@@ -1,59 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import { Container, FormControl, Button, TextField, Box, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { userActions } from '../action/userActions';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { userActions } from '../action/userActions';
 import GoogleIcon from '@mui/icons-material/Google';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { GoogleLogin } from '@react-oauth/google';
-import '../App.css';
-
-// import KakaoIcon from 'path-to-kakao-icon';
-import FacebookIcon from '@mui/icons-material/Facebook';
+import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
+// import FacebookIcon from '@mui/icons-material/Facebook';
 import GitHubIcon from '@mui/icons-material/GitHub';
-
-const buttonStyle = {
-  backgroundColor: '#4285f4',
-  color: '#ffffff',
-  border: 'none',
-  padding: '10px 15px',
-  fontSize: '16px',
-  fontWeight: 'bold',
-  cursor: 'pointer',
-  borderRadius: '4px',
-};
+import '../App.css';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const { user } = useSelector((state) => state.user);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Email:', email);
-    console.log('Password:', password);
-    const payload = { email: email, password: password };
+    const payload = { email, password };
     dispatch(userActions.loginWithEmail(payload));
   };
 
-  const handleGoogleLogin = async (googleData) => {
-    console.log('구글로그인클릭!');
-    dispatch(userActions.loginWithGoogle(googleData.credential));
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: (googleData) => dispatch(userActions.loginWithGoogle(googleData.access_token)),
+    // scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
+  });
+
+  // const handleGoogleLogin = (googleData) => {
+  //   dispatch(userActions.loginWithGoogle(googleData.credential));
+  // };
+
+  const handleKakaoLogin = () => {
+    console.log('[카카오버튼 클릭]');
+    const KAKAO_API_KEY = process.env.REACT_APP_KAKAO_API_KEY;
+    const REDIRECT_KAKAO_CALLBACK = process.env.REACT_APP_REDIRECT_KAKAO_CALLBACK;
+    window.location.href = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_API_KEY}&redirect_uri=${REDIRECT_KAKAO_CALLBACK}&scope=profile_nickname`;
   };
 
-  // const handleGoogleSuccess = (googleData) => {
-  //   console.log('Google login successful:', googleData);
-  //   const token = googleData.credential;
-  //   dispatch(userActions.loginWithGoogle(token));
-  // };
+  const handleGithubLogin = () => {
+    const REDIRECT_GITHUB_CALLBACK = process.env.REACT_APP_REDIRECT_GITHUB_CALLBACK;
+    window.location.href = `https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&redirect_uri=${REDIRECT_GITHUB_CALLBACK}`;
+  };
 
   useEffect(() => {
     if (user) {
       navigate('/');
     }
-  }, [user]);
+  }, [user, navigate]);
 
   return (
     <Container>
@@ -81,33 +76,43 @@ const LoginPage = () => {
           <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} onClick={() => navigate('/register')}>
             Go to Register
           </Button>
-          {/* 구글로그인 시작 */}
           <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', mt: 1, mb: 2 }}>
-            <GoogleLogin
+            {/* <GoogleLogin
               onSuccess={handleGoogleLogin}
               onError={() => {}}
               render={(renderProps) => (
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  color="primary"
-                  sx={{ mt: 1, mb: 2 }}
-                  startIcon={<GoogleIcon />}
-                  onClick={renderProps.handleGoogleLogin}></Button>
+                <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} startIcon={<GoogleIcon />} onClick={renderProps.onClick}>
+                  Sign in with Google
+                </Button>
               )}
-            />
+            /> */}
           </Box>
-          {/* <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} startIcon={<GoogleIcon />} onClick={handleGoogleLogin}> */}
-          {/* <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} startIcon={<GoogleIcon />} onSuccess={handleGoogleSuccess}> */}
-          {/* Sign in with Google */}
-          {/* </Button> */}
-          {/* 구글로그인 끝*/}
-          <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} startIcon={<GitHubIcon />} onClick={() => handleOAuth('GitHub')}>
+          {/* <img onClick={handleKakaoLogin} src="/image/kakao.png" width={50} height={50} alt="kakaologo" style={{ cursor: 'pointer' }} /> */}
+          {/* <img onClick={handleGithubLogin} src="/image/github.png" width={50} height={50} alt="githublogo" style={{ cursor: 'pointer' }} /> */}
+          <Button
+            fullWidth
+            variant="outlined"
+            color="primary"
+            sx={{ mt: 1, mb: 2 }}
+            startIcon={<img width="32" height="32" src="/image/kakao.png" />}
+            onClick={handleKakaoLogin}>
+            Sign in with KaKao
+          </Button>
+          <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} startIcon={<GoogleIcon />} onClick={handleGoogleLogin}>
+            Sign in with Google
+          </Button>
+          <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} startIcon={<GitHubIcon />} onClick={handleGithubLogin}>
             Sign in with GitHub
           </Button>
-          <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} startIcon={<FacebookIcon />} onClick={() => handleOAuth('Kakao')}>
+          {/* <Button
+            fullWidth
+            variant="outlined"
+            color="primary"
+            sx={{ mt: 1, mb: 2 }}
+            startIcon={<FacebookIcon />}
+            onClick={() => alert('Facebook login not implemented')}>
             Sign in with Facebook
-          </Button>
+          </Button> */}
         </Box>
       </Box>
     </Container>

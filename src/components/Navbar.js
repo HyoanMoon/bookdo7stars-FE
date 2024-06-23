@@ -1,10 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../action/userActions';
 import { categoryActions } from '../action/categoryActions';
 import { bookActions } from '../action/bookActions';
@@ -16,17 +16,18 @@ const logOut = '로그아웃';
 const register = '회원가입';
 const cart = '장바구니';
 
-function NavBar({ user }) {
+function NavBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log('userrr : ', user);
+  const { user } = useSelector((state) => state.user);
+
   const handleLogout = () => {
     dispatch(userActions.logout());
     navigate('/');
   };
 
   const [query] = useSearchParams();
-  const fields = ['isbn', 'title', 'author', 'category', 'publisher'];
+  const fields = ['total', 'isbn', 'title', 'author', 'category', 'publisher'];
 
   const totalField = fields.reduce((total, item) => {
     total[item] = query.get(item) || '';
@@ -97,7 +98,7 @@ function NavBar({ user }) {
                   </Button>
                 </Box>
               )}
-              {user && user.user?.role === 'customer' && (
+              {user && user.role === 'customer' && (
                 <Box>
                   <Button onClick={goToMyPage} variant="outlined" size="medium" key={cart} sx={{ color: 'primary', marginRight: '5px' }}>
                     마이페이지
@@ -109,7 +110,7 @@ function NavBar({ user }) {
                   {cart}
                 </Button>
               </Box>
-              {user && user.user?.role === 'admin' && (
+              {user && user.role === 'admin' && (
                 <Box>
                   <Button onClick={goToAdminPage} variant="outlined" size="medium" key={cart} sx={{ color: 'primary' }}>
                     admin
