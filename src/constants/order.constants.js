@@ -18,6 +18,12 @@ export const UPDATE_ORDER_REQUEST = 'UPDATE_ORDER_REQUEST';
 export const UPDATE_ORDER_SUCCESS = 'UPDATE_ORDER_SUCCESS';
 export const UPDATE_ORDER_FAIL = 'UPDATE_ORDER_FAIL';
 
+// 주문 상태.
+export const ORDER_STATUS = ['preparing', 'shipping', 'delivered', 'refund'];
+
+// 도서 수정할 때 주문 id값 불러오기.
+export const SET_SELECTED_ORDER = 'SET_SELECTED_ORDER';
+
 export const badgeBg = {
   // 아래 항목을 채워주세요.
   // preparing:
