@@ -11,9 +11,11 @@ import Footer from '../components/Footer/Footer';
 const AppLayout = ({ children }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
+
   useEffect(() => {
     dispatch(userActions.loginWithToken());
   }, []);
+
   const { books, bookGroup } = useSelector((state) => state.book);
 
   useEffect(() => {

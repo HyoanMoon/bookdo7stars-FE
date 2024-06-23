@@ -30,7 +30,3 @@ export const LOGIN_WITH_TOKEN_FAIL = 'LOGIN_WITH_TOKEN_FAIL';
 
 // 로그아웃.
 export const USER_LOGOUT = 'USER_LOGOUT';
-
-//오어스 보조 데이타
-export const GET_USER_INFO_SUCCESS = 'GET_USER_INFO_SUCCESS';
-export const GET_USER_INFO_FAIL = 'GET_USER_INFO_FAIL';

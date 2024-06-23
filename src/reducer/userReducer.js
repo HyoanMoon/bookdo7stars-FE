@@ -21,7 +21,7 @@ function userReducer(state = initialState, action) {
     case types.GOOGLE_LOGIN_SUCCESS:
     case types.KAKAO_LOGIN_SUCCESS:
     case types.GITHUB_LOGIN_SUCCESS:
-      return { ...state, loading: false, user: payload, error: '' };
+      return { ...state, loading: false, user: payload.user, error: '' };
     case types.USER_LOGIN_FAIL:
     case types.REGISTER_USER_FAIL:
     case types.GOOGLE_LOGIN_FAIL:

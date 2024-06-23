@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../action/userActions';
 import GoogleIcon from '@mui/icons-material/Google';
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
-// import FacebookIcon from '@mui/icons-material/Facebook';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import '../App.css';
 
@@ -25,15 +24,9 @@ const LoginPage = () => {
 
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: (googleData) => dispatch(userActions.loginWithGoogle(googleData.access_token)),
-    // scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
   });
 
-  // const handleGoogleLogin = (googleData) => {
-  //   dispatch(userActions.loginWithGoogle(googleData.credential));
-  // };
-
   const handleKakaoLogin = () => {
-    console.log('[카카오버튼 클릭]');
     const KAKAO_API_KEY = process.env.REACT_APP_KAKAO_API_KEY;
     const REDIRECT_KAKAO_CALLBACK = process.env.REACT_APP_REDIRECT_KAKAO_CALLBACK;
     window.location.href = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_API_KEY}&redirect_uri=${REDIRECT_KAKAO_CALLBACK}&scope=profile_nickname`;
@@ -76,43 +69,21 @@ const LoginPage = () => {
           <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} onClick={() => navigate('/register')}>
             Go to Register
           </Button>
-          <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', mt: 1, mb: 2 }}>
-            {/* <GoogleLogin
-              onSuccess={handleGoogleLogin}
-              onError={() => {}}
-              render={(renderProps) => (
-                <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} startIcon={<GoogleIcon />} onClick={renderProps.onClick}>
-                  Sign in with Google
-                </Button>
-              )}
-            /> */}
-          </Box>
-          {/* <img onClick={handleKakaoLogin} src="/image/kakao.png" width={50} height={50} alt="kakaologo" style={{ cursor: 'pointer' }} /> */}
-          {/* <img onClick={handleGithubLogin} src="/image/github.png" width={50} height={50} alt="githublogo" style={{ cursor: 'pointer' }} /> */}
-          <Button
-            fullWidth
-            variant="outlined"
-            color="primary"
-            sx={{ mt: 1, mb: 2 }}
-            startIcon={<img width="32" height="32" src="/image/kakao.png" />}
-            onClick={handleKakaoLogin}>
-            Sign in with KaKao
-          </Button>
           <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} startIcon={<GoogleIcon />} onClick={handleGoogleLogin}>
             Sign in with Google
           </Button>
           <Button fullWidth variant="outlined" color="primary" sx={{ mt: 1, mb: 2 }} startIcon={<GitHubIcon />} onClick={handleGithubLogin}>
             Sign in with GitHub
           </Button>
-          {/* <Button
+          <Button
             fullWidth
             variant="outlined"
             color="primary"
             sx={{ mt: 1, mb: 2 }}
-            startIcon={<FacebookIcon />}
-            onClick={() => alert('Facebook login not implemented')}>
-            Sign in with Facebook
-          </Button> */}
+            startIcon={<img width="31" height="31" src="/image/kakao2.png" />}
+            onClick={handleKakaoLogin}>
+            Sign in with KaKao
+          </Button>
         </Box>
       </Box>
     </Container>
