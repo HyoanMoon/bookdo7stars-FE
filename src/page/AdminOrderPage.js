@@ -3,7 +3,7 @@ import { Container, Grid } from '@mui/material';
 import AdminPageOrderSearchBox from '../components/AdminPageOrderSearchBox';
 import AdminPageOrderTable from '../components/AdminPageOrderTable';
 import AdminPageOrderDialog from '../components/AdminPageOrderDialog';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { orderActions } from '../action/orderActions';
 import * as types from '../constants/order.constants';
@@ -14,8 +14,9 @@ const AdminOrderPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const orderTableHead = ['', '주문 번호', '주문 일시', '구매자', '도서명', '주소', '총가격', '주문 상태'];
   const orderDialogTableHead = ['ID', '도서명', '권당 가격', '수량', '전체 가격'];
+  // const { orderList } = useSelector((state) => state.order); // orderList 데이터 받아오면 해제.
   const [query, setQuery] = useSearchParams();
-  const fields = ['orderID', 'userEmail'];
+  const fields = ['orderNum', 'userEmail'];
 
   const totalField = fields.reduce((total, option) => {
     total[option] = query.get(option) || '';
@@ -39,7 +40,7 @@ const AdminOrderPage = () => {
   ];
 
   useEffect(() => {
-    if (searchQuery.orderID === '') delete searchQuery.orderID; // orderID === orderNum
+    if (searchQuery.orderNum === '') delete searchQuery.orderNum; // orderNum === orderNum
     if (searchQuery.userEmail === '') delete searchQuery.userEmail; // userEmail === userID.email
     const params = new URLSearchParams();
     Object.keys(searchQuery).forEach((key) => {
@@ -66,11 +67,11 @@ const AdminOrderPage = () => {
     const startDate = searchQuery.startDate ? new Date(searchQuery.startDate) : null;
     const endDate = searchQuery.endDate ? new Date(searchQuery.endDate) : null;
 
-    const matchOrderID = !searchQuery.orderID || order.id.toString().includes(searchQuery.orderID);
+    const matchorderNum = !searchQuery.orderNum || order.orderNum.toString().includes(searchQuery.orderNum);
     const matchUserEmail = !searchQuery.userEmail || order.userID.email.toLowerCase().includes(searchQuery.userEmail.toLowerCase());
     const withinDateRange = (!startDate || orderDate >= startDate) && (!endDate || orderDate <= endDate);
 
-    return matchOrderID && matchUserEmail && withinDateRange;
+    return matchorderNum && matchUserEmail && withinDateRange;
   });
 
   // 주문 수정 다이얼로그 열기.

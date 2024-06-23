@@ -21,6 +21,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ORDER_STATUS } from '../constants/order.constants';
 import { orderActions } from '../action/orderActions';
 import { currencyFormat } from '../utils/number';
+import { styled } from '@mui/material/styles';
+import { tableCellClasses } from '@mui/material/TableCell';
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
 
 const AdminPageOrderDialog = ({ open, orderList, handleClose, orderDialogTableHead }) => {
   const dispatch = useDispatch();
@@ -63,7 +75,7 @@ const AdminPageOrderDialog = ({ open, orderList, handleClose, orderDialogTableHe
             <TableHead>
               <TableRow>
                 {orderDialogTableHead.map((head, index) => (
-                  <TableCell key={index}>{head}</TableCell>
+                  <StyledTableCell key={index}>{head}</StyledTableCell>
                 ))}
               </TableRow>
             </TableHead>

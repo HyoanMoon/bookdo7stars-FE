@@ -8,7 +8,7 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery, resetSearch }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [selectedOption, setSelectedOption] = useState('orderID');
+  const [selectedOption, setSelectedOption] = useState('orderNum');
 
   const handleDateRange = (range) => {
     const today = new Date();
@@ -113,7 +113,7 @@ const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery, resetSearch }) =
                   setSelectedOption(event.target.value);
                 }}
                 fullWidth>
-                <MenuItem value="orderID">주문 번호</MenuItem>
+                <MenuItem value="orderNum">주문 번호</MenuItem>
                 <MenuItem value="userEmail">구매자</MenuItem>
               </Select>
             </Grid>
