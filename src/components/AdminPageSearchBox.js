@@ -60,7 +60,6 @@ const AdminPageSearchBox = ({ searchQuery, setSearchQuery, fields, resetSearch, 
           </TextField>
 
           {/* 선택된 필드에 따른 검색 창 */}
-
           <TextField
             id={`standard-input-${selectedField}`}
             label="반갑습니다, 관리자님."
