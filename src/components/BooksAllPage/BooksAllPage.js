@@ -5,7 +5,6 @@ import BooksAllContainer from './BooksAllContainer';
 
 const BooksAllPage = () => {
   const { books } = useSelector((state) => state.book);
-  console.log(books);
 
   if (!books) {
     return;

@@ -8,7 +8,6 @@ const getCategoryList = (query) => async (dispatch) => {
     const response = await api.get('/category', {
       params: { ...query },
     });
-    console.log(response.data);
     dispatch({ type: types.CATEGORY_GET_SUCCESS, payload: response.data });
   } catch (err) {
     dispatch({ type: types.CATEGORY_GET_FAIL, payload: err });
@@ -18,7 +17,12 @@ const getCategoryList = (query) => async (dispatch) => {
 const setSelectedCategory = (category) => (dispatch) => {
   dispatch({ type: types.SET_SELECTED_CATEGORY, payload: category });
 };
+
+const setSelectedCategoryPath = (category) => (dispatch) => {
+  dispatch({ type: types.SET_SELECTED_CATEGORY_PATH, payload: category });
+};
 export const categoryActions = {
   getCategoryList,
   setSelectedCategory,
+  setSelectedCategoryPath,
 };

@@ -27,7 +27,7 @@ const AppRouter = () => {
       <Routes>
         {/* 메인, 상품 전체, 상품 상세 */}
         <Route index element={<MainPage />} />
-        <Route path="/books/category/:categoryid" element={<CategoryPage />} />
+        <Route path="/books/all/category" element={<CategoryPage />} />
         <Route path="/book/:bookid" element={<BookDetailPage />} />
         <Route path="/search" element={<SearchedBooksPage />} />
         <Route path="/books/all" element={<BooksAllPage />} />

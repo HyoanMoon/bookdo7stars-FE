@@ -40,7 +40,6 @@ const CategoryBar = ({ books }) => {
   books.map((book) => {
     return totalCategories.push(book.categoryName);
   });
-  console.log(totalCategories);
   const categoryHierarchy = getCategoryHierarchy(totalCategories);
   const firstSubCategories = getSubCategories(categoryHierarchy, '국내도서');
   const secondAllSubCategories = {};
@@ -56,7 +55,6 @@ const CategoryBar = ({ books }) => {
       thirdAllSubCategories[firstCategory][secondCategory] = thirdSubCategories;
     });
   });
-  console.log(secondAllSubCategories);
 
   // 도서 그룹 한글이름 어레이로 받아오기
   const queryTypes = ['ItemNewAll', 'ItemNewSpecial', 'BestSeller', 'BlogBest'];

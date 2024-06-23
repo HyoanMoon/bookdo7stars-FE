@@ -47,9 +47,7 @@ const getBookListByCategory = (categoryId) => async (dispatch) => {
 const getBookDetail = (id) => async (dispatch) => {
   try {
     dispatch({ type: types.GET_BOOK_DETAIL_REQUEST });
-    console.log('[북액션디테일] 들어온id: ', id);
     const response = await api.get(`book/detail/${id}`);
-    console.log('[북액션디테일] response받은것: ', response);
     if (response.status !== 200) throw new Error(response.error);
     dispatch({ type: types.GET_BOOK_DETAIL_SUCCESS, payload: response.data });
   } catch (error) {
@@ -91,7 +89,6 @@ const updateBook = (bookForm, id) => async (dispatch) => {
   try {
     dispatch({ type: types.BOOK_EDIT_REQUEST });
     const response = await api.put(`/book/${id}`, bookForm);
-    console.log('도서-수정-response', response);
     dispatch({ type: types.BOOK_EDIT_SUCCESS });
     dispatch(commonUiActions.showToastMessage('도서 정보 수정을 완료했습니다', 'success'));
     dispatch(getBookList());
@@ -102,7 +99,6 @@ const updateBook = (bookForm, id) => async (dispatch) => {
 };
 
 const setBookGroup = (payload) => (dispatch) => {
-  console.log('setBookGroup', payload);
   dispatch({ type: types.SET_BOOK_GROUP, payload });
 };
 

@@ -19,8 +19,6 @@ const BookContainer = ({ books, sx, title }) => {
     setDisplayCount(12);
   }, [title]);
 
-  console.log(displayCount);
-
   return (
     <Container
       sx={{
@@ -35,7 +33,7 @@ const BookContainer = ({ books, sx, title }) => {
         backgroundColor: '#b5c791',
       }}>
       <Box sx={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-        <Typography variant="h3" component="div" gutterBottom sx={{ width: '400px', height: '60px', fontWeight: 'bold', textAlign: 'center', margin: '0px' }}>
+        <Typography variant="h3" component="div" gutterBottom sx={{ fontWeight: 'bold', textAlign: 'center', margin: '0px' }}>
           {title}
         </Typography>
       </Box>
