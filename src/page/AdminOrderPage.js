@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Grid } from '@mui/material';
 import AdminPageOrderSearchBox from '../components/AdminPageOrderSearchBox';
 import AdminPageOrderTable from '../components/AdminPageOrderTable';
+import AdminPageOrderDialog from '../components/AdminPageOrderDialog';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { orderActions } from '../action/orderActions';
@@ -10,7 +11,9 @@ import * as types from '../constants/order.constants';
 const AdminOrderPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [openDialog, setOpenDialog] = useState(false);
   const orderTableHead = ['', '주문 번호', '주문 일시', '구매자', '도서명', '주소', '총가격', '주문 상태'];
+  const orderDialogTableHead = ['ID', '도서명', '권당 가격', '수량', '전체 가격'];
   const [query, setQuery] = useSearchParams();
   const fields = ['orderID', 'userEmail'];
 
@@ -22,15 +25,22 @@ const AdminOrderPage = () => {
 
   // 주문 더미 데이터
   const orderList = [
-    { id: 293482039481, email: '북', createdAt: '2024-06-23', status: 'Pending', totalPrice: '$100' },
-    { id: 234234242322, email: '두', createdAt: '2024-06-16', status: 'Completed', totalPrice: '$200' },
-    { id: 734235242323, email: '칠', createdAt: '2024-05-24', status: 'Delivered', totalPrice: '$300' },
-    { id: 284235542322, email: '성', createdAt: '2024-03-25', status: 'Refund', totalPrice: '$400' },
+    {
+      _id: 123456789,
+      userID: { email: 'test@gmail.com' },
+      contact: { firstName: 'test', lastName: 'test', contact: 123 },
+      shipTo: [{ address: 'test', city: 'test' }],
+      totalPrice: 0,
+      status: 'Preparing',
+      items: [{ BookID: { title: '도서 내용' }, price: 10000, qty: 2 }],
+      orderNum: 123,
+      createdAt: '2024-06-23',
+    },
   ];
 
   useEffect(() => {
-    if (searchQuery.orderID === '') delete searchQuery.orderID;
-    if (searchQuery.userEmail === '') delete searchQuery.userEmail;
+    if (searchQuery.orderID === '') delete searchQuery.orderID; // orderID === orderNum
+    if (searchQuery.userEmail === '') delete searchQuery.userEmail; // userEmail === userID.email
     const params = new URLSearchParams();
     Object.keys(searchQuery).forEach((key) => {
       const value = searchQuery[key];
@@ -50,18 +60,29 @@ const AdminOrderPage = () => {
     resetSearch();
   }, []);
 
-  // 쿼리 url.
+  // 상세 검색 쿼리 필터.
   const filteredOrders = orderList.filter((order) => {
     const orderDate = new Date(order.createdAt);
     const startDate = searchQuery.startDate ? new Date(searchQuery.startDate) : null;
     const endDate = searchQuery.endDate ? new Date(searchQuery.endDate) : null;
 
     const matchOrderID = !searchQuery.orderID || order.id.toString().includes(searchQuery.orderID);
-    const matchUserEmail = !searchQuery.userEmail || order.email.toLowerCase().includes(searchQuery.userEmail.toLowerCase());
+    const matchUserEmail = !searchQuery.userEmail || order.userID.email.toLowerCase().includes(searchQuery.userEmail.toLowerCase());
     const withinDateRange = (!startDate || orderDate >= startDate) && (!endDate || orderDate <= endDate);
 
     return matchOrderID && matchUserEmail && withinDateRange;
   });
+
+  // 주문 수정 다이얼로그 열기.
+  const handleOpenOrderDialog = (order) => {
+    setOpenDialog(true);
+    // dispatch({ type: types.SET_SELECTED_ORDER, payload: order });
+  };
+
+  // 주문 다이얼로그 닫기.
+  const handleCloseOrderDialog = () => {
+    setOpenDialog(false);
+  };
 
   return (
     <Container>
@@ -71,7 +92,8 @@ const AdminOrderPage = () => {
         </Grid>
         <Grid item xs={11} md={11}>
           <AdminPageOrderSearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} resetSearch={resetSearch} />
-          <AdminPageOrderTable orderTableHead={orderTableHead} orderList={filteredOrders} />
+          <AdminPageOrderTable orderTableHead={orderTableHead} orderList={filteredOrders} handleOpenOrderDialog={handleOpenOrderDialog} />
+          <AdminPageOrderDialog open={openDialog} orderList={orderList} handleClose={handleCloseOrderDialog} orderDialogTableHead={orderDialogTableHead} />
         </Grid>
       </Grid>
     </Container>

@@ -42,7 +42,7 @@ const AdminPageProductTable = ({ bookList, bookTableHead, handleOpenEditDialog, 
         <TableContainer sx={{ maxHeight: 590 }}>
           {/* maxHeight: 440 */}
           <Table stickyHeader aria-label="sticky table">
-            {/* 테이블 헤더 */}
+            {/* 테이블 헤드 */}
             <TableHead>
               <TableRow>
                 {bookTableHead.map((head, index) => (

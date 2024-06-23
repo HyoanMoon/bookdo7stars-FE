@@ -54,15 +54,18 @@ const AdminPageOrderTable = ({ orderTableHead, orderList, handleOpenOrderDialog 
           <TableBody>
             {orderList.length > 0 ? (
               orderList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => (
-                <StyledTableRow key={order.id}>
-                  <StyledTableCell onClick={handleOpenOrderDialog}>{index + 1}</StyledTableCell>
-                  <StyledTableCell onClick={handleOpenOrderDialog}>{order.id}</StyledTableCell>
-                  <StyledTableCell onClick={handleOpenOrderDialog}>{order.createdAt}</StyledTableCell>
-                  <StyledTableCell onClick={handleOpenOrderDialog}>{order.email}</StyledTableCell>
-                  <StyledTableCell onClick={handleOpenOrderDialog}>{order.books}</StyledTableCell>
-                  <StyledTableCell onClick={handleOpenOrderDialog}>{order.address}</StyledTableCell>
-                  <StyledTableCell onClick={handleOpenOrderDialog}>{order.totalPrice}</StyledTableCell>
-                  <StyledTableCell onClick={handleOpenOrderDialog}>{order.status}</StyledTableCell>
+                <StyledTableRow key={order?._id} onClick={() => handleOpenOrderDialog(order)}>
+                  <StyledTableCell>{index + 1}</StyledTableCell>
+                  <StyledTableCell>{order?.orderNum}</StyledTableCell>
+                  <StyledTableCell>{order?.createdAt}</StyledTableCell>
+                  <StyledTableCell>{order?.userID?.email}</StyledTableCell>
+                  {/* <StyledTableCell>{order?.items?.BookID?.title}</StyledTableCell>
+                  <StyledTableCell>{order?.shipTo?.address}</StyledTableCell>
+                  <StyledTableCell>{order?.totalPrice}</StyledTableCell> */}
+                  <StyledTableCell>test</StyledTableCell>
+                  <StyledTableCell>test</StyledTableCell>
+                  <StyledTableCell>12000</StyledTableCell>
+                  <StyledTableCell>{order?.status}</StyledTableCell>
                 </StyledTableRow>
               ))
             ) : (
