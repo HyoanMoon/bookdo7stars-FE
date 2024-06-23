@@ -6,7 +6,7 @@ const theme = createTheme({
       main: '#608020', // 원하는 색상 코드로 변경
     },
     secondary: {
-      main: '##A6BB76',
+      main: '#A6BB76',
     },
   },
 });

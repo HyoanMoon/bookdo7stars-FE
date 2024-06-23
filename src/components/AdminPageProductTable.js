@@ -83,7 +83,7 @@ const AdminPageProductTable = ({ bookList, bookTableHead, handleOpenEditDialog, 
                   </StyledTableRow>
                 ))
               ) : (
-                <StyledTableCell style={{ textAlign: 'center' }}>"상품 도서가 존재하지 않습니다.""</StyledTableCell>
+                <StyledTableCell style={{ textAlign: 'center' }}>상품 도서가 존재하지 않습니다.</StyledTableCell>
               )}
             </TableBody>
           </Table>
