@@ -111,7 +111,7 @@ const getAllUser = () => async (dispatch) => {
   try {
     dispatch({ type: types.GET_All_USERS_REQUEST });
     const response = await api.get('/user/all');
-    console.log('response for user', response);
+    // console.log('response for user', response);
     if (response.status !== 200) throw new Error(response.data.message);
     dispatch({ type: types.GET_All_USERS_SUCCESS, payload: response.data.users });
   } catch (error) {

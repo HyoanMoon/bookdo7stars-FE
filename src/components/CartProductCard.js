@@ -17,26 +17,26 @@ const CartProductCard = ({ item }) => {
     console.log('Delete item:', item._id);
   };
 
-  const stockInfo = Object.keys(item.productId.stock || {}).map((size) => {
-    const stockCount = item.productId.stock[size];
-    const stockAlert = stockCount <= 5 && stockCount > 0 ? `${stockCount} items left` : '';
-    return {
-      size,
-      stockCount,
-      stockAlert,
-    };
-  });
+  // const stockInfo = Object.keys(item.bookId.stock || {}).map((size) => {
+  //   const stockCount = item.productId.stock[size];
+  //   const stockAlert = stockCount <= 5 && stockCount > 0 ? `${stockCount} items left` : '';
+  //   return {
+  //     size,
+  //     stockCount,
+  //     stockAlert,
+  //   };
+  // });
 
   return (
     <Box display="flex" justifyContent="space-between" mb={2} alignItems="center">
       <Box display="flex" alignItems="center" width="25%">
-        <img src={item.productId.image} width={60} alt={item.productId.name} />
+        <img src={item.bookId.cover} width={60} alt={item.bookId.title} />
         <Typography variant="body2" ml={2}>
-          {item.productId.name}
+          {item.bookId.title}
         </Typography>
       </Box>
       <Typography variant="body2" width="15%">
-        ₩{item.productId.price.toFixed(2)}
+        ₩{item.bookId.priceSales.toFixed(2)}
       </Typography>
       <FormControl variant="outlined" size="small" width="15%">
         <Select value={item.qty} onChange={handleQtyChange}>
@@ -48,7 +48,7 @@ const CartProductCard = ({ item }) => {
         </Select>
       </FormControl>
       <Typography variant="body2" width="15%">
-        ₩{(item.productId.price * item.qty).toFixed(2)}
+        ₩{(item.bookId.priceSales * item.qty).toFixed(2)}
       </Typography>
       <IconButton onClick={deleteCart} color="secondary" width="5%">
         <DeleteIcon />

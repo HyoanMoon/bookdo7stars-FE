@@ -149,11 +149,10 @@ function AdminDashBoardPage() {
     setNewAdmin({ userName: '', email: '', password: '', role: 'admin' });
   };
 
-  // Edit 버튼을 클릭했을 때 dispatch 액션을 처리하는 함수
+  // Edit 버튼을 클릭했을 때 dispatch
   const handleEdit = (id) => {
     const user = localUserData.find((user) => user._id === id);
     if (user) {
-      // 원하는 Redux 액션을 dispatch합니다.
       dispatch(userActions.updateUserLevel(user._id, user.level));
     }
   };
