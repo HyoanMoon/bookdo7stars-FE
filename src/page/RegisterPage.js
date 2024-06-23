@@ -15,6 +15,7 @@ const ResisterPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [passwordError, setPasswordError] = useState('');
+  const [policyError, setPolicyError] = useState(false);
   const { error, loading } = useSelector((state) => state.user);
   const [policy, setPolicy] = useState(false);
 
