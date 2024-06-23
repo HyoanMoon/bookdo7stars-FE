@@ -33,7 +33,6 @@ const BooksCarousel = ({ books, title, categories, sx }) => {
             paddingLeft: '0px',
             paddingRight: '0px',
             marginTop: '60px',
-            backgroundColor: 'yellow',
           }}>
           <Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -61,7 +60,6 @@ const BooksCarousel = ({ books, title, categories, sx }) => {
             paddingLeft: '0px',
             paddingRight: '0px',
             marginTop: '60px',
-            backgroundColor: 'grey',
           }}>
           <Box>
             <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>

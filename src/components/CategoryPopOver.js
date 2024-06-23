@@ -1,20 +1,15 @@
-import Box from '@mui/material/Box';
-import { ClickAwayListener, Divider, Fade, Grid, List, ListItem, ListItemText, MenuItem, Paper, Popover, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { ClickAwayListener, Fade, Grid, Paper, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import { bookActions } from '../action/bookActions';
 import { categoryActions } from '../action/categoryActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Popper } from '@mui/base';
-import booksGroupContainer from './BooksGroupPage/BooksGroupContainer';
 
 const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSubCategories, anchorEl, id, open }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { books } = useSelector((state) => state.book);
   const { categories } = useSelector((state) => state.category);
-  const [selectedPath, setSelectedPath] = useState([]);
-  const { categoryId: routeCategoryId } = useParams();
 
   const clickSub3Category = (firstCategory, secondCategory, thirdCategory) => {
     const newPath = [firstCategory, secondCategory, thirdCategory];
@@ -29,8 +24,6 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
     if (categoryId) {
       dispatch(bookActions.getBookListByCategory(categoryId));
       navigate(`/books/all/category`);
-    } else {
-      navigate(-1); // 이전 페이지로 리다이렉트
     }
     handlePopperClose();
   };
@@ -39,6 +32,7 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
     const newPath = [firstCategory, secondCategory];
     let categoryPath = newPath.join('>');
     categoryPath = '국내도서>' + categoryPath;
+    console.log(categoryPath);
     dispatch(categoryActions.setSelectedCategoryPath(categoryPath));
     navigate(`/books/all/category`);
     handlePopperClose();
@@ -86,7 +80,7 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
                           <Typography
                             variant="subtitle1"
                             gutterBottom
-                            onClick={() => clickSubCategory(firstCategory, secondCategory)}
+                            onClick={() => clickSub2Category(firstCategory, secondCategory)}
                             sx={{
                               cursor: 'pointer',
                               display: 'inline-block',

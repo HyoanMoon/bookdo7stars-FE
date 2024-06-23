@@ -6,7 +6,6 @@ import { bookActions } from '../../action/bookActions';
 
 import BooksGroupContainer from './BooksGroupContainer';
 import CategoryList from '../CategoryList/CategoryList';
-import { getCategories } from '../../_helper/getCategories';
 import { getGroupNameInKorean } from '../../_helper/getGroupNameInKorean';
 
 const BooksGroupPage = () => {
@@ -44,8 +43,6 @@ const BooksGroupPage = () => {
       groupBooksByCategory.push(book);
     }
   });
-
-  console.log(groupBooksByCategory);
 
   return (
     <Container

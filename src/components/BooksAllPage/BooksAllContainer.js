@@ -1,14 +1,8 @@
-import { Box, Container, Grid, Typography, Tab, Tabs, Button, IconButton, Pagination } from '@mui/material';
-import BookSlider from '../BookSlider/BookSlider';
-import React, { useEffect, useState } from 'react';
+import { Box, Container, Grid, Typography, IconButton, Pagination } from '@mui/material';
+import React, { useState } from 'react';
 import BookCard from '../BookCard';
-import { AddCircleOutline, ArrowBack } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
-import { bookActions } from '../../action/bookActions';
-import { useDispatch } from 'react-redux';
-import { styled } from '@mui/material/styles';
 
-const BooksAllContainer = ({ books, sx, title }) => {
+const BooksAllContainer = ({ books, title }) => {
   const [page, setPage] = useState(1);
   const booksPerPage = 50;
 
@@ -39,7 +33,6 @@ const BooksAllContainer = ({ books, sx, title }) => {
         borderRadius: 2,
         paddingLeft: '0px',
         paddingRight: '0px',
-        backgroundColor: '#b5c791',
         marginTop: '20px', // 페이지네이션과의 간격 조정
       }}>
       <Box sx={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>

@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Container, Grid } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { bookActions } from '../action/bookActions';
-import BooksCategoryContainer from './BooksCategoryPage/BooksCategoryContainer';
-import { getCategoryHierarchy } from '../_helper/getCategoryHierarchy';
-import { getSubCategories } from '../_helper/getSubCategories';
 import CategoryList from './CategoryList/CategoryList';
 import BooksGroupContainer from './BooksGroupPage/BooksGroupContainer';
-import { categoryActions } from '../action/categoryActions';
 const CategoryPage = () => {
   const dispatch = useDispatch();
   const { books, categoryBooks } = useSelector((state) => state.book);
@@ -57,13 +53,17 @@ const CategoryPage = () => {
   }
 
   let title;
-  if (booksByCategory.length === 0) {
-    title = '해당 카테고리에는 책이 없습니다.';
-  } else if (selectedCategoryPath && !isCategoryItemClicked) {
-    title = selectedCategoryPath;
-  } else if (isCategoryItemClicked || selectedCategoryPath) {
+  if (booksByCategory.length !== 0) {
     title = category;
   }
+  if (categoryBooks.length !== 0) {
+    title = selectedCategoryPath;
+  }
+
+  if (booksByCategory.length === 0 && categoryBooks.length === 0) {
+    title = '해당 카테고리에는 책이 없습니다.';
+  }
+  console.log('title', title);
 
   return (
     <Container

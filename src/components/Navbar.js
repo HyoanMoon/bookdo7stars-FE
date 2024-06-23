@@ -69,7 +69,6 @@ function NavBar() {
             navigate('/');
             dispatch(bookActions.getBookList({}));
             dispatch(categoryActions.setSelectedCategory(null));
-            dispatch(bookActions.setCategoryBooks([]));
           }}
           sx={{ padding: 2, width: '10vw' }}>
           <img src="/logo.png" alt="로고 이미지" style={{ color: '#d3ddbd', borderRadius: '3px', height: '7rem' }} />

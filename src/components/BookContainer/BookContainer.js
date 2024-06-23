@@ -1,15 +1,12 @@
-import { Box, Container, Grid, Typography, Tab, Tabs, Button, IconButton } from '@mui/material';
-import BookSlider from '../BookSlider/BookSlider';
+import { Box, Container, Grid, Typography, Tab, Tabs, Button } from '@mui/material';
 import React, { useState } from 'react';
 import BookCard from '../BookCard';
-import { AddCircleOutline, ArrowBack } from '@mui/icons-material';
+import { AddCircleOutline } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { bookActions } from '../../action/bookActions';
 import { useDispatch } from 'react-redux';
 
 const BookContainer = ({ books, categories, sx, title }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [selectedCategory, setSelectedCategory] = useState('전체');
 
   const handleCategoryChange = (event, newValue) => {
@@ -38,7 +35,6 @@ const BookContainer = ({ books, categories, sx, title }) => {
         paddingLeft: '0px',
         paddingRight: '0px',
         marginTop: '60px',
-        backgroundColor: 'red',
       }}>
       <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
         <Typography variant="h3" component="div" gutterBottom sx={{ fontWeight: 'bold', display: 'flex', justifyContent: 'center', margin: 0 }}>

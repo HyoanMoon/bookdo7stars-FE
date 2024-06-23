@@ -35,16 +35,39 @@ const MainPage = () => {
 
   // category object for category-slide-bar
   const newAllBooksCategories = getCategories(newAllBooks);
-  const newSpecialBooksCategories = getCategories(newSpecialBooks);
   const bestSellerCategories = getCategories(bestSeller);
-  const blogBestBooksCategories = getCategories(blogBestBooks);
 
   return (
     <>
       <Box>
         <CarouselSlide />
       </Box>
-      <Container>
+      <Container
+        sx={{
+          maxWidth: '100%',
+          '@media (min-width: 800)': {
+            maxWidth: '1000px',
+            margin: 'auto', // 화면 너비가 800 이상일 때 적용
+          },
+          '@media (min-width: 1000px)': {
+            maxWidth: '1200px',
+            margin: 'auto', // 화면 너비가 1000px 이상일 때 적용
+          },
+          '@media (min-width: 1200px)': {
+            maxWidth: '1400px',
+            margin: 'auto', // 화면 너비가 1200px 이상일 때 적용
+          },
+          '@media (min-width: 1400px)': {
+            maxWidth: '1600px', // 화면 너비가 1200px 이상일 때 적용
+          },
+          display: 'flex',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          borderRadius: 2,
+          padding: 0,
+          margin: 'auto',
+        }}>
+        >
         <Box>
           <BooksCarousel books={newSpecialBooks.slice(0, 10)} title={'화제의 신작'} />
         </Box>
