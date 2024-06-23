@@ -42,7 +42,7 @@ const AdminPageProductTable = ({ bookList, bookTableHead, handleOpenEditDialog, 
         <TableContainer sx={{ maxHeight: 590 }}>
           {/* maxHeight: 440 */}
           <Table stickyHeader aria-label="sticky table">
-            {/* 테이블 헤더 */}
+            {/* 테이블 헤드 */}
             <TableHead>
               <TableRow>
                 {bookTableHead.map((head, index) => (
@@ -53,34 +53,38 @@ const AdminPageProductTable = ({ bookList, bookTableHead, handleOpenEditDialog, 
 
             {/* 테이블 바디 */}
             <TableBody>
-              {bookList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((book) => (
-                <StyledTableRow key={book._id}>
-                  <StyledTableCell component="th" scope="row">
-                    <img src={book.cover} alt={book.title} style={{ width: '50px', height: '50px' }} />
-                  </StyledTableCell>
-                  <StyledTableCell>{book.isbn}</StyledTableCell>
-                  <StyledTableCell>
-                    {book?.title.slice(0, 30)}
-                    {book.title?.length > 30 ? '...' : ''}
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    {book?.author.slice(0, 10)}
-                    {book.author?.length > 10 ? '...' : ''}
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    {book.stockStatus}
-                    {book.stockStatus === '' ? '정상' : book.stockStatus}
-                  </StyledTableCell>
-                  <StyledTableCell>{book.publisher}</StyledTableCell>
-                  <StyledTableCell>{book.priceStandard}</StyledTableCell>
+              {bookList.length > 0 ? (
+                bookList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((book) => (
+                  <StyledTableRow key={book._id}>
+                    <StyledTableCell component="th" scope="row">
+                      <img src={book.cover} alt={book.title} style={{ width: '50px', height: '50px' }} />
+                    </StyledTableCell>
+                    <StyledTableCell>{book.isbn}</StyledTableCell>
+                    <StyledTableCell>
+                      {book?.title.slice(0, 30)}
+                      {book.title?.length > 30 ? '...' : ''}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {book?.author.slice(0, 10)}
+                      {book.author?.length > 10 ? '...' : ''}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {book.stockStatus}
+                      {book.stockStatus === '' ? '정상' : book.stockStatus}
+                    </StyledTableCell>
+                    <StyledTableCell>{book.publisher}</StyledTableCell>
+                    <StyledTableCell>{book.priceStandard}</StyledTableCell>
 
-                  {/* EDIT/DELETE 버튼 */}
-                  <StyledTableCell>
-                    <Button onClick={() => handleOpenEditDialog(book)}>Edit</Button>
-                    <Button onClick={() => handleDeleteProduct(book._id)}>Delete</Button>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
+                    {/* EDIT/DELETE 버튼 */}
+                    <StyledTableCell>
+                      <Button onClick={() => handleOpenEditDialog(book)}>Edit</Button>
+                      <Button onClick={() => handleDeleteProduct(book._id)}>Delete</Button>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))
+              ) : (
+                <StyledTableCell style={{ textAlign: 'center' }}>"상품 도서가 존재하지 않습니다.""</StyledTableCell>
+              )}
             </TableBody>
           </Table>
         </TableContainer>

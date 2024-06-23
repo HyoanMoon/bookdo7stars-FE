@@ -13,7 +13,7 @@ const AdminProductPage = () => {
   const navigate = useNavigate();
   const [openDialog, setOpenDialog] = useState(false);
   const [editBook, setEditBook] = useState(null);
-  const bookTableHead = ['Cover', 'ISBN', 'Title', 'Author', 'Stock', 'Publisher', 'Price', ''];
+  const bookTableHead = ['이미지', 'ISBN', '도서명', '저자', '재고', '출판사', '판매가', ''];
   const { books } = useSelector((state) => state.book);
   const [query, setQuery] = useSearchParams();
   const fields = ['isbn', 'title', 'author', 'category', 'publisher'];
@@ -40,7 +40,7 @@ const AdminProductPage = () => {
       }
     });
     navigate('?' + params.toString());
-    dispatch(bookActions.getBookList(searchQuery));
+    dispatch(bookActions.getBookList({ ...searchQuery }));
   }, [searchQuery, navigate, dispatch]);
 
   // 검색한 값을 리셋하기.
