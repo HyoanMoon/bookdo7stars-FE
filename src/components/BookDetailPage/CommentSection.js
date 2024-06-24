@@ -22,12 +22,27 @@ const CommentSection = ({ bookId, deleteComment, userId }) => {
       {comments.length === 0 && <Typography variant="body1">No comments yet.</Typography>}
       <List>
         {comments.map((comment, index) => (
-          <ListItem key={index} className="comment-item">
-            <ListItemText primary={comment.userId.userName} secondary={comment.content} />
+          <ListItem
+            key={index}
+            className="comment-item"
+            sx={{
+              marginBottom: '10px',
+              padding: '15px',
+              backgroundColor: 'white',
+              opacity: '70%',
+              boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.3)',
+              borderRadius: '8px',
+            }}>
+            <ListItemText
+              primary={comment.userId.userName}
+              secondary={comment.content}
+              primaryTypographyProps={{ fontWeight: 'bold', color: '#333' }}
+              secondaryTypographyProps={{ color: '#555' }}
+            />
             {comment.userId._id === userId && (
               <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="delete" onClick={() => deleteComment(comment._id)}>
-                  <DeleteIcon />
+                <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(comment._id)}>
+                  <DeleteIcon color="#537019" />
                 </IconButton>
               </ListItemSecondaryAction>
             )}
