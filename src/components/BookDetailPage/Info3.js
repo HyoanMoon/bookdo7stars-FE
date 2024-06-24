@@ -26,7 +26,7 @@ const scrollToElement = (elementId, offset = 0) => {
 const Info3 = ({ selectedBook }) => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const [activeTab, setActiveTab] = useState('bookInfo');
+  const [activeTab, setActiveTab] = useState('bookinfo');
   const comments = useSelector((state) => state.comment?.comments || []);
   const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ const Info3 = ({ selectedBook }) => {
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
     navigate({ search: `?section=${newValue}` }, { replace: true });
-    scrollToElement(newValue, -80); // 탭 높이만큼 오프셋 적용
+    setTimeout(() => scrollToElement(newValue, -80), 0); // 탭 높이만큼 오프셋 적용
   };
 
   useEffect(() => {
@@ -69,7 +69,7 @@ const Info3 = ({ selectedBook }) => {
   useEffect(() => {
     const handleScroll = () => {
       const sections = ['bookInfo', 'author', 'reviews', 'delivery'];
-      let currentSection = 'bookInfo';
+      let currentSection;
       sections.forEach((section) => {
         const element = document.getElementById(section);
         if (element) {
@@ -79,14 +79,17 @@ const Info3 = ({ selectedBook }) => {
           }
         }
       });
-      setActiveTab(currentSection);
+      if (currentSection && currentSection !== activeTab) {
+        setActiveTab(currentSection);
+        navigate({ search: `?section=${currentSection}` }, { replace: true });
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [activeTab, navigate]);
 
   return (
     <Container sx={{ mt: 5 }}>
