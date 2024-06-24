@@ -166,7 +166,6 @@ function AdminDashBoardPage() {
       <div className="root">
         <Container className="containerStyled" maxWidth="lg">
           <Grid container spacing={3}>
-            {/* 개요 섹션 */}
             <Grid item xs={12} md={4}>
               <AdminDashboardCard title="총 매출" content={<Line data={salesData} />} />
             </Grid>
