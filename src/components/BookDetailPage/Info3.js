@@ -34,16 +34,18 @@ const Info3 = ({ selectedBook }) => {
   const section = query.get('section');
 
   useEffect(() => {
-    if (section) {
+    if (section && section !== activeTab) {
       setActiveTab(section);
       scrollToElement(section, -80); // 탭 높이만큼 오프셋 적용
     }
-  }, [section]);
+  }, [section, activeTab]);
 
   const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
-    navigate({ search: `?section=${newValue}` }, { replace: true });
-    setTimeout(() => scrollToElement(newValue, -80), 0); // 탭 높이만큼 오프셋 적용
+    if (newValue !== activeTab) {
+      setActiveTab(newValue);
+      navigate({ search: `?section=${newValue}` }, { replace: true });
+      setTimeout(() => scrollToElement(newValue, -80), 0); // 탭 높이만큼 오프셋 적용
+    }
   };
 
   useEffect(() => {
