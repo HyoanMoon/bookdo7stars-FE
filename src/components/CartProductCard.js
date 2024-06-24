@@ -18,11 +18,11 @@ const CartProductCard = ({ item, isSelected, onSelectItem, userLevel }) => {
   // 레벨에 따른 할인 비율 정의
   const getDiscountRate = (level) => {
     switch (level) {
-      case 'Silver':
+      case 'silver':
         return 0.02;
-      case 'Gold':
+      case 'gold':
         return 0.05;
-      case 'Platinum':
+      case 'platinum':
         return 0.07;
       default:
         return 0;
