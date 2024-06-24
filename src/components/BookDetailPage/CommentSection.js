@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button, TextField, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,22 +6,16 @@ import { commentActions } from '../../action/commentAction';
 
 const CommentSection = ({ bookId, deleteComment, userId }) => {
   const dispatch = useDispatch();
-  const { comments } = useSelector((state) => state.comment);
 
   const [newComment, setNewComment] = useState('');
+  const { comments } = useSelector((state) => state.comment);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     dispatch(commentActions.createComment({ content: newComment, bookId: bookId }));
+    setNewComment('');
   };
-  console.log('코멘트섹션에서', comments);
-
-  useEffect(() => {
-    dispatch(commentActions.getCommentsByBook(bookId));
-  }, []);
-
-  console.log('zzzz', comments[0].userId.userName);
 
   return (
     <Box className="comment-section mt-4">
@@ -30,7 +24,7 @@ const CommentSection = ({ bookId, deleteComment, userId }) => {
         {comments.map((comment, index) => (
           <ListItem key={index} className="comment-item">
             <ListItemText primary={comment.userId.userName} secondary={comment.content} />
-            {comment.userId === userId && (
+            {comment.userId._id === userId && (
               <ListItemSecondaryAction>
                 <IconButton edge="end" aria-label="delete" onClick={() => deleteComment(comment._id)}>
                   <DeleteIcon />

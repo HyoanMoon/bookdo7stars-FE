@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { TableContainer, TableBody, Table, TableRow, TableCell, Paper, Container, Tabs, Tab, Box, Typography } from '@mui/material';
 import CommentSection from './CommentSection';
-import { bookActions } from '../../action/bookActions';
 import { commentActions } from '../../action/commentAction';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -25,8 +24,6 @@ const scrollToElement = (elementId, offset = 0) => {
 
 const Info3 = ({ selectedBook }) => {
   const dispatch = useDispatch();
-  // const { comments } = useSelector((state) => state.comment);
-  const id = selectedBook._id;
   const [activeTab, setActiveTab] = useState('bookInfo');
   const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -48,8 +45,13 @@ const Info3 = ({ selectedBook }) => {
     }
   };
 
+  useEffect(() => {
+    console.log('언제 렌더링되니');
+    dispatch(commentActions.getCommentsByBook(selectedBook._id));
+  }, []);
+
   const deleteComment = (commentId) => {
-    dispatch(commentActions.deleteComment(commentId, id));
+    dispatch(commentActions.deleteComment(commentId, selectedBook._id));
   };
 
   useEffect(() => {

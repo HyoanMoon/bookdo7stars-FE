@@ -1,12 +1,14 @@
 import * as types from '../constants/comment.constans';
+import userReducer from './userReducer';
 
 const initialState = {
   comments: [],
+  createCommentSuccess: false,
   loading: false,
   error: null,
 };
 
-export default function commentReducer(state = initialState, action) {
+function commentReducer(state = initialState, action) {
   switch (action.type) {
     case types.CREATE_COMMENT_REQUEST:
     case types.GET_COMMENT_LIST_REQUEST:
@@ -17,22 +19,23 @@ export default function commentReducer(state = initialState, action) {
         error: null,
       };
     case types.CREATE_COMMENT_SUCCESS:
+      console.log(action.payload);
       return {
         ...state,
         loading: false,
-        comments: [...state.comments, action.payload],
+        comments: [...state.comments, action.payload.comment],
       };
     case types.GET_COMMENT_LIST_SUCCESS:
       return {
         ...state,
         loading: false,
+        createCommentSuccess: true,
         comments: action.payload.comments,
       };
     case types.DELETE_COMMENT_SUCCESS:
       return {
         ...state,
         loading: false,
-        comments: state.comments.filter((comment) => comment._id !== action.payload),
       };
     case types.CREATE_COMMENT_FAIL:
     case types.GET_COMMENT_LIST_FAIL:
@@ -46,3 +49,4 @@ export default function commentReducer(state = initialState, action) {
       return state;
   }
 }
+export default commentReducer;
