@@ -6,6 +6,7 @@ import { userActions } from '../action/userActions';
 import GoogleIcon from '@mui/icons-material/Google';
 import { useGoogleLogin } from '@react-oauth/google';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import '../App.css';
 
 const LoginPage = () => {
@@ -15,6 +16,7 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { user } = useSelector((state) => state.user);
+  const isSmallScreen = useMediaQuery('(max-width:600px)');
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -44,10 +46,10 @@ const LoginPage = () => {
   }, [user, navigate]);
 
   return (
-    <Container>
-      <Grid container>
-        <Grid item xs={12} md={6}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 8, marginRight: 5 }}>
+    <Container maxWidth="md">
+      <Grid container spacing={1}>
+        <Grid item xs={12} md={6} sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'center', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 8, marginBottom: 10, marginRight: { md: 10, xs: 0 } }}>
             <Typography component="h1" variant="h5">
               Login
             </Typography>
@@ -89,9 +91,9 @@ const LoginPage = () => {
             </Box>
           </Box>
         </Grid>
-        <Grid item xs={6} md={6} sx={{ display: { xs: 'none', md: 'block' } }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', marginLeft: 5, marginTop: 8 }}>
-            <img width="550" height="550" src="/image/login2.png" alt="Login Illustration" />
+        <Grid item xs={12} md={6} sx={{ order: { xs: 1, md: 2 }, display: { xs: 'none', md: 'flex' }, justifyContent: 'center', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', marginLeft: { md: 5, xs: 0 }, marginTop: 8 }}>
+            <img style={{ marginLeft: '10px', marginRight: '150px', width: '500px', height: '400px' }} src="/image/login2.png" alt="Login Illustration" />
           </Box>
         </Grid>
       </Grid>

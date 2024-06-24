@@ -4,6 +4,7 @@ import { commonUiActions } from './commonUiAction';
 
 const createComment = (payload) => async (dispatch) => {
   try {
+    console.log('[commentAction]에 도착!');
     dispatch({ type: types.CREATE_COMMENT_REQUEST });
     const response = await api.post('/comments', payload);
     dispatch({ type: types.CREATE_COMMENT_SUCCESS, payload: response.data });

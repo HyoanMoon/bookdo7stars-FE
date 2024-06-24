@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { Button, TextField, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+// import { useDispatch } from 'react-redux';
 
 const CommentSection = ({ comments = [], addComment, deleteComment, currentUserId }) => {
+  // const dispatch = useDispatch();
+
   const [newComment, setNewComment] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('[commentSection] 코멘트 submit클릭하면: ', newComment);
+    // console.log('[commentSection] 코멘트 submit클릭하면: ', newComment);
     if (newComment.trim()) {
       addComment(newComment);
+      // dispatch();
       setNewComment('');
     }
   };

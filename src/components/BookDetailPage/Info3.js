@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Container, Tabs, Tab, Box, Typography } from '@mui/material';
+import { TableContainer, TableBody, Table, TableRow, TableCell, Paper, Container, Tabs, Tab, Box, Typography } from '@mui/material';
 import CommentSection from './CommentSection';
 import { bookActions } from '../../action/bookActions';
 import { commentActions } from '../../action/commentAction';
@@ -13,18 +13,16 @@ const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
 
-const Info3 = ({ description }) => {
+const Info3 = ({ selectedBook }) => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState('bookInfo');
   const comments = useSelector((state) => state.comment?.comments || []);
   const user = useSelector((state) => state.user?.currentUser);
-  const [review, setReview] = useState('');
   const bookInfoRef = useRef(null);
   const authorRef = useRef(null);
   const reviewsRef = useRef(null);
   const deliveryRef = useRef(null);
-  const location = useLocation();
   const navigate = useNavigate();
   const query = useQuery();
   const section = query.get('section');
@@ -34,6 +32,7 @@ const Info3 = ({ description }) => {
     const authorTop = authorRef.current ? authorRef.current.getBoundingClientRect().top + window.scrollY : 0;
     const reviewsTop = reviewsRef.current ? reviewsRef.current.getBoundingClientRect().top + window.scrollY : 0;
     const deliveryTop = deliveryRef.current ? deliveryRef.current.getBoundingClientRect().top + window.scrollY : 0;
+
     const handleScroll = () => {
       if (window.scrollY >= deliveryTop - 50) {
         setActiveTab('delivery');
@@ -56,22 +55,18 @@ const Info3 = ({ description }) => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
   useEffect(() => {
     if (section) {
       setActiveTab(section);
       document.getElementById(section).scrollIntoView({ behavior: 'smooth' });
     }
   }, [section]);
+
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
     document.getElementById(newValue).scrollIntoView({ behavior: 'smooth' });
     navigate({ search: `?section=${newValue}` }, { replace: true });
-  };
-
-  const handleReviewSubmit = (event) => {
-    event.preventDefault();
-    console.log('Review submitted:', review);
-    setReview('');
   };
 
   useEffect(() => {
@@ -82,10 +77,12 @@ const Info3 = ({ description }) => {
   }, [id, dispatch]);
 
   const addComment = (comment) => {
+    console.log('[commentSection에서 받아와서 Info3의 addComment안] 코멘트 submit클릭하면: ', comment);
     if (!user) {
       navigate('/login');
       return;
     }
+
     dispatch(commentActions.createComment({ content: comment, productId: id }));
   };
 
@@ -110,7 +107,30 @@ const Info3 = ({ description }) => {
 
       <Box id="bookInfo" my={4} ref={bookInfoRef}>
         <Typography variant="h4">도서정보</Typography>
-        <Typography variant="body1">{description}</Typography>
+        <TableContainer component={Paper} sx={{ mt: 2, mb: 5 }}>
+          <Table sx={{ outline: '1px solid #DFE4DF' }}>
+            <TableBody sx={{ outline: '1px solid #DFE4DF' }}>
+              <TableRow sx={{ outline: '1px solid #DFE4DF' }}>
+                <TableCell sx={{ outline: '1px solid #DFE4DF', backgroundColor: '#DADFDA', width: '15%' }}>도서소개</TableCell>
+                <TableCell sx={{ outline: '1px solid #DFE4DF', width: '85%' }}>
+                  {selectedBook.description ? selectedBook.description : 'No description available'}
+                </TableCell>
+              </TableRow>
+              <TableRow sx={{ outline: '1px solid #DFE4DF' }}>
+                <TableCell sx={{ outline: '1px solid #DFE4DF', backgroundColor: '#DADFDA', width: '15%' }}>isbn</TableCell>
+                <TableCell sx={{ outline: '1px solid #DFE4DF', width: '85%' }}>{selectedBook.isbn}</TableCell>
+              </TableRow>
+              <TableRow sx={{ outline: '1px solid #DFE4DF' }}>
+                <TableCell sx={{ outline: '1px solid #DFE4DF', backgroundColor: '#DADFDA', width: '15%' }}>출판날짜</TableCell>
+                <TableCell sx={{ outline: '1px solid #DFE4DF', width: '85%' }}>{selectedBook.pubDate}</TableCell>
+              </TableRow>
+              <TableRow sx={{ outline: '1px solid #DFE4DF' }}>
+                <TableCell sx={{ outline: '1px solid #DFE4DF', backgroundColor: '#DADFDA', width: '15%' }}>카테고리</TableCell>
+                <TableCell sx={{ outline: '1px solid #DFE4DF', width: '85%' }}>{selectedBook.categoryName}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Box>
 
       <Box id="author" my={4} ref={authorRef}>

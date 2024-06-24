@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import BookImage from '../components/BookDetailPage/Book.image';
 import BookBasicInfo from '../components/BookDetailPage/BookBasicInfo';
 import BookToCart from '../components/BookDetailPage/BookToCart';
-import BookDetailInfo from '../components/BookDetailPage/BookDetailInfo';
+// import BookDetailInfo from '../components/BookDetailPage/BookDetailInfo';
 import AddressChange from '../components/BookDetailPage/AddressChange';
 import DeliveryEstimate from '../components/BookDetailPage/DeliveryEstimate';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,7 +17,7 @@ const BookDetailPage = () => {
   const [address, setAddress] = useState('지역을 선택해주세요');
   const { selectedBook, getBooksLoading } = useSelector((state) => state.book);
   const { bookid } = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   useEffect(() => {
     if (bookid) {
@@ -51,7 +51,7 @@ const BookDetailPage = () => {
             <BookDescription description={selectedBook.description} />
           </Grid> */}
           <Grid item xs={12} sm={12} md={12}>
-            <Info3 description={selectedBook.description} />
+            <Info3 selectedBook={selectedBook} />
           </Grid>
         </Grid>
       </Container>

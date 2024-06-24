@@ -37,13 +37,16 @@ const RegisterPage = () => {
 
   return (
     <Container maxWidth="md">
-      <Grid container spacing={3}>
+      <Grid container spacing={1}>
+        <Grid item xs={12} md={6} sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'center', alignItems: 'center' }}>
+          <img style={{ marginLeft: '10px', marginRight: '150px', width: '500px', height: '400px' }} src="/image/signup.jpg" alt="Register Illustration" />
+        </Grid>
         <Grid item xs={12} md={6}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 8 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: 3 }}>
             <Typography component="h1" variant="h5" gutterBottom>
               Register
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 5, mb: 5 }}>
               <TextField
                 margin="normal"
                 required
@@ -145,9 +148,6 @@ const RegisterPage = () => {
               </Button>
             </Box>
           </Box>
-        </Grid>
-        <Grid item xs={12} md={6} sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'center', alignItems: 'center' }}>
-          <img src="/image/register.png" alt="Register Illustration" style={{ maxWidth: '100%', height: 'auto' }} />
         </Grid>
       </Grid>
     </Container>
