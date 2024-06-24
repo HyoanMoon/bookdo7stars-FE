@@ -5,6 +5,7 @@ import orderReducer from './orderReducer';
 import userReducer from './userReducer';
 import cartReducer from './cartReducer';
 import favoriteReducer from './favoriteReducer';
+import categoryReducer from './categoryReducer';
 import commonUiReducer from './commonUIReducer';
 
 const store = configureStore({
@@ -15,7 +16,24 @@ const store = configureStore({
     cart: cartReducer,
     favorite: favoriteReducer,
     ui: commonUiReducer,
+    category: categoryReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      immutableCheck: false, // ImmutableStateInvariantMiddleware 비활성화
+      serializableCheck: false,
+    }),
 });
 
 export default store;
+
+// import { configureStore } from '@reduxjs/toolkit';
+
+// const store = configureStore({
+//   reducer: rootReducer,
+//   middleware: (getDefaultMiddleware) =>
+//     getDefaultMiddleware({
+//       immutableCheck: false, // ImmutableStateInvariantMiddleware 비활성화
+//       serializableCheck: false,
+//     }),
+// });

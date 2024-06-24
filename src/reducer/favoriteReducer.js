@@ -1,11 +1,29 @@
 import * as types from '../constants/favorite.constants';
-const initialState = {};
+const initialState = {
+  loading: false,
+  error: '',
+  favorite: [],
+};
 
 function favoriteReducer(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
     case types.GET_FAVORITE_REQUEST:
-      return {};
+    case types.ADD_FAVORITE_REQUEST:
+    case types.DELETE_FAVORITE_REQUEST:
+      return { ...state, loading: true };
+
+    case types.GET_FAVORITE_SUCCESS:
+      return { ...state, loading: false, error: '', favorite: payload.favorite.favorite };
+
+    case types.ADD_FAVORITE_SUCCESS:
+    case types.DELETE_FAVORITE_SUCCESS:
+      return { ...state, loading: false, error: '' };
+
+    case types.GET_FAVORITE_FAIL:
+    case types.GET_FAVORITE_FAIL:
+    case types.DELETE_FAVORITE_FAIL:
+      return { ...state, loading: false, error: payload };
     default:
       return state;
   }
