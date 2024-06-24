@@ -13,7 +13,6 @@ import { userActions } from '../../action/userActions';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import { is } from 'date-fns/locale';
 
 const logIn = '로그인';
 const logOut = '로그아웃';
