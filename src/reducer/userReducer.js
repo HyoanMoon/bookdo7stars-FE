@@ -14,6 +14,8 @@ function userReducer(state = initialState, action) {
     case types.USER_LOGIN_REQUEST:
     case types.REGISTER_USER_REQUEST:
     case types.GOOGLE_LOGIN_REQUEST:
+    case types.KAKAO_LOGIN_REQUEST:
+    case types.GITHUB_LOGIN_REQUEST:
     case types.LOGIN_WITH_TOKEN_REQUEST:
     case types.GET_ADMIN_REQUEST:
     case types.GET_All_USERS_REQUEST:
@@ -23,12 +25,17 @@ function userReducer(state = initialState, action) {
     case types.USER_LOGIN_SUCCESS:
     case types.LOGIN_WITH_TOKEN_SUCCESS:
     case types.GOOGLE_LOGIN_SUCCESS:
+    case types.KAKAO_LOGIN_SUCCESS:
+    case types.GITHUB_LOGIN_SUCCESS:
+      return { ...state, loading: false, user: payload.user, error: '' };
     case types.USER_LEVEL_EDIT_SUCCESS:
       return { ...state, loading: false, user: payload, error: '' };
 
     case types.USER_LOGIN_FAIL:
     case types.REGISTER_USER_FAIL:
     case types.GOOGLE_LOGIN_FAIL:
+    case types.KAKAO_LOGIN_FAIL:
+    case types.GITHUB_LOGIN_FAIL:
     case types.GET_ADMIN_FAIL:
     case types.GET_All_USERS_FAIL:
     case types.USER_LEVEL_EDIT_FAIL:

@@ -1,54 +1,92 @@
-import api from '../utils/api';
+import axios from 'axios';
 import * as types from '../constants/user.constants';
 import { commonUiActions } from './commonUiAction';
+import api from '../utils/api';
 
-// 이메일 로그인.
+const loginWithToken = () => async (dispatch) => {
+  try {
+    dispatch({ type: types.LOGIN_WITH_TOKEN_REQUEST });
+    const response = await api.get('/user/me', {
+      headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` },
+    });
+    if (response.status !== 200) throw new Error(response.data.message);
+    dispatch({ type: types.LOGIN_WITH_TOKEN_SUCCESS, payload: response.data });
+  } catch (error) {
+    dispatch({ type: types.LOGIN_WITH_TOKEN_FAIL, payload: error });
+    dispatch(logout());
+  }
+};
+
 const loginWithEmail = (payload) => async (dispatch) => {
   try {
     dispatch({ type: types.USER_LOGIN_REQUEST });
     const response = await api.post('/auth/login', payload);
-    // console.log('response', response.data);
     dispatch({ type: types.USER_LOGIN_SUCCESS, payload: response.data });
     dispatch(commonUiActions.showToastMessage('로그인을 성공하셨습니다!', 'success'));
-
     sessionStorage.setItem('token', response.data.token);
   } catch (error) {
-    dispatch({ type: types.USER_LOGIN_FAIL, payload: error });
+    dispatch({ type: types.USER_LOGIN_FAIL, payload: error.message });
     dispatch(commonUiActions.showToastMessage(error.message, 'error'));
   }
 };
 
-// 구글 로그인.
 const loginWithGoogle = (token) => async (dispatch) => {
-  console.log('토큰 잘 들어와? ', token);
   try {
     dispatch({ type: types.GOOGLE_LOGIN_REQUEST });
     const response = await api.post('/auth/google', { token });
-    if (response.status !== 200) throw new Error(response.error);
-    sessionStorage.setItem('token', response.data.token);
     dispatch({ type: types.GOOGLE_LOGIN_SUCCESS, payload: response.data });
+    sessionStorage.setItem('token', response.data.token);
     dispatch(commonUiActions.showToastMessage('Google login successful!', 'success'));
   } catch (error) {
-    dispatch({ type: types.GOOGLE_LOGIN_FAIL, payload: error.error });
-    dispatch(commonUiActions.showToastMessage(error.error, 'error'));
+    dispatch({ type: types.GOOGLE_LOGIN_FAIL, payload: error.message });
+    dispatch(commonUiActions.showToastMessage(error.message, 'error'));
   }
 };
 
-// 회원가입.
+const loginWithKakao = (code, navigate) => async (dispatch) => {
+  try {
+    dispatch({ type: types.KAKAO_LOGIN_REQUEST });
+    const response = await api.get('/auth/kakao', { params: { code } });
+    dispatch({ type: types.KAKAO_LOGIN_SUCCESS, payload: response.data });
+    sessionStorage.setItem('token', response.data.token);
+    dispatch(loginWithToken());
+    navigate('/');
+    dispatch(commonUiActions.showToastMessage('Kakao login successful!', 'success'));
+  } catch (error) {
+    dispatch({ type: types.KAKAO_LOGIN_FAIL, payload: error.message });
+    dispatch(commonUiActions.showToastMessage(error.message, 'error'));
+  }
+};
+
+const loginWithGithub = (code, navigate) => async (dispatch) => {
+  try {
+    dispatch({ type: types.GITHUB_LOGIN_REQUEST });
+    const response = await api.get('/auth/github', { params: { code } });
+    dispatch({ type: types.GITHUB_LOGIN_SUCCESS, payload: response.data });
+    sessionStorage.setItem('token', response.data.token);
+    dispatch(loginWithToken());
+    navigate('/');
+    dispatch(commonUiActions.showToastMessage('GitHub login successful!', 'success'));
+  } catch (error) {
+    dispatch({ type: types.GITHUB_LOGIN_FAIL, payload: error.message });
+    dispatch(commonUiActions.showToastMessage(error.message, 'error'));
+  }
+};
+
 const registerUser =
-  ({ email, userName, password, role, level, address, phone }, Navigate) =>
+  ({ email, userName, password, role, level, address, phone }, navigate) =>
   async (dispatch) => {
     try {
       dispatch({ type: types.REGISTER_USER_REQUEST });
-      const Response = await api.post('/user', { email, userName, password, role, level, address, phone });
-      if (Response.status !== 200) throw new Error(Response.error);
-      dispatch({ type: types.REGISTER_USER_SUCCESS, payload: Response.data });
+      const response = await api.post('/user', { email, userName, password, role, level, address, phone });
+      dispatch({ type: types.REGISTER_USER_SUCCESS, payload: response.data });
       dispatch(commonUiActions.showToastMessage('Registration completed successfully.', 'success'));
-      Navigate('/login');
+      navigate('/login');
     } catch (error) {
-      dispatch({ type: types.REGISTER_USER_FAIL, payload: error.error });
+      dispatch({ type: types.REGISTER_USER_FAIL, payload: error.message });
     }
   };
+
 // 어드민 대쉬보드에서 어드민 계정 생성
 const registerAdmin =
   ({ email, userName, password, role }) =>
@@ -63,23 +101,6 @@ const registerAdmin =
       dispatch({ type: types.REGISTER_USER_FAIL, payload: error.error });
     }
   };
-
-// 토큰 로그인.
-const loginWithToken = () => async (dispatch) => {
-  try {
-    const token = sessionStorage.getItem('token');
-    if (!token) {
-      return;
-    }
-    dispatch({ type: types.LOGIN_WITH_TOKEN_REQUEST });
-    const response = await api.get('/user/me');
-    if (response.status !== 200) throw new Error(response.data.message);
-    dispatch({ type: types.LOGIN_WITH_TOKEN_SUCCESS, payload: response.data });
-  } catch (error) {
-    dispatch({ type: types.LOGIN_WITH_TOKEN_FAIL, payload: error });
-    dispatch(logout());
-  }
-}; // 변수 이름 token으로 해주세요.
 
 // 로그아웃.
 const logout = () => async (dispatch) => {
@@ -135,10 +156,12 @@ const updateUserLevel = (id, level) => async (dispatch) => {
 };
 
 export const userActions = {
+  loginWithToken,
   loginWithEmail,
   loginWithGoogle,
+  loginWithKakao,
+  loginWithGithub,
   registerUser,
-  loginWithToken,
   logout,
   removeUser,
   adminUser,
