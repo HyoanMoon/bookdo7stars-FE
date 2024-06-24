@@ -1,8 +1,14 @@
 import React from 'react';
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Link, Container, Grid, Button } from '@mui/material';
 import MyPageCategory from '../components/MyPageCategory';
+import { useNavigate } from 'react-router-dom';
 
 const MyPageOrderClaimList = () => {
+  const navigate = useNavigate();
+  const handleClaim = () => {
+    navigate('');
+  };
+
   return (
     <Container>
       <Box p={3}>
@@ -36,7 +42,12 @@ const MyPageOrderClaimList = () => {
             <Box mt={2} ml={2} mb={4}>
               <Grid container alignItems="center" mb={2}>
                 <Typography variant="subtitle2">구매하셨던 상품의 반품/교환/추가배송 신청 및 내역을 조회하실 수 있습니다.</Typography>
-                <Button variant="contained" color="secondary" fullWidth sx={{ ml: 1, width: '25ch', height: '30px', borderRadius: '20px' }}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  fullWidth
+                  sx={{ ml: 1, width: '25ch', height: '30px', borderRadius: '20px' }}
+                  onClick={handleClaim}>
                   <Typography variant="subtitle2" color="white">
                     반품/교환 신청하기
                   </Typography>

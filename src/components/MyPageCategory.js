@@ -76,7 +76,7 @@ const MyPageCategory = () => {
             ))}
           </Box>
           <Button variant="outlined" color="primary" fullWidth sx={{ width: '20ch', height: '30px', borderRadius: '10px' }}>
-            <Typography variant="subtitle2">반품/교환 신청하기</Typography>
+            <Typography variant="subtitle2">1:1 문의</Typography>
           </Button>
         </Box>
       </Grid>
