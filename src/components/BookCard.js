@@ -12,7 +12,6 @@ import { favoriteActions } from '../action/favoriteActions';
 const BookCard = ({ book, favorite }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
 
   const clickBookCard = (book) => {
     dispatch({ type: types.SET_SELECTED_BOOK, payload: book });

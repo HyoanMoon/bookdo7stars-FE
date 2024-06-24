@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Typography, Link, Container, Grid } from '@mui/material';
 import MyPageCategory from '../components/MyPageCategory';
+import BookCard from '../components/BookCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { favoriteActions } from '../action/favoriteActions';
 
 const MyPageWishList = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+  const { favorite } = useSelector((state) => state.favorite);
+  const { bookList } = useSelector((state) => state.book);
+
+  useEffect(() => {
+    dispatch(favoriteActions.getFavorite());
+  }, [dispatch, user]);
+
   return (
     <Container>
       <Box p={3}>
@@ -46,6 +58,20 @@ const MyPageWishList = () => {
 
               {/* 구분선 */}
               <Typography mt={2} mb={2} borderBottom={1} borderColor="grey.400" />
+
+              {/* 찜한 상품 나열 */}
+              <Grid container spacing={2}>
+                {favorite.map((item) => {
+                  const book = bookList.find((favBook) => favBook._id === item._id);
+                  return (
+                    book && (
+                      <Grid item key={item._id} xs={12} sm={6} md={4}>
+                        <BookCard favorite={true} book={book} />
+                      </Grid>
+                    )
+                  );
+                })}
+              </Grid>
             </Box>
           </Grid>
         </Grid>
