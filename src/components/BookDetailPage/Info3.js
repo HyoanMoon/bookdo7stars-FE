@@ -29,13 +29,12 @@ const Info3 = ({ description }) => {
   const query = useQuery();
   const section = query.get('section');
 
-  useEffect(() => {
+  const handleScroll = () => {
+    const bookInfoTop = bookInfoRef.current ? bookInfoRef.current.getBoundingClientRect().top + window.scrollY : 0;
+    const authorTop = authorRef.current ? authorRef.current.getBoundingClientRect().top + window.scrollY : 0;
+    const reviewsTop = reviewsRef.current ? reviewsRef.current.getBoundingClientRect().top + window.scrollY : 0;
+    const deliveryTop = deliveryRef.current ? deliveryRef.current.getBoundingClientRect().top + window.scrollY : 0;
     const handleScroll = () => {
-      const bookInfoTop = bookInfoRef.current ? bookInfoRef.current.getBoundingClientRect().top + window.scrollY : 0;
-      const authorTop = authorRef.current ? bookInfoRef.current.getBoundingClientRect().top + window.scrollY : 0;
-      const reviewsTop = reviewsRef.current ? bookInfoRef.current.getBoundingClientRect().top + window.scrollY : 0;
-      const deliveryTop = deliveryRef.current ? bookInfoRef.current.getBoundingClientRect().top + window.scrollY : 0;
-
       if (window.scrollY >= deliveryTop - 50) {
         setActiveTab('delivery');
         navigate({ search: '?section=delivery' }, { replace: true });
@@ -50,20 +49,19 @@ const Info3 = ({ description }) => {
         navigate({ search: '?section=bookInfo' }, { replace: true });
       }
     };
-
+  };
+  useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [navigate]);
-
+  }, []);
   useEffect(() => {
     if (section) {
       setActiveTab(section);
       document.getElementById(section).scrollIntoView({ behavior: 'smooth' });
     }
   }, [section]);
-
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
     document.getElementById(newValue).scrollIntoView({ behavior: 'smooth' });
