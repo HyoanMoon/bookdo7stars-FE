@@ -15,6 +15,8 @@ const CartPage = () => {
   const { cartList, totalPrice, user } = useSelector((state) => state.cart); // 사용자 정보 추가
   const [selectedItems, setSelectedItems] = useState([]); // 선택된 상품을 상태로 관리
 
+  console.log(user.level, 'userrrrrrr');
+
   useEffect(() => {
     dispatch(cartActions.getCartList());
   }, [dispatch]);
@@ -44,11 +46,11 @@ const CartPage = () => {
   // 레벨에 따른 할인 비율 정의
   const getDiscountRate = (level) => {
     switch (level) {
-      case 'Silver':
+      case 'silver':
         return 0.02;
-      case 'Gold':
+      case 'gold':
         return 0.05;
-      case 'Platinum':
+      case 'platinum':
         return 0.07;
       default:
         return 0;

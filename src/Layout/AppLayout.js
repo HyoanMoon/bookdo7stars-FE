@@ -5,6 +5,7 @@ import { useLocation } from 'react-router'; // useLocation import 추가
 import ToastMessage from '../components/ToastMessage';
 import { userActions } from '../action/userActions';
 import { bookActions } from '../action/bookActions';
+import { cartActions } from '../action/cartActions';
 import Sidebar from '../components/Sidebar'; // Sidebar import 추가
 import Footer from '../components/Footer/Footer';
 import CategoryBar from '../components/CategoryBar';
@@ -17,6 +18,12 @@ const AppLayout = ({ children }) => {
   useEffect(() => {
     dispatch(userActions.loginWithToken());
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(cartActions.getCartQty());
+    }
+  }, [user]);
 
   const { bookList, bookGroup } = useSelector((state) => state.book);
 

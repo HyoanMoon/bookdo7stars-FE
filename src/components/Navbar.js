@@ -21,6 +21,7 @@ function NavBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
+  const { cartItemCount } = useSelector((state) => state.cart);
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleLogout = () => {
@@ -116,7 +117,9 @@ function NavBar() {
               )}
               <Box>
                 <Button variant="outlined" size="medium" key={cart} sx={{ color: 'primary', marginRight: '5px' }}>
-                  {cart}
+                  <div onClick={() => navigate('/cart')}>
+                    {cart}({cartItemCount || 0})
+                  </div>
                 </Button>
               </Box>
               {user && user.role === 'admin' && (

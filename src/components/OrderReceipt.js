@@ -1,9 +1,10 @@
 import React from 'react';
 import { Box, Typography, Paper, Divider, Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom'; // react-router-dom에서 useNavigate 가져오기
+import { useNavigate, useLocation } from 'react-router-dom'; // react-router-dom에서 useNavigate 가져오기
 import { currencyFormat } from '../utils/number';
 
-const OrderReceipt = ({ finalTotalPrice, hasSelectedItems }) => {
+const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList }) => {
+  const location = useLocation();
   const navigate = useNavigate(); // useNavigate 훅 사용
   const shippingFee = hasSelectedItems ? (finalTotalPrice > 100000 ? 0 : 2500) : 0; // 선택된 상품이 있으면 100불 이상 무료 배송, 그 외 2500원, 선택된 상품이 없으면 배송비 0
   const pointsEarned = finalTotalPrice * 0.05;
@@ -26,15 +27,17 @@ const OrderReceipt = ({ finalTotalPrice, hasSelectedItems }) => {
         <Typography variant="h6" mt={2}>
           Order Total: ₩{currencyFormat(grandTotal)}
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 2 }}
-          onClick={handleOrder} // 주문하기 버튼 클릭 시 handleOrder 함수 호출
-        >
-          주문하기
-        </Button>
+        {location.pathname.includes('/cart') && cartList.length > 0 && (
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 2 }}
+            onClick={handleOrder} // 주문하기 버튼 클릭 시 handleOrder 함수 호출
+          >
+            주문하기
+          </Button>
+        )}
       </Box>
     </Paper>
   );

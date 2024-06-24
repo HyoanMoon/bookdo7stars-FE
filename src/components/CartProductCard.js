@@ -1,18 +1,19 @@
 import React from 'react';
 import { Grid, Typography, Box, IconButton, FormControl, Select, MenuItem, Checkbox } from '@mui/material';
+import { useDispatch } from 'react-redux';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { currencyFormat } from '../utils/number';
+import { cartActions } from '../action/cartActions';
 
 const CartProductCard = ({ item, isSelected, onSelectItem, userLevel }) => {
-  const handleQtyChange = (event) => {
-    const value = event.target.value;
-    // 아이템 수량을 수정하는 로직
-    console.log('Update quantity to:', value);
+  const dispatch = useDispatch();
+
+  const handleQtyChange = (id, value) => {
+    dispatch(cartActions.updateItemQty(id, value));
   };
 
-  const deleteCart = () => {
-    // 아이템을 삭제하는 로직
-    console.log('Delete item:', item._id);
+  const deleteCart = (id, qty) => {
+    dispatch(cartActions.deleteCartItem(id, qty));
   };
 
   // 레벨에 따른 할인 비율 정의
@@ -51,7 +52,7 @@ const CartProductCard = ({ item, isSelected, onSelectItem, userLevel }) => {
         </Box>
       </Box>
       <FormControl variant="outlined" size="small" style={{ width: '15%' }}>
-        <Select value={item.qty} onChange={handleQtyChange}>
+        <Select onChange={(event) => handleQtyChange(item._id, event.target.value)} required defaultValue={item.qty}>
           {[...Array(10).keys()].map((x) => (
             <MenuItem key={x + 1} value={x + 1}>
               {x + 1}
@@ -67,7 +68,7 @@ const CartProductCard = ({ item, isSelected, onSelectItem, userLevel }) => {
           ₩ {currencyFormat(discountedPrice)} ({(discountRate * 100).toFixed(0)}% 할인)
         </Typography>
       </Box>
-      <IconButton onClick={deleteCart} color="secondary" style={{ width: '5%' }}>
+      <IconButton onClick={() => deleteCart(item._id, item.qty)} color="secondary" style={{ width: '5%' }}>
         <DeleteIcon />
       </IconButton>
     </Box>
