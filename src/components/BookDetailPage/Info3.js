@@ -66,6 +66,28 @@ const Info3 = ({ selectedBook }) => {
     dispatch(commentActions.deleteComment(commentId, id));
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['bookInfo', 'author', 'reviews', 'delivery'];
+      let currentSection = 'bookInfo';
+      sections.forEach((section) => {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= 80 && rect.bottom > 80) {
+            currentSection = section;
+          }
+        }
+      });
+      setActiveTab(currentSection);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <Container sx={{ mt: 5 }}>
       <Tabs
