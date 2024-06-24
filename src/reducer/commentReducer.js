@@ -1,9 +1,9 @@
 import * as types from '../constants/comment.constans';
-import userReducer from './userReducer';
 
 const initialState = {
   comments: [],
   createCommentSuccess: false,
+  deleteCommentSuccess: false,
   loading: false,
   error: null,
 };

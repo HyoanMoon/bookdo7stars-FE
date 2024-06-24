@@ -26,9 +26,16 @@ const Info3 = ({ selectedBook }) => {
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState('bookInfo');
   const { user } = useSelector((state) => state.user);
+  const { comments, createCommentSuccess, deleteCommentSuccess } = useSelector((state) => state.comment);
   const navigate = useNavigate();
   const query = useQuery();
   const section = query.get('section');
+
+  useEffect(() => {
+    if (createCommentSuccess || deleteCommentSuccess) {
+      dispatch(commentActions.getCommentsByBook(selectedBook._id));
+    }
+  }, [createCommentSuccess, dispatch, deleteCommentSuccess]);
 
   useEffect(() => {
     if (section && section !== activeTab) {
@@ -46,7 +53,6 @@ const Info3 = ({ selectedBook }) => {
   };
 
   useEffect(() => {
-    console.log('언제 렌더링되니');
     dispatch(commentActions.getCommentsByBook(selectedBook._id));
   }, []);
 
@@ -129,7 +135,7 @@ const Info3 = ({ selectedBook }) => {
 
       <Box id="reviews" my={4}>
         <Typography variant="h4">리뷰</Typography>
-        <CommentSection bookId={selectedBook._id} deleteComment={deleteComment} userId={user?._id} />
+        <CommentSection comments={comments} bookId={selectedBook._id} deleteComment={deleteComment} user={user} />
       </Box>
 
       <Box id="delivery" my={4}>

@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, TextField, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch, useSelector } from 'react-redux';
 import { commentActions } from '../../action/commentAction';
 
-const CommentSection = ({ bookId, deleteComment, userId }) => {
+const CommentSection = ({ comments, bookId, deleteComment, user }) => {
   const dispatch = useDispatch();
 
   const [newComment, setNewComment] = useState('');
-  const { comments } = useSelector((state) => state.comment);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,6 +15,10 @@ const CommentSection = ({ bookId, deleteComment, userId }) => {
     dispatch(commentActions.createComment({ content: newComment, bookId: bookId }));
     setNewComment('');
   };
+
+  useEffect(() => {
+    dispatch(commentActions.getCommentsByBook(bookId));
+  }, [comments.length]);
 
   return (
     <Box className="comment-section mt-4">
@@ -39,9 +42,9 @@ const CommentSection = ({ bookId, deleteComment, userId }) => {
               primaryTypographyProps={{ fontWeight: 'bold', color: '#333' }}
               secondaryTypographyProps={{ color: '#555' }}
             />
-            {comment.userId._id === userId && (
+            {comment.userId._id === user?._id && (
               <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(comment._id)}>
+                <IconButton edge="end" aria-label="delete" onClick={() => deleteComment(comment._id)}>
                   <DeleteIcon color="#537019" />
                 </IconButton>
               </ListItemSecondaryAction>

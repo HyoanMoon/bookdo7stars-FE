@@ -4,7 +4,6 @@ import { commonUiActions } from './commonUiAction';
 
 const createComment = (payload) => async (dispatch) => {
   try {
-    console.log('[commentAction]에 도착!', payload);
     dispatch({ type: types.CREATE_COMMENT_REQUEST });
     const response = await api.post('/comments', payload);
     dispatch({ type: types.CREATE_COMMENT_SUCCESS, payload: response.data });
@@ -18,7 +17,7 @@ const createComment = (payload) => async (dispatch) => {
 const getCommentsByBook = (bookId) => async (dispatch) => {
   try {
     dispatch({ type: types.GET_COMMENT_LIST_REQUEST });
-    console.log('getCommentsByBook안에 도달했니?');
+
     const response = await api.get(`/comments/book/${bookId}`);
     dispatch({
       type: types.GET_COMMENT_LIST_SUCCESS,
