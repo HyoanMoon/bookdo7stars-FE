@@ -4,7 +4,7 @@ import { commonUiActions } from './commonUiAction';
 
 const createComment = (payload) => async (dispatch) => {
   try {
-    console.log('[commentAction]에 도착!');
+    console.log('[commentAction]에 도착!', payload);
     dispatch({ type: types.CREATE_COMMENT_REQUEST });
     const response = await api.post('/comments', payload);
     dispatch({ type: types.CREATE_COMMENT_SUCCESS, payload: response.data });
@@ -15,14 +15,16 @@ const createComment = (payload) => async (dispatch) => {
   }
 };
 
-const getCommentsByProduct = (bookId) => async (dispatch) => {
+const getCommentsByBook = (bookId) => async (dispatch) => {
   try {
     dispatch({ type: types.GET_COMMENT_LIST_REQUEST });
+    console.log('getCommentsByBook안에 도달했니?');
     const response = await api.get(`/comments/book/${bookId}`);
     dispatch({
       type: types.GET_COMMENT_LIST_SUCCESS,
-      payload: response.data.data, // 서버에서 받은 댓글 데이터
+      payload: response.data, // 서버에서 받은 댓글 데이터
     });
+    console.log('response->>>', response.data);
   } catch (error) {
     dispatch({ type: types.GET_COMMENT_LIST_FAIL, payload: error.message });
   }
@@ -33,7 +35,7 @@ const deleteComment = (commentId, bookId) => async (dispatch) => {
     dispatch({ type: types.DELETE_COMMENT_REQUEST });
     await api.delete(`/comments/${commentId}`);
     dispatch({ type: types.DELETE_COMMENT_SUCCESS, payload: commentId });
-    dispatch(getCommentsByProduct(bookId)); // 댓글 삭제 후 목록 갱신
+    dispatch(getCommentsByBook(bookId)); // 댓글 삭제 후 목록 갱신
   } catch (error) {
     dispatch({ type: types.DELETE_COMMENT_FAIL, payload: error.message });
   }
@@ -41,6 +43,6 @@ const deleteComment = (commentId, bookId) => async (dispatch) => {
 
 export const commentActions = {
   createComment,
-  getCommentsByProduct,
+  getCommentsByBook,
   deleteComment,
 };

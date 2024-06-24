@@ -25,9 +25,9 @@ const scrollToElement = (elementId, offset = 0) => {
 
 const Info3 = ({ selectedBook }) => {
   const dispatch = useDispatch();
-  const { id } = useParams();
-  const [activeTab, setActiveTab] = useState('bookinfo');
-  const comments = useSelector((state) => state.comment?.comments || []);
+  // const { comments } = useSelector((state) => state.comment);
+  const id = selectedBook._id;
+  const [activeTab, setActiveTab] = useState('bookInfo');
   const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const query = useQuery();
@@ -46,22 +46,6 @@ const Info3 = ({ selectedBook }) => {
       navigate({ search: `?section=${newValue}` }, { replace: true });
       setTimeout(() => scrollToElement(newValue, -80), 0); // 탭 높이만큼 오프셋 적용
     }
-  };
-
-  useEffect(() => {
-    if (id) {
-      dispatch(bookActions.getBookDetail(id));
-      dispatch(commentActions.getCommentsByProduct(id));
-    }
-  }, [id, dispatch]);
-
-  const addComment = (comment) => {
-    if (!user) {
-      navigate('/login');
-      return;
-    }
-
-    dispatch(commentActions.createComment({ content: comment, productId: id }));
   };
 
   const deleteComment = (commentId) => {
@@ -143,7 +127,7 @@ const Info3 = ({ selectedBook }) => {
 
       <Box id="reviews" my={4}>
         <Typography variant="h4">리뷰</Typography>
-        <CommentSection comments={comments} addComment={addComment} deleteComment={deleteComment} currentUserId={user?._id} />
+        <CommentSection bookId={selectedBook._id} deleteComment={deleteComment} userId={user?._id} />
       </Box>
 
       <Box id="delivery" my={4}>

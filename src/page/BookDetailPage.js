@@ -52,7 +52,7 @@ const BookDetailPage = () => {
             <BookDescription description={selectedBook.description} />
           </Grid> */}
           <Grid item xs={12} sm={12} md={12}>
-            <Info3 selectedBook={selectedBook} />
+            <Info3 selectedBook={selectedBook} bookid={bookid} />
           </Grid>
         </Grid>
       </Container>

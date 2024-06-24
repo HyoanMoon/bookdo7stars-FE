@@ -1,22 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, TextField, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-// import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { commentActions } from '../../action/commentAction';
 
-const CommentSection = ({ comments = [], addComment, deleteComment, currentUserId }) => {
-  // const dispatch = useDispatch();
+const CommentSection = ({ bookId, deleteComment, userId }) => {
+  const dispatch = useDispatch();
+  const { comments } = useSelector((state) => state.comment);
 
   const [newComment, setNewComment] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log('[commentSection] 코멘트 submit클릭하면: ', newComment);
-    if (newComment.trim()) {
-      addComment(newComment);
-      // dispatch();
-      setNewComment('');
-    }
+
+    dispatch(commentActions.createComment({ content: newComment, bookId: bookId }));
   };
+  console.log('코멘트섹션에서', comments);
+
+  useEffect(() => {
+    dispatch(commentActions.getCommentsByBook(bookId));
+  }, []);
+
+  console.log('zzzz', comments[0].userId.userName);
 
   return (
     <Box className="comment-section mt-4">
@@ -24,8 +29,8 @@ const CommentSection = ({ comments = [], addComment, deleteComment, currentUserI
       <List>
         {comments.map((comment, index) => (
           <ListItem key={index} className="comment-item">
-            <ListItemText primary={comment.email} secondary={comment.content} />
-            {comment.userId === currentUserId && (
+            <ListItemText primary={comment.userId.userName} secondary={comment.content} />
+            {comment.userId === userId && (
               <ListItemSecondaryAction>
                 <IconButton edge="end" aria-label="delete" onClick={() => deleteComment(comment._id)}>
                   <DeleteIcon />

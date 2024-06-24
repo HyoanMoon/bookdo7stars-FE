@@ -26,7 +26,7 @@ export default function commentReducer(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        comments: action.payload,
+        comments: action.payload.comments,
       };
     case types.DELETE_COMMENT_SUCCESS:
       return {
