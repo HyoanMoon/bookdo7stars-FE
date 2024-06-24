@@ -43,6 +43,7 @@ const BookDetailPage = () => {
               {/* <BookDetailInfo pubDate={selectedBook.pubDate} isbn={selectedBook.isbn} /> */}
               {/* 여기에 다음 API */}
               <div style={{ fontWeight: 'bold' }}> 배송 정보 </div>
+              <h6>{address}</h6>
               <AddressChange setAddress={setAddress} />
               <DeliveryEstimate address={address} />
             </Grid>
