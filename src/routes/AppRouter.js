@@ -38,7 +38,6 @@ const AppRouter = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/oauth/callback/:provider" element={<OauthCallbackPage />} />
-        {/* <Route path="/auth/socialLoginCallback" element={<SocialLoginCallback />} /> */}
 
         {/* 장바구니, 결제, 마이페이지 */}
         <Route element={<PrivateRoute permissionLevel="customer" />}>
