@@ -1,39 +1,77 @@
-import React from 'react';
-import { Container, TextField, Button, Typography, Box } from '@mui/material';
+// src/page/ContactPage.js
+import React, { useState } from 'react';
+import { styled } from '@mui/material/styles';
+import { Paper, Grid, Box } from '@mui/material';
+
+import QnaTop10 from '../components/ContactPage/QnaTop10';
+import ContactUs from '../components/ContactPage/ContactUs';
+import Notice from '../components/ContactPage/Notice';
+import PopUp from '../components/ContactPage/PopUp';
+import CircularButton from '../components/ContactPage/CircularButton';
+
+import ServicesSection from '../components/ContactPage/ServiceSection';
+import ContactSection from '../components/ContactPage/ContactSection';
+
+import Sidebar from '../components/ContactPage/Sidebar';
+import InquiryForm from '../components/ContactPage/InquiryForm';
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: '#fff', // Inner box background
+  ...theme.typography.body2,
+  padding: theme.spacing(2),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  height: '100%',
+  boxShadow: theme.shadows[3], // Adding shadow
+}));
+
+const OuterContainer = styled(Box)(({ theme }) => ({
+  backgroundColor: '#dde3dc', // Outer background
+  padding: theme.spacing(2),
+}));
 
 const ContactPage = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get('name'),
-      email: data.get('email'),
-      message: data.get('message'),
-    });
+  const [showPopup, setShowPopup] = useState(false);
+
+  const togglePopup = () => {
+    setShowPopup(!showPopup);
   };
 
   return (
-    <Container component="main" maxWidth="sm">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}>
-        <Typography component="h1" variant="h5">
-          Contact Us
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField margin="normal" required fullWidth id="name" label="Name" name="name" autoComplete="name" autoFocus />
-          <TextField margin="normal" required fullWidth id="email" label="Email Address" name="email" autoComplete="email" />
-          <TextField margin="normal" required fullWidth name="message" label="Message" id="message" multiline rows={4} />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Send
-          </Button>
-        </Box>
-      </Box>
-    </Container>
+    <Box sx={{ width: '80%', margin: 'auto' }}>
+      <Grid container rowSpacing={3} columnSpacing={{ xs: 2, sm: 2, md: 3 }}>
+        <Grid item xs={12}>
+          <Item>
+            <QnaTop10 />
+          </Item>
+        </Grid>
+        <Grid item xs={12}>
+          <Item>
+            <ContactUs />
+          </Item>
+        </Grid>
+        <Grid item xs={12}>
+          <Item>
+            <Notice />
+          </Item>
+        </Grid>
+        <Grid item xs={12}>
+          <Item>
+            <ServicesSection />
+          </Item>
+        </Grid>
+        <Grid item xs={12}>
+          <Item>
+            <ContactSection />
+          </Item>
+        </Grid>
+      </Grid>
+      <CircularButton onClick={togglePopup} />
+      {showPopup && <PopUp closePopup={togglePopup} />}
+    </Box>
   );
 };
 

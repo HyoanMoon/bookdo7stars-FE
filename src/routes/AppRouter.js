@@ -19,6 +19,7 @@ import EditorPage from '../page/EditorPage';
 import OauthCallbackPage from '../page/OauthCallbackPage';
 import BooksAllPage from '../components/BooksAllPage/BooksAllPage';
 import ContactPage from '../page/ContactPage';
+import ContactPage2 from '../page/ContactPage2';
 import MyPageOrderList from '../page/MyPageOrderList';
 import MyPageOrderClaimList from '../page/MyPageOrderClaimList';
 import MyPageOrderCancelList from '../page/MyPageOrderCancelList';
@@ -44,6 +45,7 @@ const AppRouter = () => {
 
         {/* 연락 */}
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/contact2" element={<ContactPage2 />} />
 
         {/* 장바구니, 결제, 마이페이지 */}
         <Route element={<PrivateRoute permissionLevel="customer" />}>

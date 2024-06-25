@@ -152,7 +152,7 @@ const MyPageOrderClaimList = () => {
                       </Typography>
                     </li>
                     <li>
-                      <Typography variant="body2">{'반품주소 : (10846) 경기도 파주시 탄현면 월롱산로 294-58 예스24 물류센터 내 반송담당자 앞'}</Typography>
+                      <Typography variant="body2">{'반품주소 : (10846) 경기도 파주시 탄현면 월롱산로 294-58 북두칠성 물류센터 내 반송담당자 앞'}</Typography>
                     </li>
                   </ul>
                 </Typography>
