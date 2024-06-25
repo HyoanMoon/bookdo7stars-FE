@@ -26,6 +26,11 @@ const AppLayout = ({ children }) => {
   }, [user]);
 
   const { bookList, bookGroup } = useSelector((state) => state.book);
+  console.log(
+    bookList.find((book) => {
+      return book.isbn === 'K842931415';
+    }),
+  );
 
   useEffect(() => {
     if (bookGroup) {

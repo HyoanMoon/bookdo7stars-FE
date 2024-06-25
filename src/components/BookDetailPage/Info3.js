@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import './Info3.css';
 import DeliveryPolicy from './DeliveryPolicy';
 import CommentSection from './CommentSection';
-import AuthorSection from './AuthorSection';
+import AuthorSection from './AuthorBooksSection';
+import BookCard from '../BookCard';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -22,7 +23,7 @@ const scrollToElement = (elementId, offset = 0) => {
   }
 };
 
-const Info3 = ({ selectedBook }) => {
+const Info3 = ({ selectedBook, otherBooksByAuthor }) => {
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState('bookInfo');
   const { user } = useSelector((state) => state.user);
@@ -129,11 +130,7 @@ const Info3 = ({ selectedBook }) => {
       </Box>
 
       <Box id="author" my={4}>
-        <Typography variant="h4">저자의 다른 책들</Typography>
-        <Typography variant="body1">
-          {/* 저자의 다른 책들 북 카드를 여기에 넣습니다 */}
-          <AuthorSection />
-        </Typography>
+        <AuthorSection otherBooksByAuthor={otherBooksByAuthor} />
       </Box>
 
       <Box id="reviews" my={4}>

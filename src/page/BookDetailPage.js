@@ -18,7 +18,7 @@ const BookDetailPage = () => {
   const dispatch = useDispatch();
   const [address, setAddress] = useState('지역을 선택해주세요');
   const { fullAddress, deliveryInfo } = useSelector((state) => state.order);
-  const { selectedBook, getBooksLoading } = useSelector((state) => state.book);
+  const { selectedBook, getBooksLoading, otherBooksByAuthor } = useSelector((state) => state.book);
   const { bookid } = useParams();
   const navigate = useNavigate();
   const { favorite } = useSelector((state) => state.favorite);
@@ -66,7 +66,7 @@ const BookDetailPage = () => {
             <BookDescription description={selectedBook.description} />
           </Grid> */}
           <Grid item xs={12} sm={12} md={12}>
-            <Info3 selectedBook={selectedBook} bookid={bookid} />
+            <Info3 selectedBook={selectedBook} otherBooksByAuthor={otherBooksByAuthor} />
           </Grid>
         </Grid>
       </Container>
