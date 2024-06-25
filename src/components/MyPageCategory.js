@@ -11,7 +11,7 @@ const MyPageCategory = () => {
     { list: '찜한 도서', link: '/mypage/wishlist' },
   ];
   const myInfoList = [
-    { list: '개인정보 수정', link: '#' },
+    { list: '개인정보 수정', link: '/member/confirm-password' },
     { list: '이벤트 당첨 내역', link: '#' },
     { list: '회원 탈퇴', link: '#' },
   ];

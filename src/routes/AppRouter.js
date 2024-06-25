@@ -24,6 +24,9 @@ import MyPageOrderClaimList from '../page/MyPageOrderClaimList';
 import MyPageOrderCancelList from '../page/MyPageOrderCancelList';
 import MyPageMyReview from '../page/MyPageMyReview';
 import MyPageWishList from '../page/MyPageWishList';
+import PasswordConfirmPage from '../page/PasswordConfirmPage';
+import UserInfoPage from '../page/UserInfoPage';
+
 const AppRouter = () => {
   return (
     <div style={{ height: '100%' }}>
@@ -45,13 +48,14 @@ const AppRouter = () => {
         {/* 연락 */}
         <Route path="/contact" element={<ContactPage />} />
 
-        {/* 장바구니, 결제, 마이페이지 */}
+        {/* 장바구니, 결제*/}
         <Route element={<PrivateRoute permissionLevel="customer" />}>
           <Route path="/cart" element={<CartPage />} />
 
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/payment/success" element={<OrderCompletePage />} />
 
+          {/* 마이페이지 */}
           <Route path="/mypage" element={<MyShoppingPage />} />
           <Route path="/mypage/orderlist" element={<MyPageOrderList />} />
           <Route path="/mypage/orderclaimlist" element={<MyPageOrderClaimList />} />
@@ -59,6 +63,10 @@ const AppRouter = () => {
           <Route path="/mypage/myreview" element={<MyPageMyReview />} />
           <Route path="/mypage/wishlist" element={<MyPageWishList />} />
         </Route>
+
+        {/* 마이페이지- 회원정보 */}
+        <Route path="/member/confirm-password" element={<PasswordConfirmPage />} />
+        <Route path="/member/user-info" element={<UserInfoPage />} />
 
         {/* 어드민 */}
         <Route element={<PrivateRoute permissionLevel="admin" />}>

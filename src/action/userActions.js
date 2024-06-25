@@ -155,6 +155,34 @@ const updateUserLevel = (id, level) => async (dispatch) => {
   }
 };
 
+// 회원 정보- 비밀번호 확인
+const confirmPassword = (password, navigate) => async (dispatch) => {
+  try {
+    dispatch({ type: types.USER_CONFIRM_REQUEST });
+    const response = await api.post('user/confirmPassword', { password });
+    console.log('회원 정보-비밀번호 확인', response);
+    dispatch({ type: types.USER_CONFIRM_SUCCESS });
+    console.log('Navigating to /my-info');
+    navigate('/member/user-info');
+  } catch (err) {
+    dispatch({ type: types.USER_CONFIRM_FAIL, payload: err.error });
+    dispatch(commonUiActions.showToastMessage(err.error, 'error'));
+  }
+};
+
+// 회원 정보- 수정 요청
+const userInfoChange = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: types.USER_INFO_REQUEST });
+    const response = await api.post(`/user/myInfo/${id}`);
+    dispatch({ type: types.USER_CONFIRM_SUCCESS });
+    dispatch(commonUiActions.showToastMessage('회원 정보를 수정했습니다.', 'success'));
+  } catch (err) {
+    dispatch({ type: types.USER_CONFIRM_FAIL, payload: err.error });
+    dispatch(commonUiActions.showToastMessage(err.error, 'error'));
+  }
+};
+
 export const userActions = {
   loginWithToken,
   loginWithEmail,
@@ -168,4 +196,6 @@ export const userActions = {
   registerAdmin,
   getAllUser,
   updateUserLevel,
+  confirmPassword,
+  userInfoChange,
 };
