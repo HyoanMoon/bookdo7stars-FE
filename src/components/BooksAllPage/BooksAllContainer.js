@@ -1,10 +1,19 @@
 import { Box, Container, Grid, Typography, IconButton, Pagination } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BookCard from '../BookCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { favoriteActions } from '../../action/favoriteActions';
 
 const BooksAllContainer = ({ bookList, title }) => {
   const [page, setPage] = useState(1);
   const booksPerPage = 50;
+  const dispatch = useDispatch();
+  const { favorite } = useSelector((state) => state.favorite);
+  const { user } = useSelector((state) => state.favorite);
+
+  useEffect(() => {
+    dispatch(favoriteActions.getFavorite());
+  }, [dispatch, user]);
 
   // 총 페이지 수 계산
   const pageCount = Math.ceil(bookList.length / booksPerPage);
@@ -62,7 +71,7 @@ const BooksAllContainer = ({ bookList, title }) => {
               md={4}
               lg={3}
               sx={{ paddingY: '30px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <BookCard key={book._id} book={book} />
+              <BookCard key={book._id} book={book} favorite={favorite.some((favorite) => favorite._id === book._id)} />
             </Grid>
           ))}
         </Grid>

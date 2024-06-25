@@ -10,7 +10,6 @@ import CartPage from '../page/CartPage';
 import PaymentPage from '../page/PaymentPage';
 import OrderCompletePage from '../page/OrderCompletePage';
 import MyShoppingPage from '../page/MyShoppingPage';
-import MyInfoPage from '../page/MyInfoPage';
 import AdminProductPage from '../page/AdminProductPage';
 import AdminOrderPage from '../page/AdminOrderPage';
 import AdminDashBoardPage from '../page/AdminDashBoardPage';
@@ -20,7 +19,11 @@ import EditorPage from '../page/EditorPage';
 import OauthCallbackPage from '../page/OauthCallbackPage';
 import BooksAllPage from '../components/BooksAllPage/BooksAllPage';
 import ContactPage from '../page/ContactPage';
-
+import MyPageOrderList from '../page/MyPageOrderList';
+import MyPageOrderClaimList from '../page/MyPageOrderClaimList';
+import MyPageOrderCancelList from '../page/MyPageOrderCancelList';
+import MyPageMyReview from '../page/MyPageMyReview';
+import MyPageWishList from '../page/MyPageWishList';
 const AppRouter = () => {
   return (
     <div style={{ height: '100%' }}>
@@ -49,8 +52,12 @@ const AppRouter = () => {
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/payment/success" element={<OrderCompletePage />} />
 
-          <Route path="/account/myshopping" element={<MyShoppingPage />} />
-          <Route path="/account/myinfo" element={<MyInfoPage />} />
+          <Route path="/mypage" element={<MyShoppingPage />} />
+          <Route path="/mypage/orderlist" element={<MyPageOrderList />} />
+          <Route path="/mypage/orderclaimlist" element={<MyPageOrderClaimList />} />
+          <Route path="/mypage/ordercancellist" element={<MyPageOrderCancelList />} />
+          <Route path="/mypage/myreview" element={<MyPageMyReview />} />
+          <Route path="/mypage/wishlist" element={<MyPageWishList />} />
         </Route>
 
         {/* 어드민 */}

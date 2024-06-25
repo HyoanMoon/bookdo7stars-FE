@@ -1,13 +1,17 @@
 import { Box, Container, Grid, Typography, Tab, Tabs, Button } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BookCard from '../BookCard';
 import { AddCircleOutline } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { favoriteActions } from '../../action/favoriteActions';
 
 const BookContainer = ({ bookList, categories, sx, title }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('전체');
+  const { user } = useSelector((state) => state.user);
+  const { favorite } = useSelector((state) => state.favorite);
 
   const handleCategoryChange = (event, newValue) => {
     setSelectedCategory(newValue);
@@ -22,6 +26,10 @@ const BookContainer = ({ bookList, categories, sx, title }) => {
       navigate(`/books/group/${bookGroup}`);
     }
   };
+
+  useEffect(() => {
+    dispatch(favoriteActions.getFavorite());
+  }, [dispatch, user]);
 
   return (
     <Container
@@ -86,7 +94,7 @@ const BookContainer = ({ bookList, categories, sx, title }) => {
         <Grid container spacing={2}>
           {filteredBooks.map((book) => (
             <Grid key={book._id} item xs={12} sm={6} md={4} lg={3} sx={{ display: 'flex', justifyContent: 'center', padding: '16px' }}>
-              <BookCard key={book._id} book={book} />
+              <BookCard key={book._id} book={book} favorite={favorite?.some((item) => item._id === book._id)} />
             </Grid>
           ))}
         </Grid>

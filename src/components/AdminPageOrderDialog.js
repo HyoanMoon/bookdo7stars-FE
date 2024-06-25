@@ -16,6 +16,7 @@ import {
   Select,
   MenuItem,
   Typography,
+  Grid,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { ORDER_STATUS } from '../constants/order.constants';
@@ -75,7 +76,7 @@ const AdminPageOrderDialog = ({ open, orderList, handleClose, orderDialogTableHe
             <TableHead>
               <TableRow>
                 {orderDialogTableHead.map((head, index) => (
-                  <StyledTableCell key={index}>{head}</StyledTableCell>
+                  <TableCell key={index}>{head}</TableCell>
                 ))}
               </TableRow>
             </TableHead>
@@ -116,12 +117,18 @@ const AdminPageOrderDialog = ({ open, orderList, handleClose, orderDialogTableHe
             </Select>
           </FormControl>
           <DialogActions>
-            <Button onClick={handleClose} color="secondary">
-              닫기
-            </Button>
-            <Button type="submit" color="primary">
-              저장
-            </Button>
+            <Grid container>
+              <Grid item sx={6}>
+                <Button onClick={handleClose} color="secondary">
+                  닫기
+                </Button>
+              </Grid>
+              <Grid item sx={6}>
+                <Button type="submit" color="primary">
+                  저장
+                </Button>
+              </Grid>
+            </Grid>
           </DialogActions>
         </form>
       </DialogContent>

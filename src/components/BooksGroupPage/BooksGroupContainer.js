@@ -5,13 +5,20 @@ import BookCard from '../BookCard';
 import { AddCircleOutline, ArrowBack } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { bookActions } from '../../action/bookActions';
-import { useDispatch } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { favoriteActions } from '../../action/favoriteActions';
 const BooksGroupContainer = ({ bookList, title }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [selectedCategory, setSelectedCategory] = useState('전체');
   const [displayCount, setDisplayCount] = useState(16); // 처음에 표시할 책의 수
+  const { favorite } = useSelector((state) => state.favorite);
+  const { user } = useSelector((state) => state.favorite);
+
+  useEffect(() => {
+    dispatch(favoriteActions.getFavorite());
+  }, [dispatch, user]);
+
   // "더보기" 기능
   const handleLoadMore = () => {
     setDisplayCount((prevCount) => prevCount + 16);
@@ -45,7 +52,7 @@ const BooksGroupContainer = ({ bookList, title }) => {
               md={4}
               lg={3}
               sx={{ paddingY: '30px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <BookCard key={book._id} book={book} />
+              <BookCard key={book._id} book={book} favorite={favorite.some((favorite) => favorite._id === book._id)} />
             </Grid>
           ))}
         </Grid>

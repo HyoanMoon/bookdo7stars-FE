@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as types from '../constants/book.constants';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import IconButton from '@mui/material/IconButton';
-const BookCard = ({ book }) => {
+import { pink } from '@mui/material/colors';
+import { favoriteActions } from '../action/favoriteActions';
+
+const BookCard = ({ book, favorite }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -14,8 +17,13 @@ const BookCard = ({ book }) => {
     dispatch({ type: types.SET_SELECTED_BOOK, payload: book });
     navigate(`/book/${book._id}`);
   };
+
   const handleFavoriteClick = () => {
-    // Your favorite click handling logic
+    dispatch(favoriteActions.addFavorite(book._id));
+    console.log('main-favorite', favorite);
+  };
+  const deleteFavoriteClick = () => {
+    dispatch(favoriteActions.deleteFavorite(book._id));
   };
 
   const handleCartClick = () => {
@@ -63,9 +71,16 @@ const BookCard = ({ book }) => {
                 </Typography>
               </Box>
               <Box>
-                <IconButton onClick={handleFavoriteClick} sx={{ padding: '5px' }}>
-                  <FavoriteBorderIcon fontSize="small" />
-                </IconButton>
+                {favorite ? (
+                  <IconButton onClick={deleteFavoriteClick} sx={{ padding: '5px' }}>
+                    <FavoriteBorderIcon fontSize="small" sx={{ color: pink[500] }} />
+                  </IconButton>
+                ) : (
+                  <IconButton onClick={handleFavoriteClick} sx={{ padding: '5px' }}>
+                    <FavoriteBorderIcon fontSize="small" />
+                  </IconButton>
+                )}
+
                 <IconButton onClick={handleCartClick} sx={{ padding: '5px' }}>
                   <ShoppingCartIcon fontSize="small" />
                 </IconButton>

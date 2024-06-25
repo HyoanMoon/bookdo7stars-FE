@@ -11,6 +11,8 @@ import DeliveryEstimate from '../components/BookDetailPage/DeliveryEstimate';
 import { useDispatch, useSelector } from 'react-redux';
 import { bookActions } from '../action/bookActions';
 import Info3 from '../components/BookDetailPage/Info3';
+// import ClipLoader from 'react-spinners/ClipLoader';
+import { favoriteActions } from '../action/favoriteActions';
 
 const BookDetailPage = () => {
   const dispatch = useDispatch();
@@ -18,7 +20,13 @@ const BookDetailPage = () => {
   const { fullAddress, deliveryInfo } = useSelector((state) => state.order);
   const { selectedBook, getBooksLoading } = useSelector((state) => state.book);
   const { bookid } = useParams();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { favorite } = useSelector((state) => state.favorite);
+  const { user } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    dispatch(favoriteActions.getFavorite());
+  }, [dispatch, user]);
 
   useEffect(() => {
     if (bookid) {
@@ -39,7 +47,12 @@ const BookDetailPage = () => {
           </Grid>
           <Grid item xs={6} sm={12} md={8}>
             <BookBasicInfo title={selectedBook.title} author={selectedBook.author} publisher={selectedBook.publisher} price={selectedBook.priceStandard} />
-            <BookToCart fullAddress={fullAddress} deliveryInfo={deliveryInfo} />
+            <BookToCart
+              favorite={favorite?.some((favorite) => favorite._id === selectedBook._id)}
+              selectedBook={selectedBook}
+              fullAddress={fullAddress}
+              deliveryInfo={deliveryInfo}
+            />
             <Grid item mt={4}>
               {/* <BookDetailInfo pubDate={selectedBook.pubDate} isbn={selectedBook.isbn} /> */}
               {/* 여기에 다음 API */}
