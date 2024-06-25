@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import './Info3.css';
 import DeliveryPolicy from './DeliveryPolicy';
 import CommentSection from './CommentSection';
-import AuthorSection from './AuthorSection';
+import AuthorSection from './AuthorBooksSection';
+import BookCard from '../BookCard';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -22,9 +23,9 @@ const scrollToElement = (elementId, offset = 0) => {
   }
 };
 
-const Info3 = ({ selectedBook }) => {
+const Info3 = ({ selectedBook, otherBooksByAuthor }) => {
   const dispatch = useDispatch();
-  const [activeTab, setActiveTab] = useState('bookInfo');
+  const [activeTab, setActiveTab] = useState('bookDescription');
   const { user } = useSelector((state) => state.user);
   const { comments, createCommentSuccess, deleteCommentSuccess } = useSelector((state) => state.comment);
   const navigate = useNavigate();
@@ -62,7 +63,7 @@ const Info3 = ({ selectedBook }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['bookInfo', 'author', 'reviews', 'delivery'];
+      const sections = ['bookDescription', 'bookInfo', 'author', 'reviews', 'delivery'];
       let currentSection;
       sections.forEach((section) => {
         const element = document.getElementById(section);
@@ -93,26 +94,29 @@ const Info3 = ({ selectedBook }) => {
         centered
         indicatorColor="primary"
         textColor="primary"
-        sx={{ backgroundColor: '#DADFCE', opacity: '90%', position: 'sticky', top: '0', ml: '0', width: '100%' }}>
+        sx={{ backgroundColor: '#DADFCE', opacity: '90%', position: 'sticky', top: '0', ml: '0', width: '100%', zIndex: 1500 }}>
+        <Tab label="도서소개" value="bookDescription" />
         <Tab label="도서정보" value="bookInfo" />
         <Tab label="저자의 다른 책" value="author" />
         <Tab label="리뷰" value="reviews" />
         <Tab label="배송" value="delivery" />
       </Tabs>
 
+      <Box id="bookDescription" my={4}>
+        <Typography variant="h4">도서소개</Typography>
+        <Box component={Paper} sx={{ mt: 2, mb: 2, outline: '1px solid #DFE4DF', backgroundColor: '#DADFDA', width: '100%' }}>
+          <Box sx={{ p: 2 }}>
+            <Typography variant="body1">{selectedBook.description ? selectedBook.description : 'No description available'}</Typography>
+          </Box>
+        </Box>
+      </Box>
       <Box id="bookInfo" my={4}>
         <Typography variant="h4">도서정보</Typography>
         <TableContainer component={Paper} sx={{ mt: 2, mb: 5 }}>
           <Table sx={{ outline: '1px solid #DFE4DF' }}>
             <TableBody sx={{ outline: '1px solid #DFE4DF' }}>
               <TableRow sx={{ outline: '1px solid #DFE4DF' }}>
-                <TableCell sx={{ outline: '1px solid #DFE4DF', backgroundColor: '#DADFDA', width: '15%' }}>도서소개</TableCell>
-                <TableCell sx={{ outline: '1px solid #DFE4DF', width: '85%' }}>
-                  {selectedBook.description ? selectedBook.description : 'No description available'}
-                </TableCell>
-              </TableRow>
-              <TableRow sx={{ outline: '1px solid #DFE4DF' }}>
-                <TableCell sx={{ outline: '1px solid #DFE4DF', backgroundColor: '#DADFDA', width: '15%' }}>isbn</TableCell>
+                <TableCell sx={{ outline: '1px solid #DFE4DF', backgroundColor: '#DADFDA', width: '15%' }}>ISBN</TableCell>
                 <TableCell sx={{ outline: '1px solid #DFE4DF', width: '85%' }}>{selectedBook.isbn}</TableCell>
               </TableRow>
               <TableRow sx={{ outline: '1px solid #DFE4DF' }}>
@@ -129,11 +133,7 @@ const Info3 = ({ selectedBook }) => {
       </Box>
 
       <Box id="author" my={4}>
-        <Typography variant="h4">저자의 다른 책들</Typography>
-        <Typography variant="body1">
-          {/* 저자의 다른 책들 북 카드를 여기에 넣습니다 */}
-          <AuthorSection />
-        </Typography>
+        <AuthorSection otherBooksByAuthor={otherBooksByAuthor} />
       </Box>
 
       <Box id="reviews" my={4}>
