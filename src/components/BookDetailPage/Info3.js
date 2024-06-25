@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { TableContainer, TableBody, Table, TableRow, TableCell, Paper, Container, Tabs, Tab, Box, Typography } from '@mui/material';
-import CommentSection from './CommentSection';
 import { commentActions } from '../../action/commentAction';
 import { useDispatch, useSelector } from 'react-redux';
-
 import './Info3.css';
 import DeliveryPolicy from './DeliveryPolicy';
+import CommentSection from './CommentSection';
+import AuthorSection from './AuthorSection';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -130,7 +130,10 @@ const Info3 = ({ selectedBook }) => {
 
       <Box id="author" my={4}>
         <Typography variant="h4">저자의 다른 책들</Typography>
-        <Typography variant="body1">{/* 저자의 다른 책들 북 카드를 여기에 넣습니다 */}</Typography>
+        <Typography variant="body1">
+          {/* 저자의 다른 책들 북 카드를 여기에 넣습니다 */}
+          <AuthorSection />
+        </Typography>
       </Box>
 
       <Box id="reviews" my={4}>

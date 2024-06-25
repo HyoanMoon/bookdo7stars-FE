@@ -47,7 +47,7 @@ const AppLayout = ({ children }) => {
           backgroundColor: '#6b8e23',
           height: '60px',
         }}>
-        <h2 style={{ margin: 0, color: '#fff', textAlign: 'center' }}>100불 이상 주문 시 모든 주문 무료 배송 (Standard Shipping)</h2>
+        <h2 style={{ margin: 0, color: '#fff', textAlign: 'center' }}>10만원 이상 주문 시 모든 주문 무료 배송 (Standard Shipping)</h2>
       </div>
       {location.pathname.includes('admin') ? ( // 관리자 페이지 여부에 따라 조건부 렌더링
         <div style={{ display: 'flex' }}>
