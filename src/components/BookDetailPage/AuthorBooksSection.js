@@ -20,7 +20,7 @@ const AuthorBooksSection = ({ otherBooksByAuthor }) => {
             width: '100%',
             height: '180px',
             backgroundColor: '#DADFCE',
-            opacity: '90%',
+            opacity: '50%',
             mt: 2,
             display: 'flex',
             justifyContent: 'center',
