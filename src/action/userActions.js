@@ -118,7 +118,6 @@ const adminUser = () => async (dispatch) => {
   try {
     dispatch({ type: types.GET_ADMIN_REQUEST });
     const response = await api.get('/user/admin');
-    console.log('response for admin', response);
     if (response.status !== 200) throw new Error(response.data.message);
     dispatch({ type: types.GET_ADMIN_SUCCESS, payload: response.data.users });
     dispatch(getAllUser());
@@ -132,7 +131,6 @@ const getAllUser = () => async (dispatch) => {
   try {
     dispatch({ type: types.GET_All_USERS_REQUEST });
     const response = await api.get('/user/all');
-    // console.log('response for user', response);
     if (response.status !== 200) throw new Error(response.data.message);
     dispatch({ type: types.GET_All_USERS_SUCCESS, payload: response.data.users });
   } catch (error) {
@@ -145,7 +143,6 @@ const updateUserLevel = (id, level) => async (dispatch) => {
     dispatch({ type: types.USER_LEVEL_EDIT_REQUEST });
 
     const response = await api.put(`/user/${id}`, { level }); // PUT 요청으로 변경
-    console.log('response for user', response);
 
     if (response.status !== 200) throw new Error(response.data.message);
 

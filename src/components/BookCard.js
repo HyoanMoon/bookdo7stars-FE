@@ -20,7 +20,6 @@ const BookCard = ({ book, favorite, sx }) => {
 
   const handleFavoriteClick = () => {
     dispatch(favoriteActions.addFavorite(book._id));
-    console.log('main-favorite', favorite);
   };
   const deleteFavoriteClick = () => {
     dispatch(favoriteActions.deleteFavorite(book._id));

@@ -15,8 +15,6 @@ const CartPage = () => {
   const { cartList, totalPrice, user } = useSelector((state) => state.cart); // 사용자 정보 추가
   const [selectedItems, setSelectedItems] = useState([]); // 선택된 상품을 상태로 관리
 
-  console.log(user.level, 'userrrrrrr');
-
   useEffect(() => {
     dispatch(cartActions.getCartList());
   }, [dispatch]);
