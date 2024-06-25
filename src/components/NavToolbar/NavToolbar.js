@@ -6,7 +6,7 @@ import { IconButton, Menu, useMediaQuery, useTheme } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Toolbar from '@mui/material/Toolbar';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import { userActions } from '../../action/userActions';
@@ -43,7 +43,7 @@ const NavToolbar = () => {
     return total;
   }, {});
 
-  const [searchQuery, setSearchQuery] = React.useState(totalField);
+  const [searchQuery, setSearchQuery] = useState(totalField);
 
   const goToMyPage = () => {
     navigate('/account/myinfo');
@@ -161,28 +161,49 @@ const NavToolbar = () => {
       sx={{
         position: 'absolute',
       }}>
-      <MenuItem
-        onClick={() => {
-          popupState.close();
-          navigate('/account/myinfo');
-        }}>
-        마이페이지
-      </MenuItem>
-      <MenuItem
-        onClick={() => {
-          popupState.close();
-          handleLogout();
-        }}>
-        {logOut}
-      </MenuItem>
-      {user && user.role === 'admin' && (
-        <MenuItem
-          onClick={() => {
-            popupState.close();
-            navigate('/admin/dashboard');
-          }}>
-          관리자
-        </MenuItem>
+      {user ? (
+        <>
+          <MenuItem
+            onClick={() => {
+              popupState.close();
+              navigate('/account/myinfo');
+            }}>
+            마이페이지
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              popupState.close();
+              handleLogout();
+            }}>
+            {logOut}
+          </MenuItem>
+          {user.role === 'admin' && (
+            <MenuItem
+              onClick={() => {
+                popupState.close();
+                navigate('/admin/dashboard');
+              }}>
+              관리자
+            </MenuItem>
+          )}
+        </>
+      ) : (
+        <>
+          <MenuItem
+            onClick={() => {
+              popupState.close();
+              navigate('/login');
+            }}>
+            {logIn}
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              popupState.close();
+              navigate('/register');
+            }}>
+            {register}
+          </MenuItem>
+        </>
       )}
     </Menu>
   );
@@ -238,4 +259,5 @@ const NavToolbar = () => {
     </Toolbar>
   );
 };
+
 export default NavToolbar;

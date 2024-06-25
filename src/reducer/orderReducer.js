@@ -4,6 +4,8 @@ const initialState = {
   error: '',
   orderList: [],
   selectedOrder: '',
+  fullAdress: '',
+  deliveryInfo: '',
 };
 
 function orderReducer(state = initialState, action) {
@@ -21,6 +23,10 @@ function orderReducer(state = initialState, action) {
     case types.GET_ORDER_FAIL:
     case types.UPDATE_ORDER_FAIL:
       return { ...state, loading: false, error: payload };
+    case types.SET_FULL_ADDRESS:
+      return { ...state, fullAdress: payload };
+    case types.SET_DELIVERY_INFO:
+      return { ...state, deliveryInfo: payload };
     default:
       return state;
   }

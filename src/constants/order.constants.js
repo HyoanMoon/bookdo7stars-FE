@@ -24,6 +24,10 @@ export const ORDER_STATUS = ['preparing', 'shipping', 'delivered', 'refund'];
 // 도서 수정할 때 주문 id값 불러오기.
 export const SET_SELECTED_ORDER = 'SET_SELECTED_ORDER';
 
+//도서 주문시 배송 정보 지역 선택.
+export const SET_FULL_ADDRESS = 'SET_FULL_ADDRESS';
+export const SET_DELIVERY_INFO = 'SET_DELIVERY_INFO';
+
 export const badgeBg = {
   // 아래 항목을 채워주세요.
   // preparing:

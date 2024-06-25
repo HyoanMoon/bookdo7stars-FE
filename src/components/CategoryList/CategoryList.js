@@ -26,6 +26,20 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName }) => {
     setOpen(initialOpenState);
   }, [categoryHierarchy]);
 
+  useEffect(() => {
+    if (selectedCategory) {
+      // 선택된 경로와 상위 경로의 카테고리를 열림 상태로 설정
+      const paths = selectedCategory.split('>');
+      const openState = {};
+      let currentPath = '';
+      paths.forEach((path) => {
+        currentPath = currentPath ? `${currentPath}>${path}` : path;
+        openState[currentPath] = true;
+      });
+      setOpen((prevOpen) => ({ ...prevOpen, ...openState }));
+    }
+  }, [selectedCategory]);
+
   // 카테고리 클릭 처리
   const handleItemClick = (categoryPath) => {
     if (selectedCategory === categoryPath) {
@@ -34,6 +48,16 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName }) => {
     } else {
       setSelectedCategory(categoryPath);
       setSelectedPath(categoryPath.split('>'));
+
+      // 선택된 경로와 상위 경로의 카테고리를 열림 상태로 설정
+      const paths = categoryPath.split('>');
+      const openState = {};
+      let currentPath = '';
+      paths.forEach((path) => {
+        currentPath = currentPath ? `${currentPath}>${path}` : path;
+        openState[currentPath] = true;
+      });
+      setOpen((prevOpen) => ({ ...prevOpen, ...openState }));
     }
     if (onCategoryClick) {
       onCategoryClick(categoryPath);
@@ -41,11 +65,13 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName }) => {
   };
 
   // 카테고리 열기/닫기 처리
-  const handleClick = (categoryPath) => {
-    setOpen((prevOpen) => ({
-      ...prevOpen,
-      [categoryPath]: !prevOpen[categoryPath],
-    }));
+  const handleClick = (categoryPath, hasSubCategories) => {
+    if (hasSubCategories) {
+      setOpen((prevOpen) => ({
+        ...prevOpen,
+        [categoryPath]: !prevOpen[categoryPath],
+      }));
+    }
   };
 
   const renderCategories = (categories, parentPath = '') => {
@@ -57,11 +83,9 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName }) => {
       return (
         <div key={index}>
           <ListItem
-            onClick={() => {
-              handleClick(categoryPath);
-              handleItemClick(categoryPath);
-            }}
+            onClick={() => handleItemClick(categoryPath)}
             sx={{
+              backgroundColor: selectedCategory === categoryPath ? 'primary.light' : 'inherit',
               '&:hover': {
                 backgroundColor: 'primary.light',
               },
@@ -72,7 +96,7 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName }) => {
               <IconButton
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleClick(categoryPath);
+                  handleClick(categoryPath, hasSubCategories);
                 }}>
                 {open[categoryPath] ? <ExpandMoreIcon /> : <ChevronRightIcon />}
               </IconButton>

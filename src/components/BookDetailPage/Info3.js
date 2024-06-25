@@ -1,149 +1,149 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Container, Tabs, Tab, Box, Typography, TextField, Button } from '@mui/material';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { TableContainer, TableBody, Table, TableRow, TableCell, Paper, Container, Tabs, Tab, Box, Typography } from '@mui/material';
+import { commentActions } from '../../action/commentAction';
+import { useDispatch, useSelector } from 'react-redux';
 import './Info3.css';
+import DeliveryPolicy from './DeliveryPolicy';
+import CommentSection from './CommentSection';
+import AuthorSection from './AuthorSection';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
 
-const Info3 = () => {
+const scrollToElement = (elementId, offset = 0) => {
+  const element = document.getElementById(elementId);
+  if (element) {
+    const yOffset = offset; // 오프셋 적용
+    const yPosition = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+    window.scrollTo({ top: yPosition, behavior: 'smooth' });
+  }
+};
+
+const Info3 = ({ selectedBook }) => {
+  const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState('bookInfo');
-  const [review, setReview] = useState('');
-  const bookInfoRef = useRef(null);
-  const reviewsRef = useRef(null);
-  const deliveryRef = useRef(null);
-  const location = useLocation();
+  const { user } = useSelector((state) => state.user);
+  const { comments, createCommentSuccess, deleteCommentSuccess } = useSelector((state) => state.comment);
   const navigate = useNavigate();
   const query = useQuery();
   const section = query.get('section');
 
-  const handleScroll = () => {
-    const bookInfoTop = bookInfoRef.current.getBoundingClientRect().top + window.scrollY;
-    const reviewsTop = reviewsRef.current.getBoundingClientRect().top + window.scrollY;
-    const deliveryTop = deliveryRef.current.getBoundingClientRect().top + window.scrollY;
+  useEffect(() => {
+    if (createCommentSuccess || deleteCommentSuccess) {
+      dispatch(commentActions.getCommentsByBook(selectedBook._id));
+    }
+  }, [createCommentSuccess, dispatch, deleteCommentSuccess]);
 
-    if (window.scrollY >= deliveryTop - 50) {
-      setActiveTab('delivery');
-      navigate({ search: '?section=delivery' }, { replace: true });
-    } else if (window.scrollY >= reviewsTop - 50) {
-      setActiveTab('reviews');
-      navigate({ search: '?section=reviews' }, { replace: true });
-    } else if (window.scrollY >= bookInfoTop - 50) {
-      setActiveTab('bookInfo');
-      navigate({ search: '?section=bookInfo' }, { replace: true });
+  useEffect(() => {
+    if (section && section !== activeTab) {
+      setActiveTab(section);
+      scrollToElement(section, -80); // 탭 높이만큼 오프셋 적용
+    }
+  }, [section, activeTab]);
+
+  const handleTabChange = (event, newValue) => {
+    if (newValue !== activeTab) {
+      setActiveTab(newValue);
+      navigate({ search: `?section=${newValue}` }, { replace: true });
+      setTimeout(() => scrollToElement(newValue, -80), 0); // 탭 높이만큼 오프셋 적용
     }
   };
 
   useEffect(() => {
+    dispatch(commentActions.getCommentsByBook(selectedBook._id));
+  }, []);
+
+  const deleteComment = (commentId) => {
+    dispatch(commentActions.deleteComment(commentId, selectedBook._id));
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['bookInfo', 'author', 'reviews', 'delivery'];
+      let currentSection;
+      sections.forEach((section) => {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= 80 && rect.bottom > 80) {
+            currentSection = section;
+          }
+        }
+      });
+      if (currentSection && currentSection !== activeTab) {
+        setActiveTab(currentSection);
+        navigate({ search: `?section=${currentSection}` }, { replace: true });
+      }
+    };
+
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
-
-  useEffect(() => {
-    if (section) {
-      setActiveTab(section);
-      document.getElementById(section).scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [section]);
-
-  const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
-    document.getElementById(newValue).scrollIntoView({ behavior: 'smooth' });
-    navigate({ search: `?section=${newValue}` }, { replace: true });
-  };
-
-  const handleReviewSubmit = (event) => {
-    event.preventDefault();
-    // Handle review submission logic here
-    setReview(''); // Clear the form
-  };
+  }, [activeTab, navigate]);
 
   return (
-    <Container>
+    <Container sx={{ mt: 5 }}>
       <Tabs
         value={activeTab}
         onChange={handleTabChange}
         centered
         indicatorColor="primary"
         textColor="primary"
-        sx={{ backgroundColor: 'white', position: 'sticky', top: '0' }}>
+        sx={{ backgroundColor: '#DADFCE', opacity: '90%', position: 'sticky', top: '0', ml: '0', width: '100%' }}>
         <Tab label="도서정보" value="bookInfo" />
+        <Tab label="저자의 다른 책" value="author" />
         <Tab label="리뷰" value="reviews" />
         <Tab label="배송" value="delivery" />
       </Tabs>
 
-      <Box id="bookInfo" my={4} ref={bookInfoRef}>
+      <Box id="bookInfo" my={4}>
         <Typography variant="h4">도서정보</Typography>
+        <TableContainer component={Paper} sx={{ mt: 2, mb: 5 }}>
+          <Table sx={{ outline: '1px solid #DFE4DF' }}>
+            <TableBody sx={{ outline: '1px solid #DFE4DF' }}>
+              <TableRow sx={{ outline: '1px solid #DFE4DF' }}>
+                <TableCell sx={{ outline: '1px solid #DFE4DF', backgroundColor: '#DADFDA', width: '15%' }}>도서소개</TableCell>
+                <TableCell sx={{ outline: '1px solid #DFE4DF', width: '85%' }}>
+                  {selectedBook.description ? selectedBook.description : 'No description available'}
+                </TableCell>
+              </TableRow>
+              <TableRow sx={{ outline: '1px solid #DFE4DF' }}>
+                <TableCell sx={{ outline: '1px solid #DFE4DF', backgroundColor: '#DADFDA', width: '15%' }}>isbn</TableCell>
+                <TableCell sx={{ outline: '1px solid #DFE4DF', width: '85%' }}>{selectedBook.isbn}</TableCell>
+              </TableRow>
+              <TableRow sx={{ outline: '1px solid #DFE4DF' }}>
+                <TableCell sx={{ outline: '1px solid #DFE4DF', backgroundColor: '#DADFDA', width: '15%' }}>출판날짜</TableCell>
+                <TableCell sx={{ outline: '1px solid #DFE4DF', width: '85%' }}>{selectedBook.pubDate}</TableCell>
+              </TableRow>
+              <TableRow sx={{ outline: '1px solid #DFE4DF' }}>
+                <TableCell sx={{ outline: '1px solid #DFE4DF', backgroundColor: '#DADFDA', width: '15%' }}>카테고리</TableCell>
+                <TableCell sx={{ outline: '1px solid #DFE4DF', width: '85%' }}>{selectedBook.categoryName}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+
+      <Box id="author" my={4}>
+        <Typography variant="h4">저자의 다른 책들</Typography>
         <Typography variant="body1">
-          {/* 도서 설명을 여기에 넣습니다 */}이 책은 타이틀에 대한 설명이 들어가는 곳입니다. 문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아
+          {/* 저자의 다른 책들 북 카드를 여기에 넣습니다 */}
+          <AuthorSection />
         </Typography>
       </Box>
 
-      <Box id="reviews" my={4} ref={reviewsRef}>
+      <Box id="reviews" my={4}>
         <Typography variant="h4">리뷰</Typography>
-        <form onSubmit={handleReviewSubmit}>
-          <TextField label="Write a review" multiline rows={4} variant="outlined" fullWidth value={review} onChange={(e) => setReview(e.target.value)} />
-          <Button type="submit" variant="contained" color="primary" style={{ marginTop: 16 }}>
-            Submit Review
-          </Button>
-        </form>
+        <CommentSection comments={comments} bookId={selectedBook._id} deleteComment={deleteComment} user={user} />
       </Box>
 
-      <Box id="delivery" my={4} ref={deliveryRef}>
-        <Typography variant="h4">배송</Typography>
-        <Typography variant="body1">
-          {/* 배송 정보를 여기에 넣습니다 */}이 섹션에는 배송 정보가 들어갑니다. 이 책은 타이틀에 대한 설명이 들어가는 곳입니다. 문제는 도서정보나 배송정보가
-          내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이
-          길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가
-          않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가
-          않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가
-          않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아이 책은 타이틀에 대한 설명이 들어가는 곳입니다.
-          문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는
-          도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는
-          도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는
-          도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는
-          도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아이 책은 타이틀에
-          대한 설명이 들어가는 곳입니다. 문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아이 책은 타이틀에 대한 설명이 들어가는 곳입니다. 문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아이 책은 타이틀에 대한 설명이 들어가는 곳입니다. 문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는
-          도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는
-          도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아이 책은 타이틀에 대한 설명이 들어가는 곳입니다. 문제는
-          도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는
-          도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나
-          배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아이 책은 타이틀에 대한
-          설명이 들어가는 곳입니다. 문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가
-          내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가이 길지가
-          않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가
-          않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아이
-          책은 타이틀에 대한 설명이 들어가는 곳입니다. 문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는
-          도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는 도서정보나 배송정보가 내용이 길지가 않아문제는
-          도서정보나 배송정보가
-        </Typography>
+      <Box id="delivery" my={4}>
+        <Typography variant="h4">배송/반품/교환 안내</Typography>
+        <DeliveryPolicy />
       </Box>
     </Container>
   );
