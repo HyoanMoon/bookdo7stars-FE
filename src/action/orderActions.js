@@ -3,7 +3,20 @@ import * as types from '../constants/order.constants';
 import { commonUiActions } from './commonUiAction';
 
 // 주문 생성.
-const createOrder = () => async (dispatch) => {};
+const createOrder = (payload) => async (dispatch) => {
+  try {
+    dispatch({ type: types.CREATE_ORDER_REQUEST });
+    const response = await api.post('/order', payload);
+    if (response.status !== 200) throw new Error(response.error);
+    dispatch({ type: types.CREATE_ORDER_SUCCESS, payload: response.data.orderNum });
+    console.log('response', response);
+    dispatch(cartActions.getCartQty());
+    navigate('/payment/success');
+  } catch (error) {
+    dispatch({ type: types.CREATE_ORDER_FAIL, payload: error.error });
+    dispatch(commonUiActions.showToastMessage(error.error, 'error'));
+  }
+};
 
 // 내 주문 조회.
 const getMyOrder = () => async (dispatch) => {};

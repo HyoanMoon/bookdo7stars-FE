@@ -14,6 +14,7 @@ const CartPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { cartList, totalPrice, user } = useSelector((state) => state.cart); // 사용자 정보 추가
+  const { fullAddress } = useSelector((state) => state.order);
   const [selectedItems, setSelectedItems] = useState([]); // 선택된 상품을 상태로 관리
 
   useEffect(() => {
@@ -64,6 +65,7 @@ const CartPage = () => {
   const shippingFee = selectedItems.length > 0 ? (finalTotalPrice > 100000 ? 0 : 2500) : 0;
   const pointsEarned = finalTotalPrice * 0.05;
   const grandTotal = finalTotalPrice + shippingFee;
+
   // 결제 페이지로 이동하는 함수
   const handleCheckout = () => {
     navigate('/payment', { state: { selectedCartList, finalTotalPrice, discountAmount, discountRate, shippingFee, pointsEarned, grandTotal } });
@@ -85,6 +87,7 @@ const CartPage = () => {
             <Typography variant="h6">상품 정보</Typography>
             <Typography variant="h6">수량</Typography>
             <Typography variant="h6">상품 금액</Typography>
+            <Typography variant="h6">배송 정보</Typography>
             <Typography variant="h6">삭제</Typography>
           </Box>
           {cartList.length > 0 ? (
@@ -95,6 +98,7 @@ const CartPage = () => {
                 isSelected={selectedItems.includes(item._id)} // 선택된 상태 전달
                 onSelectItem={handleSelectItem} // 선택 상태 변경 함수 전달
                 userLevel={user.level} // 사용자 레벨 전달
+                fullAddress={fullAddress} // 전체 주소 전달
               />
             ))
           ) : (

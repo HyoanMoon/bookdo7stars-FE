@@ -1,11 +1,11 @@
-import { type } from '@testing-library/user-event/dist/type';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { orderActions } from '../../action/orderActions';
-import { SET_FULL_ADDERESS } from '../../constants/order.constants';
+import { useDispatch } from 'react-redux';
+import { SET_FULL_ADDRESS } from '../../constants/order.constants';
 
 const AddressChange = ({ setAddress }) => {
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
   const elementRef = useRef(null);
+  const dispatch = useDispatch(); // useDispatch 훅을 사용하여 dispatch 정의
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -33,7 +33,7 @@ const AddressChange = ({ setAddress }) => {
               fullAddress += extraAddress;
             }
             setAddress(fullAddress);
-            dispatch({ type: types.SET_FULL_ADDERESS, fullAddress });
+            dispatch({ type: SET_FULL_ADDRESS, fullAddress });
             togglePostcode();
           },
           width: '100%',
@@ -43,7 +43,7 @@ const AddressChange = ({ setAddress }) => {
     } else if (elementRef.current) {
       elementRef.current.innerHTML = '';
     }
-  }, [isPostcodeOpen, setAddress, togglePostcode]);
+  }, [isPostcodeOpen, setAddress, togglePostcode, dispatch]);
 
   return (
     <div style={{ position: 'relative' }}>

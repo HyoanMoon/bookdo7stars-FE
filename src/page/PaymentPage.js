@@ -71,6 +71,7 @@ const PaymentPage = () => {
         return {
           bookId: item.bookId,
           qty: item.qty,
+          price: item.bookId.priceSales,
         };
       }),
     };
