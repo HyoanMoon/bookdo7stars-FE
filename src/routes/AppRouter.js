@@ -18,8 +18,6 @@ import BooksGroupPage from '../components/BooksGroupPage/BooksGroupPage';
 import EditorPage from '../page/EditorPage';
 import OauthCallbackPage from '../page/OauthCallbackPage';
 import BooksAllPage from '../components/BooksAllPage/BooksAllPage';
-import ContactPage from '../page/ContactPage';
-import ContactPage2 from '../page/ContactPage2';
 import MyPageOrderList from '../page/MyPageOrderList';
 import MyPageOrderClaimList from '../page/MyPageOrderClaimList';
 import MyPageOrderCancelList from '../page/MyPageOrderCancelList';
