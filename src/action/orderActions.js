@@ -26,7 +26,6 @@ const getOrderList = (query) => async (dispatch) => {
   try {
     dispatch({ type: types.GET_ORDER_LIST_REQUEST });
     const response = await api.get('/order', { params: { ...query } });
-    // console.log('주문-조회-response', response);
     dispatch({ type: types.GET_ORDER_LIST_SUCCESS, payload: response.data }); // orders로 데이터 받음.
   } catch (err) {
     dispatch({ type: types.GET_ORDER_LIST_FAIL, payload: err.error });

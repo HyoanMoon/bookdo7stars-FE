@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import { pink } from '@mui/material/colors';
 import { favoriteActions } from '../action/favoriteActions';
 
-const BookCard = ({ book, favorite }) => {
+const BookCard = ({ book, favorite, sx }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -20,7 +20,6 @@ const BookCard = ({ book, favorite }) => {
 
   const handleFavoriteClick = () => {
     dispatch(favoriteActions.addFavorite(book._id));
-    console.log('main-favorite', favorite);
   };
   const deleteFavoriteClick = () => {
     dispatch(favoriteActions.deleteFavorite(book._id));
@@ -31,7 +30,7 @@ const BookCard = ({ book, favorite }) => {
   };
 
   return (
-    <Card sx={{ width: 230, height: 350, borderRadius: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+    <Card sx={{ ...sx, width: 230, height: 350, borderRadius: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
       <CardMedia component="img" image={book.cover} alt={book.title} sx={{ height: 275, objectFit: 'cover' }} onClick={() => clickBookCard(book)} />
       <CardContent sx={{ height: 100 }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>

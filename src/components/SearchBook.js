@@ -23,6 +23,7 @@ const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch, isMobile
     const queryValue = searchQuery[selectedField] || '';
     if (queryValue.trim() === '') {
       navigate('/');
+      setSearchQuery('');
     } else {
       const searchPath = `/search?${selectedField}=${queryValue}`;
       // Reset the search query to keep only the selected field
@@ -45,7 +46,7 @@ const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch, isMobile
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: 'center', width: '100%' }}>
+    <Box>
       <FormControl sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: '1 1 auto', mb: isMobile ? 2 : 0 }}>
         <TextField
           variant="filled"

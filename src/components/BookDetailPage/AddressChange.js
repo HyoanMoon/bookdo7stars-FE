@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { orderActions } from '../../action/orderActions';
 import { SET_FULL_ADDRESS } from '../../constants/order.constants';
+import { useDispatch } from 'react-redux';
 
 const AddressChange = ({ setAddress }) => {
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
   const elementRef = useRef(null);
-  const dispatch = useDispatch(); // useDispatch 훅을 사용하여 dispatch 정의
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const script = document.createElement('script');

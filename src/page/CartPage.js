@@ -13,8 +13,8 @@ import { currencyFormat } from '../utils/number';
 const CartPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { cartList, totalPrice, user } = useSelector((state) => state.cart); // 사용자 정보 추가
-  const { fullAddress } = useSelector((state) => state.order);
+  const { cartList, totalPrice, user } = useSelector((state) => state.cart);
+  const { fullAddress = '' } = useSelector((state) => state.order); // fullAddress 초기값 설정
   const [selectedItems, setSelectedItems] = useState([]); // 선택된 상품을 상태로 관리
 
   useEffect(() => {
@@ -26,7 +26,6 @@ const CartPage = () => {
     console.log('user:', user);
   }, [cartList, user]);
 
-  // 전체 선택/해제 핸들러
   const handleSelectAll = (event) => {
     if (event.target.checked) {
       setSelectedItems(cartList.map((item) => item._id)); // 전체 선택
@@ -34,18 +33,15 @@ const CartPage = () => {
       setSelectedItems([]); // 전체 선택 해제
     }
   };
-
   // 개별 항목 선택/해제 핸들러
   const handleSelectItem = (itemId) => {
     setSelectedItems((prevState) => (prevState.includes(itemId) ? prevState.filter((id) => id !== itemId) : [...prevState, itemId])); // 선택 해제 또는 추가
   };
-
   // 선택된 상품 리스트
   const selectedCartList = cartList.filter((item) => selectedItems.includes(item._id));
   // 선택된 상품의 총 가격 계산
   const selectedTotalPrice = selectedCartList.reduce((total, item) => total + item.bookId.priceSales * item.qty, 0);
 
-  // 레벨에 따른 할인 비율 정의
   const getDiscountRate = (level) => {
     switch (level) {
       case 'silver':
@@ -65,7 +61,6 @@ const CartPage = () => {
   const shippingFee = selectedItems.length > 0 ? (finalTotalPrice > 100000 ? 0 : 2500) : 0;
   const pointsEarned = finalTotalPrice * 0.05;
   const grandTotal = finalTotalPrice + shippingFee;
-
   // 결제 페이지로 이동하는 함수
   const handleCheckout = () => {
     navigate('/payment', { state: { selectedCartList, finalTotalPrice, discountAmount, discountRate, shippingFee, pointsEarned, grandTotal } });
@@ -141,7 +136,7 @@ const CartPage = () => {
           cartList={selectedCartList}
           finalTotalPrice={finalTotalPrice}
           hasSelectedItems={selectedItems.length > 0}
-          handleCheckout={handleCheckout} // handleCheckout 함수 전달
+          handleCheckout={handleCheckout}
         />
       </Container>
     </ThemeProvider>
