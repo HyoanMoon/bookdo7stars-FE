@@ -80,6 +80,7 @@ const NavToolbar = () => {
             color: 'primary',
             fontSize: isMobile ? '0.8rem' : isTablet ? '0.9rem' : '1rem',
             width: isMobile ? '80px' : isTablet ? '90px' : '100px',
+            minWidth: '100px',
           }}
           onClick={() => navigate('/login')}>
           {logIn}
@@ -92,6 +93,7 @@ const NavToolbar = () => {
             color: 'primary',
             fontSize: isMobile ? '0.8rem' : isTablet ? '0.9rem' : '1rem',
             width: isMobile ? '80px' : isTablet ? '90px' : '100px',
+            minWidth: '100px',
           }}
           onClick={handleLogout}>
           {logOut}
@@ -105,6 +107,7 @@ const NavToolbar = () => {
             color: 'primary',
             fontSize: isMobile ? '0.8rem' : isTablet ? '0.9rem' : '1rem',
             width: isMobile ? '80px' : isTablet ? '90px' : '100px',
+            minWidth: '100px',
           }}
           onClick={() => navigate('/register')}>
           {register}
@@ -116,8 +119,9 @@ const NavToolbar = () => {
           size="medium"
           sx={{
             color: 'primary',
-            fontSize: isMobile ? '0.8rem' : isTablet ? '0.9rem' : '1rem',
-            width: isMobile ? '80px' : isTablet ? '90px' : '100px',
+            fontSize: isMobile ? '0.7rem' : isTablet ? '0.8rem' : '1rem',
+            width: isMobile ? '90px' : isTablet ? '110px' : '130px',
+            minWidth: '130px',
           }}
           onClick={goToMyPage}>
           마이페이지
@@ -128,8 +132,9 @@ const NavToolbar = () => {
         size="medium"
         sx={{
           color: 'primary',
-          fontSize: isMobile ? '0.8rem' : isTablet ? '0.9rem' : '1rem',
-          width: isMobile ? '80px' : isTablet ? '90px' : '100px',
+          fontSize: isMobile ? '0.7rem' : isTablet ? '0.8rem' : '1rem',
+          width: isMobile ? '90px' : isTablet ? '110px' : '130px',
+          minWidth: '130px',
         }}
         onClick={() => navigate('/cart')}>
         {cart} ({cartItemCount || 0})
@@ -227,7 +232,7 @@ const NavToolbar = () => {
         sx={{ cursor: 'pointer', padding: 1 }}>
         <img src="/logo.png" alt="로고 이미지" style={{ color: '#d3ddbd', borderRadius: '3px', height: isMobile ? '4rem' : isTablet ? '5rem' : '7rem' }} />
       </Box>
-      <Box sx={{ flex: isMobile ? '1 1 100%' : isTablet ? '1 1 80%' : '1 1 auto', width: '100%', marginY: isMobile ? 2 : isTablet ? 1 : 0 }}>
+      <Box sx={{ width: isMobile ? '90%' : isTablet ? '70%' : '60%', marginY: isMobile ? 2 : isTablet ? 1 : 0 }}>
         <SearchBook
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}

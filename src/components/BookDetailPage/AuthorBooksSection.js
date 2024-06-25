@@ -15,7 +15,26 @@ const AuthorBooksSection = ({ otherBooksByAuthor }) => {
           ))}
         </Grid>
       ) : (
-        <Box sx={{ width: '100%', height: '100px', backgroundColor: 'green', mt: 2 }}>이 작가의 다른 책이 없습니다.</Box>
+        <Box
+          sx={{
+            width: '100%',
+            height: '180px',
+            backgroundColor: '#DADFCE',
+            opacity: '90%',
+            mt: 2,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Typography
+            variant="h6"
+            sx={{
+              textAlign: 'center',
+              mx: 2,
+            }}>
+            이 작가의 다른 책이 없습니다.
+          </Typography>
+        </Box>
       )}
     </Box>
   );
