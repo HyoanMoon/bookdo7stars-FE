@@ -1,5 +1,5 @@
 import { ClickAwayListener, Fade, Grid, Paper, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
 import { bookActions } from '../action/bookActions';
 import { categoryActions } from '../action/categoryActions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -57,15 +57,23 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
         <Fade {...TransitionProps} timeout={350}>
           <Paper
             sx={{
-              width: '1000px',
+              width: '100%',
+              maxWidth: '1000px',
               maxHeight: '500px',
               overflowY: 'auto',
               padding: '10px',
-            }}>
+              border: '1px solid',
+              borderColor: 'primary.main',
+              borderRadius: '4px',
+              minWidth: '200px', // 최소 너비 설정
+              minHeight: '200px', // 최소 높이 설정
+            }}
+            {...TransitionProps}>
             <ClickAwayListener onClickAway={() => handlePopperClose()}>
               <Grid container spacing={2}>
-                {Object.keys(secondAllSubCategories).map((firstCategory) => (
-                  <Grid item xs={12} key={firstCategory}>
+                {Object.keys(secondAllSubCategories).map((firstCategory, index) => (
+                  <Grid item xs={12} key={index} sx={{ paddingBottom: '5px' }}>
+                    {' '}
                     <Typography
                       variant="h6"
                       gutterBottom
@@ -80,8 +88,14 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
                       <strong>{firstCategory}</strong>
                     </Typography>
                     <Grid container spacing={1}>
-                      {secondAllSubCategories[firstCategory].map((secondCategory) => (
-                        <Grid item xs={12} key={secondCategory}>
+                      {secondAllSubCategories[firstCategory].map((secondCategory, idx) => (
+                        <Grid
+                          item
+                          xs={12}
+                          key={idx}
+                          sx={{
+                            paddingBottom: '5px',
+                          }}>
                           <Typography
                             variant="subtitle1"
                             gutterBottom
@@ -96,8 +110,8 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
                             <strong>{secondCategory}</strong>
                           </Typography>
                           <Grid container spacing={1}>
-                            {thirdAllSubCategories[firstCategory][secondCategory].map((thirdCategory) => (
-                              <Grid item xs={6} sm={4} md={3} key={thirdCategory}>
+                            {thirdAllSubCategories[firstCategory][secondCategory].map((thirdCategory, idx) => (
+                              <Grid item xs={6} sm={4} md={3} key={idx}>
                                 <Typography
                                   variant="body2"
                                   onClick={() => clickSub3Category(firstCategory, secondCategory, thirdCategory)}
