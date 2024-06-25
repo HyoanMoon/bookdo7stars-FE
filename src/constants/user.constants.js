@@ -30,3 +30,18 @@ export const LOGIN_WITH_TOKEN_FAIL = 'LOGIN_WITH_TOKEN_FAIL';
 
 // 로그아웃.
 export const USER_LOGOUT = 'USER_LOGOUT';
+
+// 어드민 정보
+export const GET_ADMIN_REQUEST = ' GET_ADMIN_REQUEST';
+export const GET_ADMIN_SUCCESS = ' GET_ADMIN_SUCCESS';
+export const GET_ADMIN_FAIL = ' GET_ADMIN_FAIL';
+
+// 모든 유저 정보
+export const GET_All_USERS_REQUEST = ' GET_All_USERS_REQUEST';
+export const GET_All_USERS_SUCCESS = ' GET_All_USERS_SUCCESS';
+export const GET_All_USERS_FAIL = ' GET_All_USERS_FAIL';
+
+// 유저 LEVEL 변경
+export const USER_LEVEL_EDIT_REQUEST = ' USER_LEVEL_EDIT_REQUEST';
+export const USER_LEVEL_EDIT_SUCCESS = 'USER_LEVEL_EDIT_SUCCESS';
+export const USER_LEVEL_EDIT_FAIL = ' USER_LEVEL_EDIT_FAIL';

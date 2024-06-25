@@ -66,7 +66,7 @@ const SearchedBooksPage = () => {
               margin: '4rem',
               color: 'black',
             }}>
-            "{queryKey}로 {queryValue}를 검색한 결과 {count}개 입니다."
+            "{queryValue}"을/를 검색한 결과 {count}개 입니다.
           </Typography>
           <Grid container spacing={2}>
             {visibleBooks.map((book) => (
