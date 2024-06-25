@@ -23,6 +23,7 @@ const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch, isMobile
     const queryValue = searchQuery[selectedField] || '';
     if (queryValue.trim() === '') {
       navigate('/');
+      setSearchQuery('');
     } else {
       const searchPath = `/search?${selectedField}=${queryValue}`;
       // Reset the search query to keep only the selected field

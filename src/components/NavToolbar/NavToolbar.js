@@ -226,6 +226,7 @@ const NavToolbar = () => {
       <Box
         onClick={() => {
           navigate('/');
+          setSearchQuery({});
           dispatch(bookActions.getBookList({}));
           dispatch(categoryActions.setSelectedCategory(null));
         }}
