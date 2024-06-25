@@ -30,6 +30,7 @@ const AddressChange = ({ setAddress }) => {
               fullAddress += extraAddress;
             }
             setAddress(fullAddress);
+            console.log('[fullAddress]=>', fullAddress);
             togglePostcode();
           },
           width: '100%',
