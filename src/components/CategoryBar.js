@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, Menu, MenuItem, Grid, Popover, Fade, ClickAwayListener, Grow, Paper } from '@mui/material';
+import { AppBar, Toolbar, Typography, MenuItem, Box } from '@mui/material';
 import { categoryActions } from '../action/categoryActions';
-import { useDispatch, useSelector } from 'react-redux';
-import Box from '@mui/material/Box';
-import CategoryPopOver from './CategoryPopOver';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import CategoryPopOver from './CategoryPopOver';
 import { getCategoryHierarchy } from '../_helper/getCategoryHierarchy';
 import { getSubCategories } from '../_helper/getSubCategories';
 import { getKeyByValue } from '../_helper/getKeyByValue';
@@ -41,7 +40,6 @@ const CategoryBar = ({ bookList }) => {
   const secondAllSubCategories = {};
   const thirdAllSubCategories = {};
 
-  // 첫 번째 하위 카테고리들 매핑
   firstSubCategories.forEach((firstCategory) => {
     const secondSubCategories = getSubCategories(categoryHierarchy['국내도서'], firstCategory);
     secondAllSubCategories[firstCategory] = secondSubCategories;
@@ -52,7 +50,6 @@ const CategoryBar = ({ bookList }) => {
     });
   });
 
-  // 도서 그룹 한글이름 어레이로 받아오기
   const queryTypes = ['ItemNewAll', 'ItemNewSpecial', 'BestSeller', 'BlogBest'];
   const bookGroups = {
     ItemNewAll: '새로 나온 책',
@@ -65,9 +62,7 @@ const CategoryBar = ({ bookList }) => {
   const index = groups.indexOf('전체 도서');
 
   if (index > -1) {
-    // '전체 도서'를 배열에서 제거합니다.
     const [item] = groups.splice(index, 1);
-    // '전체 도서'를 배열의 첫 번째 위치에 추가합니다.
     groups.unshift(item);
   }
 
@@ -98,12 +93,19 @@ const CategoryBar = ({ bookList }) => {
           <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', width: '80%' }}>
             {groups.map((group, index) => (
               <MenuItem key={index} onClick={() => goToAllBooksOfGroup(group)}>
-                {group}
+                <Typography variant="body1" component="div" sx={{ fontSize: { xs: '0.8rem', sm: '1rem' }, cursor: 'pointer' }}>
+                  {group}
+                </Typography>
               </MenuItem>
             ))}
           </Box>
           <Box sx={{ display: 'flex' }}>
-            <Typography variant="h7" component="div" aria-describedby={id} onClick={handlePopperClick} sx={{ cursor: 'pointer' }}>
+            <Typography
+              variant="h7"
+              component="div"
+              aria-describedby={id}
+              onClick={handlePopperClick}
+              sx={{ cursor: 'pointer', fontSize: { xs: '0.8rem', sm: '1rem' } }}>
               전체 카테고리
             </Typography>
           </Box>
