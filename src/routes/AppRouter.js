@@ -43,10 +43,6 @@ const AppRouter = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/oauth/callback/:provider" element={<OauthCallbackPage />} />
 
-        {/* 연락 */}
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/contact2" element={<ContactPage2 />} />
-
         {/* 장바구니, 결제, 마이페이지 */}
         <Route element={<PrivateRoute permissionLevel="customer" />}>
           <Route path="/cart" element={<CartPage />} />
