@@ -18,6 +18,7 @@ const logIn = '로그인';
 const logOut = '로그아웃';
 const register = '회원가입';
 const cart = '장바구니';
+
 const NavToolbar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -27,6 +28,7 @@ const NavToolbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
+  const { cartItemCount } = useSelector((state) => state.cart);
 
   const handleLogout = () => {
     dispatch(userActions.logout());
@@ -130,7 +132,7 @@ const NavToolbar = () => {
           width: isMobile ? '80px' : isTablet ? '90px' : '100px',
         }}
         onClick={() => navigate('/cart')}>
-        {cart}
+        {cart} ({cartItemCount || 0})
       </Button>
       {user && user.role === 'admin' && (
         <Button
