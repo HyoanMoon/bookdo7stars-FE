@@ -1,4 +1,3 @@
-import { type } from '@testing-library/user-event/dist/type';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { orderActions } from '../../action/orderActions';
 import { SET_FULL_ADDRESS } from '../../constants/order.constants';
@@ -45,7 +44,7 @@ const AddressChange = ({ setAddress }) => {
     } else if (elementRef.current) {
       elementRef.current.innerHTML = '';
     }
-  }, [isPostcodeOpen, setAddress, togglePostcode]);
+  }, [isPostcodeOpen, setAddress, togglePostcode, dispatch]);
 
   return (
     <div style={{ position: 'relative' }}>
