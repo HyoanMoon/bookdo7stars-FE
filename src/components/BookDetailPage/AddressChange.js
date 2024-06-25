@@ -1,4 +1,7 @@
+import { type } from '@testing-library/user-event/dist/type';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { orderActions } from '../../action/orderActions';
+import { SET_FULL_ADDERESS } from '../../constants/order.constants';
 
 const AddressChange = ({ setAddress }) => {
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
@@ -30,7 +33,7 @@ const AddressChange = ({ setAddress }) => {
               fullAddress += extraAddress;
             }
             setAddress(fullAddress);
-            console.log('[fullAddress]=>', fullAddress);
+            dispatch({ type: types.SET_FULL_ADDERESS, fullAddress });
             togglePostcode();
           },
           width: '100%',

@@ -15,6 +15,7 @@ import Info3 from '../components/BookDetailPage/Info3';
 const BookDetailPage = () => {
   const dispatch = useDispatch();
   const [address, setAddress] = useState('지역을 선택해주세요');
+  const { fullAddress, deliveryInfo } = useSelector((state) => state.order);
   const { selectedBook, getBooksLoading } = useSelector((state) => state.book);
   const { bookid } = useParams();
   // const navigate = useNavigate();
@@ -38,7 +39,7 @@ const BookDetailPage = () => {
           </Grid>
           <Grid item xs={6} sm={12} md={8}>
             <BookBasicInfo title={selectedBook.title} author={selectedBook.author} publisher={selectedBook.publisher} price={selectedBook.priceStandard} />
-            <BookToCart />
+            <BookToCart fullAddress={fullAddress} deliveryInfo={deliveryInfo} />
             <Grid item mt={4}>
               {/* <BookDetailInfo pubDate={selectedBook.pubDate} isbn={selectedBook.isbn} /> */}
               {/* 여기에 다음 API */}
