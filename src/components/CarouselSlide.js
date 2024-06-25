@@ -14,13 +14,13 @@ const CarouselSlide = () => {
   return (
     <div style={{ overflow: 'hidden' }}>
       <Carousel showArrows={false} infiniteLoop={true} showThumbs={false} showStatus={false} autoPlay={true} interval={3000}>
-        <div onClick={(e) => handleImageClick('6674551e57dd26116151c617', e)}>
+        <div>
           <img src="/carousel/cr1.png" alt="Slide 1" style={{ width: '100vw' }} />
         </div>
-        <div onClick={(e) => handleImageClick('6674553357dd26116151d537', e)}>
+        <div>
           <img src="/carousel/cr2.png" alt="Slide 2" style={{ width: '100vw' }} />
         </div>
-        <div onClick={(e) => handleImageClick('6674553357dd26116151d4c7', e)}>
+        <div>
           <img src="/carousel/cr3.png" alt="Slide 3" style={{ width: '100vw' }} />
         </div>
       </Carousel>
@@ -29,3 +29,4 @@ const CarouselSlide = () => {
 };
 
 export default CarouselSlide;
+// onClick={(e) => handleImageClick('6674551e57dd26116151c617', e)}

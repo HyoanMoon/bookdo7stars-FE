@@ -6,7 +6,7 @@ import { pink } from '@mui/material/colors';
 import { useDispatch } from 'react-redux';
 import { favoriteActions } from '../../action/favoriteActions';
 
-const BookToCart = ({ favorite, selectedBook }) => {
+const BookToCart = ({ favorite, selectedBook, fullAddress, deliveryInfo }) => {
   const dispatch = useDispatch();
 
   const handleFavoriteClick = () => {

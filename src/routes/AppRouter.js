@@ -17,14 +17,13 @@ import SearchedBooksPage from '../page/SearchedBooksPage';
 import BooksGroupPage from '../components/BooksGroupPage/BooksGroupPage';
 import EditorPage from '../page/EditorPage';
 import OauthCallbackPage from '../page/OauthCallbackPage';
-// import SocialLoginCallback from '../utils/SocialLoginCallback';
 import BooksAllPage from '../components/BooksAllPage/BooksAllPage';
+import ContactPage from '../page/ContactPage';
 import MyPageOrderList from '../page/MyPageOrderList';
 import MyPageOrderClaimList from '../page/MyPageOrderClaimList';
 import MyPageOrderCancelList from '../page/MyPageOrderCancelList';
 import MyPageMyReview from '../page/MyPageMyReview';
 import MyPageWishList from '../page/MyPageWishList';
-
 const AppRouter = () => {
   return (
     <div style={{ height: '100%' }}>
@@ -42,7 +41,9 @@ const AppRouter = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/oauth/callback/:provider" element={<OauthCallbackPage />} />
-        {/* <Route path="/auth/socialLoginCallback" element={<SocialLoginCallback />} /> */}
+
+        {/* 연락 */}
+        <Route path="/contact" element={<ContactPage />} />
 
         {/* 장바구니, 결제, 마이페이지 */}
         <Route element={<PrivateRoute permissionLevel="customer" />}>
