@@ -6,10 +6,7 @@ import { commonUiActions } from './commonUiAction';
 const addToCart = (book, quantity) => async (dispatch) => {
   try {
     dispatch({ type: types.ADD_TO_CART_REQUEST });
-    console.log('[cartReducer의 addToCart의 레스폰스전]');
-
     const response = await api.post('/cart', { bookId: book._id, qty: quantity });
-    console.log('[cartReducer의 addToCart의 레스폰스]', response);
     if (response.status !== 200) throw new Error(response.error);
     dispatch({ type: types.ADD_TO_CART_SUCCESS, payload: response.data });
     dispatch(commonUiActions.showToastMessage(`${quantity}개의 책이 장바구니에 담겼습니다.`, 'success'));

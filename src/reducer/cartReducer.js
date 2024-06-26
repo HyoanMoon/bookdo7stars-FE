@@ -59,7 +59,6 @@ function cartReducer(state = initialState, action) {
       };
 
     case types.ADD_TO_CART_SUCCESS:
-      console.log('[ADD_TO_CART_SUCCESS]의 payload', payload);
       return { ...state, loading: false, cartList: [...cartList, payload.data] };
 
     case types.GET_CART_LIST_FAIL:

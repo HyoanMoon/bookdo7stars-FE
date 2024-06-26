@@ -10,7 +10,6 @@ const BookBasicInfo = ({ title, author, publisher, price }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('퀀티티 잘 들어 가지?', quantity);
     dispatch({ type: types.SET_QUANTITY, payload: quantity });
   }, [quantity, dispatch]);
 

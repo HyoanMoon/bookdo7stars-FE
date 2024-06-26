@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 
 const BookToCart = ({ favorite, selectedBook, fullAddress, deliveryInfo }) => {
   const dispatch = useDispatch();
-  const quantity = useSelector((state) => state.cart.quantity);
+  const { quantity } = useSelector((state) => state.cart);
 
   const handleAddToCart = () => {
     dispatch(cartActions.addToCart(selectedBook, quantity));
