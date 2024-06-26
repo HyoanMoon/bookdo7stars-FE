@@ -1,8 +1,10 @@
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Link, Tabs, Tab, Container, Grid } from '@mui/material';
 import React, { useState } from 'react';
 import MyPageCategory from '../components/MyPageCategory';
+import { useSelector } from 'react-redux';
 
 const MyShoppingPage = () => {
+  const { user } = useSelector((state) => state.user);
   const [tabIndex, setTabIndex] = useState(0);
   const recentOrderHistory = [{ _id: '12345', createdAt: '2024-06-23', orderNum: '123456', bookTitle: 'BookTitle', status: 'Delivered', none: '' }];
 
@@ -26,7 +28,7 @@ const MyShoppingPage = () => {
           </Typography>
         </Grid>
         <Grid container>
-          <Typography variant="subtitle1">userName님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
+          <Typography variant="subtitle1">{user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
         </Grid>
         <Grid container>
           {/* 마이페이지 좌측 카테고리 */}
@@ -38,7 +40,14 @@ const MyShoppingPage = () => {
           <Grid item md={9} pl={3}>
             {/* 최근 주문 내역 */}
             <Box mt={2}>
-              <Typography variant="h6">최근 주문 내역</Typography>
+              <Grid sx={{ display: 'flex' }}>
+                <Typography variant="h6">최근 주문 내역</Typography>
+                <Link ml={1} mt={1} href="/mypage/order-list" underline="hover" color="inherit">
+                  <Typography variant="subtitle2" color="primary">
+                    더보기
+                  </Typography>
+                </Link>
+              </Grid>
               <Table>
                 {/* 테이블 헤드 */}
                 <TableHead>
