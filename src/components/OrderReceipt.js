@@ -11,18 +11,32 @@ const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheck
   const grandTotal = finalTotalPrice + shippingFee;
 
   return (
-    <Paper elevation={3} sx={{ padding: '16px', width: '100%', maxWidth: '300px' }}>
-      <Typography variant="h6">Summary</Typography>
+    <Paper elevation={3} sx={{ padding: '16px', width: '100%', maxWidth: '600px', marginTop: '20px' }}>
+      <Typography variant="h6" align="center" sx={{ fontWeight: 'bold', marginBottom: '16px' }}>
+        Order Summary
+      </Typography>
+      <Divider />
       <Box mt={2}>
-        <Typography variant="body1">총 상품 금액: ₩{currencyFormat(finalTotalPrice)}</Typography>
-        <Divider sx={{ my: 1 }} />
-        <Typography variant="body1">배송비: ₩{currencyFormat(shippingFee)}</Typography>
-        <Divider sx={{ my: 1 }} />
-        <Typography variant="body1">적립금: ₩{currencyFormat(pointsEarned)}</Typography>
-        <Divider sx={{ my: 1 }} />
-        <Typography variant="h6" mt={2}>
-          Order Total: ₩{currencyFormat(grandTotal)}
-        </Typography>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+          <Typography variant="body1">총 상품 금액:</Typography>
+          <Typography variant="body1">₩{currencyFormat(finalTotalPrice)}</Typography>
+        </Box>
+        <Divider />
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+          <Typography variant="body1">배송비:</Typography>
+          <Typography variant="body1">₩{currencyFormat(shippingFee)}</Typography>
+        </Box>
+        <Divider />
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+          <Typography variant="body1">적립금:</Typography>
+          <Typography variant="body1">₩{currencyFormat(pointsEarned)}</Typography>
+        </Box>
+        <Divider />
+        <Box display="flex" justifyContent="space-between" alignItems="center" mt={2} mb={2}>
+          <Typography variant="h6">최종 결제 금액:</Typography>
+          <Typography variant="h6">₩{currencyFormat(grandTotal)}</Typography>
+        </Box>
+        <Divider />
         {location.pathname.includes('/cart') && cartList.length > 0 && (
           <Button
             variant="contained"
