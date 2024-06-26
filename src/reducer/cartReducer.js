@@ -9,6 +9,7 @@ const initialState = {
   cartItemCount: 0,
   totalPrice: 0,
   user: {},
+  quantity: 1,
 };
 
 function cartReducer(state = initialState, action) {
@@ -57,11 +58,17 @@ function cartReducer(state = initialState, action) {
         cartItemCount: payload,
       };
 
+    case types.ADD_TO_CART_SUCCESS:
+      return { ...state, loading: false, cartList: [...cartList, payload.data] };
+
     case types.GET_CART_LIST_FAIL:
     case types.DELETE_CART_ITEM_FAIL:
     case types.UPDATE_CART_ITEM_FAIL:
     case types.GET_CART_QTY_FAIL:
       return { ...state, loading: false, error: payload };
+
+    case types.SET_QUANTITY:
+      return { ...state, quantity: payload };
     default:
       return state;
   }
