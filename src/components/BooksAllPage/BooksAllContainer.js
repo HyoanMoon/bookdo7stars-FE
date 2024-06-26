@@ -67,11 +67,11 @@ const BooksAllContainer = ({ bookList, title }) => {
               key={book._id}
               item
               xs={12}
-              sm={6}
-              md={4}
-              lg={3}
+              sm={8}
+              md={6}
+              lg={4}
               sx={{ paddingY: '30px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <BookCard key={book._id} book={book} favorite={favorite.some((favorite) => favorite._id === book._id)} />
+              <BookCard key={book._id} book={book} />
             </Grid>
           ))}
         </Grid>

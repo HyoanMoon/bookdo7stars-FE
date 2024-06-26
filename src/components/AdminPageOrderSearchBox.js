@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Grid, Select, MenuItem, InputLabel } from '@mui/material';
-import { format, isValid } from 'date-fns';
-import { startOfDay, endOfDay } from 'date-fns';
+import { format, isValid, startOfDay, endOfDay } from 'date-fns';
 import DateFilter from './DateFilter';
 
 const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery, resetSearch }) => {

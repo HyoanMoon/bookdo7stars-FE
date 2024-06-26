@@ -8,6 +8,7 @@ import favoriteReducer from './favoriteReducer';
 import categoryReducer from './categoryReducer';
 import commonUiReducer from './commonUIReducer';
 import commentReducer from './commentReducer';
+import contactReducer from './contactReducer';
 
 const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ const store = configureStore({
     favorite: favoriteReducer,
     ui: commonUiReducer,
     category: categoryReducer,
+    contact: contactReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -27,7 +27,6 @@ const getCartList = () => async (dispatch) => {
   try {
     dispatch({ type: types.GET_CART_LIST_REQUEST });
     const response = await api.get('/cart');
-    console.log('response', response);
     if (response.status !== 200) throw new Error(response.error);
     dispatch({ type: types.GET_CART_LIST_SUCCESS, payload: response.data.data });
   } catch (error) {
