@@ -8,6 +8,7 @@ const createOrder = (payload) => async (dispatch) => {
     dispatch({ type: types.CREATE_ORDER_REQUEST });
     const response = await api.post('/order', payload);
     if (response.status !== 200) throw new Error(response.error);
+    console.log(response, 'responseeeeeeeeeeee');
     dispatch({ type: types.CREATE_ORDER_SUCCESS, payload: response.data.orderNum });
     dispatch(cartActions.getCartQty());
     navigate('/payment/success');
