@@ -7,12 +7,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { favoriteActions } from '../../action/favoriteActions';
 import { cartActions } from '../../action/cartActions';
 
-const BookToCart = ({ favorite, selectedBook, fullAddress, deliveryInfo }) => {
+const BookToCart = ({ favorite, selectedBook, fullAddress, deliveryInfo, deliveryAddress }) => {
   const dispatch = useDispatch();
   const { quantity } = useSelector((state) => state.cart);
 
   const handleAddToCart = () => {
-    dispatch(cartActions.addToCart(selectedBook, quantity));
+    dispatch(cartActions.addToCart(selectedBook, quantity, deliveryAddress)); // 배송 정보 추가
   };
 
   const handleFavoriteClick = () => {

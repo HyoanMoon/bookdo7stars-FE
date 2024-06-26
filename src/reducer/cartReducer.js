@@ -11,6 +11,7 @@ const initialState = {
   user: {},
   quantity: 1,
   addToCartDone: false,
+  deliveryAddress: '',
 };
 
 function cartReducer(state = initialState, action) {
@@ -70,6 +71,9 @@ function cartReducer(state = initialState, action) {
 
     case types.SET_QUANTITY:
       return { ...state, quantity: payload };
+
+    case types.SET_DELIVERY_ADDRESS:
+      return { ...state, deliveryAddress: payload };
     default:
       return state;
   }

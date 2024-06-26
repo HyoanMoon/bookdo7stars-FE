@@ -19,11 +19,13 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Divider,
 } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { currencyFormat, cc_expires_format } from '../utils/number';
 import { orderActions } from '../action/orderActions'; // 오더 생성 액션 추가
+import DeliveryEstimate from '../components/BookDetailPage/DeliveryEstimate';
 
 const PaymentPage = () => {
   const location = useLocation();
@@ -35,12 +37,14 @@ const PaymentPage = () => {
     discountRate: 0,
     grandTotal: 0,
   };
-  const { user, cartList } = useSelector((state) => state.cart); // 사용자 정보 추가
+  const { user, cartList, deliveryAddress } = useSelector((state) => state.cart); // 사용자 정보 추가
+  const { orderList } = useSelector((state) => state.order);
   const dispatch = useDispatch();
 
   useEffect(() => {
     console.log('user:', user);
-  }, [user]);
+    console.log('orderList', orderList);
+  }, [user, orderList]);
 
   const [shippingMethod, setShippingMethod] = useState('general');
   const [shippingInfo, setShippingInfo] = useState({
@@ -60,7 +64,7 @@ const PaymentPage = () => {
     cvc: '',
   });
 
-  const handleOrderSubmit = (e) => {
+  const handleOrderSubmit = async (e) => {
     e.preventDefault();
     const { name, zipCode, address1, address2, phone, email } = shippingInfo;
     const data = {
@@ -76,7 +80,18 @@ const PaymentPage = () => {
       }),
     };
 
-    dispatch(orderActions.createOrder(data, navigate));
+    try {
+      const response = await dispatch(orderActions.createOrder(data));
+      navigate('/payment/success', {
+        state: {
+          shippingInfo,
+          grandTotal,
+          paymentMethod,
+        },
+      });
+    } catch (error) {
+      console.error('Order creation failed:', error);
+    }
   };
 
   const handleShippingInfoChange = (e) => {
@@ -111,7 +126,6 @@ const PaymentPage = () => {
     navigate('/cart');
   }
 
-  // 주소찾기 버튼 클릭 시 실행될 함수
   const handlePostcode = () => {
     const script = document.createElement('script');
     script.src = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
@@ -129,12 +143,10 @@ const PaymentPage = () => {
     document.body.appendChild(script);
   };
 
-  // 배송방법 선택 시 실행될 함수
   const handleShippingMethodChange = (e) => {
     const { value } = e.target;
     setShippingMethod(value);
     if (value === 'general') {
-      // 일반택배가 선택되면 폼을 초기화
       setShippingInfo({
         name: '',
         zipCode: '',
@@ -156,6 +168,16 @@ const PaymentPage = () => {
       email: user.email,
     });
   };
+  const handleStoredAddress = () => {
+    setShippingInfo({
+      name: '',
+      zipCode: '',
+      address1: deliveryAddress,
+      address2: '',
+      phone: '',
+      email: '',
+    });
+  };
 
   return (
     <Container>
@@ -175,6 +197,7 @@ const PaymentPage = () => {
               <TableCell align="right">수량</TableCell>
               <TableCell align="right">할인금액</TableCell>
               <TableCell align="right">합계</TableCell>
+              <TableCell align="right">배송일</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -196,12 +219,53 @@ const PaymentPage = () => {
                   <TableCell align="right">{item.qty}</TableCell>
                   <TableCell align="right">₩ {currencyFormat(discountAmount)}</TableCell>
                   <TableCell align="right">₩ {currencyFormat(discountedPrice)}</TableCell>
+                  <TableCell align="right">
+                    <DeliveryEstimate address={deliveryAddress} />
+                  </TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Box mt={4}>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>배송일</TableCell>
+                <TableCell>배송 정보</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell component="th" scope="row">
+                  배송지
+                </TableCell>
+                <TableCell>
+                  <Box display="flex" flexDirection="column">
+                    <Typography variant="body2">{deliveryAddress}</Typography>
+                  </Box>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell component="th" scope="row">
+                  배송 정보
+                </TableCell>
+                <TableCell>
+                  <Box display="flex" flexDirection="column">
+                    <Typography variant="body2">
+                      {' '}
+                      <DeliveryEstimate address={deliveryAddress} />
+                    </Typography>
+                  </Box>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
 
       <Box display="flex" justifyContent="flex-end" mt={4}>
         <Typography variant="h6">최종 금액: ₩{currencyFormat(finalTotalPrice)}</Typography>
@@ -220,6 +284,7 @@ const PaymentPage = () => {
         <RadioGroup row value={shippingMethod} onChange={handleShippingMethodChange}>
           <FormControlLabel value="general" control={<Radio />} label="새로입력" />
           <FormControlLabel value="userInfo" control={<Radio />} label="회원 정보 동일" onClick={handleUseUserInfo} />
+          <FormControlLabel value="storedInfo" control={<Radio />} label="위 주소와 동일" onClick={handleStoredAddress} />
         </RadioGroup>
 
         <TextField fullWidth label="이름" name="name" value={shippingInfo.name} onChange={handleShippingInfoChange} margin="normal" />
