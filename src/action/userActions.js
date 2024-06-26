@@ -118,7 +118,6 @@ const adminUser = () => async (dispatch) => {
   try {
     dispatch({ type: types.GET_ADMIN_REQUEST });
     const response = await api.get('/user/admin');
-    console.log('response for admin', response);
     if (response.status !== 200) throw new Error(response.data.message);
     dispatch({ type: types.GET_ADMIN_SUCCESS, payload: response.data.users });
     dispatch(getAllUser());
@@ -132,7 +131,6 @@ const getAllUser = () => async (dispatch) => {
   try {
     dispatch({ type: types.GET_All_USERS_REQUEST });
     const response = await api.get('/user/all');
-    // console.log('response for user', response);
     if (response.status !== 200) throw new Error(response.data.message);
     dispatch({ type: types.GET_All_USERS_SUCCESS, payload: response.data.users });
   } catch (error) {
@@ -145,7 +143,6 @@ const updateUserLevel = (id, level) => async (dispatch) => {
     dispatch({ type: types.USER_LEVEL_EDIT_REQUEST });
 
     const response = await api.put(`/user/${id}`, { level }); // PUT 요청으로 변경
-    console.log('response for user', response);
 
     if (response.status !== 200) throw new Error(response.data.message);
 
@@ -159,10 +156,8 @@ const updateUserLevel = (id, level) => async (dispatch) => {
 const confirmPassword = (password, navigate) => async (dispatch) => {
   try {
     dispatch({ type: types.USER_CONFIRM_REQUEST });
-    const response = await api.post('user/confirmPassword', { password });
-    console.log('회원 정보-비밀번호 확인', response);
+    const response = await api.post('/user/confirmPassword', { password });
     dispatch({ type: types.USER_CONFIRM_SUCCESS });
-    console.log('Navigating to /my-info');
     navigate('/member/user-info');
   } catch (err) {
     dispatch({ type: types.USER_CONFIRM_FAIL, payload: err.error });
@@ -170,15 +165,16 @@ const confirmPassword = (password, navigate) => async (dispatch) => {
   }
 };
 
-// 회원 정보- 수정 요청
-const userInfoChange = (id) => async (dispatch) => {
+// 회원 정보 수정 요청
+const userInfoChange = (id, newUserInfo) => async (dispatch) => {
   try {
     dispatch({ type: types.USER_INFO_REQUEST });
-    const response = await api.post(`/user/myInfo/${id}`);
-    dispatch({ type: types.USER_CONFIRM_SUCCESS });
+    const response = await api.put(`/user/myInfo/${id}`, newUserInfo);
+    dispatch({ type: types.USER_INFO_SUCCESS });
     dispatch(commonUiActions.showToastMessage('회원 정보를 수정했습니다.', 'success'));
+    console.log('회원정보수정', response);
   } catch (err) {
-    dispatch({ type: types.USER_CONFIRM_FAIL, payload: err.error });
+    dispatch({ type: types.USER_INFO_FAIL, payload: err.error });
     dispatch(commonUiActions.showToastMessage(err.error, 'error'));
   }
 };

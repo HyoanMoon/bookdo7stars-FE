@@ -46,7 +46,8 @@ const Footer = () => {
                 Twitter
               </Link>
               <br />
-              <Link href="https://github.com/7CodeCrew" color="inherit" underline="none">
+              <Link href="/contact2" color="inherit" underline="none">
+                {' '}
                 Instagram
               </Link>
             </Typography>

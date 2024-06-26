@@ -23,7 +23,6 @@ const getCommentsByBook = (bookId) => async (dispatch) => {
       type: types.GET_COMMENT_LIST_SUCCESS,
       payload: response.data, // 서버에서 받은 댓글 데이터
     });
-    console.log('response->>>', response.data);
   } catch (error) {
     dispatch({ type: types.GET_COMMENT_LIST_FAIL, payload: error.message });
   }

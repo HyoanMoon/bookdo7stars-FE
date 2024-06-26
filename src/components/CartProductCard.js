@@ -5,7 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { currencyFormat } from '../utils/number';
 import { cartActions } from '../action/cartActions';
 
-const CartProductCard = ({ item, isSelected, onSelectItem, userLevel }) => {
+const CartProductCard = ({ item, isSelected, onSelectItem, userLevel, fullAddress = '' }) => {
   const dispatch = useDispatch();
 
   const handleQtyChange = (id, value) => {
@@ -16,7 +16,6 @@ const CartProductCard = ({ item, isSelected, onSelectItem, userLevel }) => {
     dispatch(cartActions.deleteCartItem(id, qty));
   };
 
-  // 레벨에 따른 할인 비율 정의
   const getDiscountRate = (level) => {
     switch (level) {
       case 'silver':
@@ -35,20 +34,31 @@ const CartProductCard = ({ item, isSelected, onSelectItem, userLevel }) => {
   const discountAmount = originalPrice * discountRate;
   const discountedPrice = originalPrice - discountAmount;
 
+  const regionsFast = ['서울', '경기', '인천', '부산'];
+  const regionsRegular = ['강원', '경북', '경남', '제주', '전남', '전북', '광주', '대구', '울산', '세종', '대전', '충남', '충북'];
+
+  let deliveryText = '';
+  let deliveryStyle = {};
+
+  if (regionsFast.some((region) => fullAddress.includes(region))) {
+    deliveryText = '하루 배송 - 24시까지 주문하면 내일 도착 예정';
+    deliveryStyle = { color: 'red' };
+  } else if (regionsRegular.some((region) => fullAddress.includes(region))) {
+    deliveryText = '일반 배송 - 오늘 출고 예정';
+  } else {
+    deliveryText = '배송 정보가 없습니다.';
+  }
+
   return (
     <Box display="flex" justifyContent="space-between" mb={3} alignItems="center">
-      <Checkbox
-        checked={isSelected} // 선택된 상태
-        onChange={() => onSelectItem(item._id)} // 선택 상태 변경 함수 호출
-        color="primary"
-      />
+      <Checkbox checked={isSelected} onChange={() => onSelectItem(item._id)} color="primary" />
       <Box display="flex" alignItems="center" width="25%">
         <img src={item.bookId.cover} width={60} alt={item.bookId.title} />
         <Box ml={2}>
           <Typography variant="body2">{item.bookId.title}</Typography>
           <Typography variant="body2" color="textSecondary">
             {item.bookId.stockStatus === '' ? '재고 있음' : item.bookId.stockStatus}
-          </Typography>{' '}
+          </Typography>
         </Box>
       </Box>
       <FormControl variant="outlined" size="small" style={{ width: '15%' }}>
@@ -66,6 +76,11 @@ const CartProductCard = ({ item, isSelected, onSelectItem, userLevel }) => {
         </Typography>
         <Typography variant="body2" color="primary">
           ₩ {currencyFormat(discountedPrice)} ({(discountRate * 100).toFixed(0)}% 할인)
+        </Typography>
+      </Box>
+      <Box display="flex" flexDirection="column" alignItems="center" width="15%">
+        <Typography variant="body2" style={deliveryStyle}>
+          {deliveryText}
         </Typography>
       </Box>
       <IconButton onClick={() => deleteCart(item._id, item.qty)} color="secondary" style={{ width: '5%' }}>

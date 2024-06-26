@@ -90,6 +90,16 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName }) => {
                 backgroundColor: 'primary.light',
               },
               cursor: 'pointer',
+              minWidth: '200px', // 기본 minWidth 설정
+              '@media (max-width: 600px)': {
+                minWidth: '150px', // 작은 화면에서 minWidth 조정
+                '& .MuiTypography-root': {
+                  fontSize: '0.8rem', // 작은 화면에서 글자 크기 조정
+                },
+                '& .MuiIconButton-root': {
+                  padding: '4px', // 작은 화면에서 IconButton 크기 조정
+                },
+              },
             }}>
             <ListItemText primary={category} />
             {hasSubCategories && (

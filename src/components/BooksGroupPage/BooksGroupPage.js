@@ -80,7 +80,7 @@ const BooksGroupPage = () => {
 
         {/* 오른쪽 칼럼 (2:10 비율) */}
         <Grid item xs={10}>
-          <Box>
+          <Box sx={{ marginLeft: { xs: 0, sm: 2 } }}>
             <BooksGroupContainer bookList={groupBooksByCategory} title={groupNameInKorean} />
           </Box>
         </Grid>

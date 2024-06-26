@@ -19,7 +19,6 @@ function commentReducer(state = initialState, action) {
         error: null,
       };
     case types.CREATE_COMMENT_SUCCESS:
-      console.log(action.payload);
       return {
         ...state,
         loading: false,

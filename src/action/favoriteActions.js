@@ -7,7 +7,6 @@ const getFavorite = () => async (dispatch) => {
   try {
     dispatch({ type: types.GET_FAVORITE_REQUEST });
     const response = await api.get('/favorite');
-    // console.log('get-찜한 도서', response.data);
     dispatch({ type: types.GET_FAVORITE_SUCCESS, payload: response.data });
   } catch (err) {
     dispatch({ type: types.GET_FAVORITE_FAIL, payload: err.error });
@@ -20,7 +19,6 @@ const addFavorite = (id) => async (dispatch) => {
   try {
     dispatch({ type: types.ADD_FAVORITE_REQUEST });
     const response = await api.put(`/favorite/${id}`);
-    console.log('put-찜한 도서', response.data);
     dispatch({ type: types.ADD_FAVORITE_SUCCESS, payload: response.data });
     dispatch(commonUiActions.showToastMessage('도서를 찜했습니다.', 'success'));
     dispatch(getFavorite());
@@ -35,7 +33,6 @@ const deleteFavorite = (id) => async (dispatch) => {
   try {
     dispatch({ type: types.DELETE_FAVORITE_REQUEST });
     const response = await api.delete(`/favorite/${id}`);
-    console.log('delete-찜한 도서', response.data);
     dispatch({ type: types.DELETE_FAVORITE_SUCCESS });
     dispatch(commonUiActions.showToastMessage('도서의 찜하기를 취소했습니다.', 'success'));
     dispatch(getFavorite());

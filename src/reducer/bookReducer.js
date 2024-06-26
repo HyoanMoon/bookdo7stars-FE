@@ -9,6 +9,7 @@ const initialState = {
   getBooksByCategoryError: null,
   getBooksByCategoryLoading: false,
   bookGroup: '',
+  otherBooksByAuthor: [],
   loading: true,
   error: '',
 };
@@ -54,7 +55,7 @@ function bookReducer(state = initialState, action) {
     case types.SET_BOOK_GROUP:
       return { bookGroup: payload };
     case types.GET_BOOK_DETAIL_SUCCESS:
-      return { ...state, getBooksLoading: false, selectedBook: payload.data };
+      return { ...state, getBooksLoading: false, selectedBook: payload.data.book, otherBooksByAuthor: payload.data.otherBooksByAuthor };
     case types.RESET_BOOK_BY_CATEGORY:
       return { ...state, categoryBooks: payload };
 
