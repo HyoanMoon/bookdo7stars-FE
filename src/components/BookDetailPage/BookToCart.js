@@ -5,9 +5,16 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { pink } from '@mui/material/colors';
 import { useDispatch } from 'react-redux';
 import { favoriteActions } from '../../action/favoriteActions';
+import { cartActions } from '../../action/cartActions';
+import { useSelector } from 'react-redux';
 
 const BookToCart = ({ favorite, selectedBook, fullAddress, deliveryInfo }) => {
   const dispatch = useDispatch();
+  const quantity = useSelector((state) => state.cart.quantity);
+
+  const handleAddToCart = () => {
+    dispatch(cartActions.addToCart(selectedBook, quantity));
+  };
 
   const handleFavoriteClick = () => {
     dispatch(favoriteActions.addFavorite(selectedBook._id));
@@ -18,7 +25,7 @@ const BookToCart = ({ favorite, selectedBook, fullAddress, deliveryInfo }) => {
 
   return (
     <Box display="flex" alignItems="center" gap={2}>
-      <Button variant="contained" color="primary" startIcon={<AddShoppingCartIcon />} sx={{ height: '60px', flexGrow: 1 }}>
+      <Button onClick={handleAddToCart} variant="contained" color="primary" startIcon={<AddShoppingCartIcon />} sx={{ height: '60px', flexGrow: 1 }}>
         ADD TO CART
       </Button>
       {favorite ? (

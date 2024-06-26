@@ -1,17 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography, Box, IconButton } from '@mui/material';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
-
+import { useDispatch } from 'react-redux';
+import * as types from '../../constants/cart.constants';
+// import { types } from './actionTypes';
 const BookBasicInfo = ({ title, author, publisher, price }) => {
   const [quantity, setQuantity] = useState(1);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log('퀀티티 잘 들어 가지?', quantity);
+    dispatch({ type: types.SET_QUANTITY, payload: quantity });
+  }, [quantity, dispatch]);
 
   const handleDecrease = () => {
     setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+    // dispatch({ type: types.SET_QUANTITY, quantity });
   };
 
   const handleIncrease = () => {
     setQuantity((prev) => prev + 1);
+    // dispatch({ type: types.SET_QUANTITY, quantity });
   };
 
   return (
