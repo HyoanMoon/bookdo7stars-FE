@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Typography,
@@ -20,14 +20,25 @@ import {
 } from '@mui/material';
 import MyPageCategory from '../components/MyPageCategory';
 import DateFilter from '../components/DateFilter';
+import { useDispatch, useSelector } from 'react-redux';
+import { orderActions } from '../action/orderActions';
 
 const MyPageOrderList = () => {
+  const dispatch = useDispatch();
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [selectedOption, setSelectedOption] = useState('orderAll');
   const [searchQuery, setSearchQuery] = useState({});
   const [recentChecked, setRecentChecked] = useState(false);
   const [oldChecked, setOldChecked] = useState(false);
+  const { user } = useSelector((state) => state.user);
+  const { myOrderList } = useSelector((state) => state.order);
+  console.log('myOrderList', myOrderList);
+  console.log('user', user);
+
+  useEffect(() => {
+    dispatch(orderActions.getMyOrder());
+  }, [dispatch]);
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -151,15 +162,15 @@ const MyPageOrderList = () => {
                   </TableHead>
                   {/* 테이블 바디 */}
                   <TableBody>
-                    {/* {recentOrderHistory?.map((item) => ( */}
-                    <TableRow>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                    </TableRow>
-                    {/* ))} */}
+                    {myOrderList?.map((item) => (
+                      <TableRow key={item._id}>
+                        <TableCell>{item.orderNum}</TableCell>
+                        <TableCell>{item.createdAt.slice(0, 10)}</TableCell>
+                        <TableCell>{item.items[0].bookId.title}</TableCell>
+                        <TableCell>{item.totalPrice}</TableCell>
+                        <TableCell>{item.status}</TableCell>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
               </Box>

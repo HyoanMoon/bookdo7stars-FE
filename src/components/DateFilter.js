@@ -11,24 +11,30 @@ const DateFilter = ({ startDate, setStartDate, endDate, setEndDate }) => {
     let start, end;
     switch (range) {
       case 'today':
-        start = new Date();
-        end = new Date();
+        start = new Date(today);
+        end = new Date(today);
         break;
       case 'week':
         start = subDays(today, 7);
-        end = new Date();
+        end = new Date(today);
         break;
       case 'month':
         start = subDays(today, 30);
-        end = new Date();
+        end = new Date(today);
         break;
       case '3months':
         start = subDays(today, 90);
-        end = new Date();
+        end = new Date(today);
         break;
       default:
         start = null;
         end = null;
+    }
+    if (start) {
+      start.setHours(0, 0, 0, 0);
+    }
+    if (end) {
+      end.setHours(23, 59, 59, 999);
     }
     setStartDate(start);
     setEndDate(end);

@@ -70,10 +70,7 @@ const AdminProductPage = () => {
   return (
     <Container>
       <Grid container>
-        <Grid item xs={1} md={1}>
-          상품 관리
-        </Grid>
-        <Grid item xs={11} md={11}>
+        <Grid item xs={12} md={12}>
           {/* 검색 박스 */}
           <AdminPageSearchBox
             searchQuery={searchQuery}

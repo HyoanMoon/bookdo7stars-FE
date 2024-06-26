@@ -22,23 +22,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ORDER_STATUS } from '../constants/order.constants';
 import { orderActions } from '../action/orderActions';
 import { currencyFormat } from '../utils/number';
-import { styled } from '@mui/material/styles';
-import { tableCellClasses } from '@mui/material/TableCell';
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const AdminPageOrderDialog = ({ open, orderList, handleClose, orderDialogTableHead }) => {
+const AdminPageOrderDialog = ({ open, handleClose, orderDialogTableHead }) => {
   const dispatch = useDispatch();
-  const selectedOrder = useSelector((state) => state.order.selectedOrder);
-  const [orderStatus, setOrderStatus] = useState(orderList?.status || '');
+  const { selectedOrder } = useSelector((state) => state.order);
+  const [orderStatus, setOrderStatus] = useState(selectedOrder?.status || '');
+
+  console.log('selectedOrder', selectedOrder);
 
   // 주문 진행 상태 변경 핸들러.
   const handleStatusChange = (event) => {
@@ -58,18 +48,12 @@ const AdminPageOrderDialog = ({ open, orderList, handleClose, orderDialogTableHe
 
       {/* 주문 정보 */}
       <DialogContent>
-        {/* <Typography>예약번호: {orderList?.orderNum}</Typography>
-        <Typography>주문날짜: {orderList?.createdAt}</Typography>
-        <Typography>주문날짜: {orderList?.createdAt.slice(0, 10)}</Typography>
-        <Typography>이메일: {orderList?.userID?.email}</Typography>
-        <Typography>주소: {orderList?.shipTo?.address + ' ' + orderList?.shipTo?.city}</Typography>
-        <Typography>연락처: {`${orderList?.contact?.firstName} ${orderList?.contact?.lastName} ${orderList?.contact?.contact}`}</Typography> */}
-        <Typography>예약번호: test</Typography>
-        <Typography>주문날짜: 2024-0623</Typography>
-        <Typography>이메일: test</Typography>
-        <Typography>주소: {'test' + ' ' + 'test'}</Typography>
-        <Typography>연락처: test 123</Typography>
-        <Typography>주문내역</Typography>
+        <Typography>예약번호: {selectedOrder?.orderNum}</Typography>
+        <Typography>주문날짜: {selectedOrder?.createdAt}</Typography>
+        <Typography>주문날짜: {selectedOrder?.createdAt?.slice(0, 10)}</Typography>
+        <Typography>이메일: {selectedOrder?.contact?.email}</Typography>
+        <Typography>주소: {selectedOrder?.shipTo?.address1 + ' ' + selectedOrder?.shipTo?.address2}</Typography>
+        <Typography>연락처: {`${selectedOrder?.contact?.name} ${selectedOrder?.contact?.phone}`}</Typography>
         <TableContainer>
           <Table>
             {/* 테이블 헤드 */}
@@ -83,22 +67,18 @@ const AdminPageOrderDialog = ({ open, orderList, handleClose, orderDialogTableHe
 
             {/* 테이블 바디 */}
             <TableBody>
-              {orderList?.map((order) => (
-                <TableRow key={order?._id}>
-                  <TableCell>{order?._id}</TableCell>
-                  {/* <TableCell>{order?.items?.bookID?.title}</TableCell>
-                  <TableCell>{currencyFormat(order?.items?.price)}</TableCell>
-                  <TableCell>{order?.items?.qty}</TableCell>
-                  <TableCell>{currencyFormat(order?.items?.price * order?.items?.qty)}</TableCell> */}
-                  <TableCell>도서명</TableCell>
-                  <TableCell>3000</TableCell>
-                  <TableCell>4</TableCell>
-                  <TableCell>12000</TableCell>
-                </TableRow>
-              ))}
+              {selectedOrder.items.length > 0 &&
+                selectedOrder.items.map((order) => (
+                  <TableRow key={order?._id}>
+                    <TableCell>{order?._id}</TableCell>
+                    <TableCell>{order?.bookId?.title}</TableCell>
+                    <TableCell>{currencyFormat(order?.price)}</TableCell>
+                    <TableCell>{order?.qty}</TableCell>
+                    <TableCell>{currencyFormat(order?.price * order?.qty)}</TableCell>
+                  </TableRow>
+                ))}
               <TableRow>
-                {/* <TableCell colSpan={4}>총계: {currencyFormat(orderList?.totalPrice)}</TableCell> */}
-                <TableCell colSpan={4}>총계: 12000</TableCell>
+                <TableCell colSpan={4}>총계: {currencyFormat(selectedOrder?.totalPrice)}</TableCell>
               </TableRow>
             </TableBody>
           </Table>

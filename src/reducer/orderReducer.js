@@ -4,7 +4,7 @@ const initialState = {
   error: '',
   orderList: [],
   myOrderList: [],
-  selectedOrder: '',
+  selectedOrder: null,
   fullAddress: '',
   deliveryInfo: '',
   orderNum: '',
@@ -21,7 +21,7 @@ function orderReducer(state = initialState, action) {
     case types.CREATE_ORDER_SUCCESS:
       return {
         ...state,
-        loading: true,
+        loading: false,
         orderNum: payload,
       };
     case types.SET_SELECTED_ORDER:

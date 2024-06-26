@@ -45,7 +45,8 @@ const getOrderList = (query) => async (dispatch) => {
 const updateOrder = (id, status) => async (dispatch) => {
   try {
     dispatch({ type: types.UPDATE_ORDER_REQUEST });
-    const response = await api.put(`/order${id}`, { status });
+    const response = await api.put(`/order/${id}`, { status });
+    console.log('status-response', response);
     dispatch({ type: types.UPDATE_ORDER_SUCCESS });
     dispatch(commonUiActions.showToastMessage('주문 상태를 수정했습니다.', 'success'));
     dispatch(getOrderList());
