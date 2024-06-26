@@ -36,11 +36,13 @@ const PaymentPage = () => {
     grandTotal: 0,
   };
   const { user, cartList } = useSelector((state) => state.cart); // 사용자 정보 추가
+  const { orderList } = useSelector((state) => state.order);
   const dispatch = useDispatch();
 
   useEffect(() => {
     console.log('user:', user);
-  }, [user]);
+    console.log('orderList', orderList);
+  }, [user, orderList]);
 
   const [shippingMethod, setShippingMethod] = useState('general');
   const [shippingInfo, setShippingInfo] = useState({
@@ -60,7 +62,7 @@ const PaymentPage = () => {
     cvc: '',
   });
 
-  const handleOrderSubmit = (e) => {
+  const handleOrderSubmit = async (e) => {
     e.preventDefault();
     const { name, zipCode, address1, address2, phone, email } = shippingInfo;
     const data = {
@@ -76,7 +78,18 @@ const PaymentPage = () => {
       }),
     };
 
-    dispatch(orderActions.createOrder(data, navigate));
+    try {
+      const response = await dispatch(orderActions.createOrder(data));
+      navigate('/payment/success', {
+        state: {
+          shippingInfo,
+          grandTotal,
+          paymentMethod,
+        },
+      });
+    } catch (error) {
+      console.error('Order creation failed:', error);
+    }
   };
 
   const handleShippingInfoChange = (e) => {
@@ -111,7 +124,6 @@ const PaymentPage = () => {
     navigate('/cart');
   }
 
-  // 주소찾기 버튼 클릭 시 실행될 함수
   const handlePostcode = () => {
     const script = document.createElement('script');
     script.src = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
@@ -129,12 +141,10 @@ const PaymentPage = () => {
     document.body.appendChild(script);
   };
 
-  // 배송방법 선택 시 실행될 함수
   const handleShippingMethodChange = (e) => {
     const { value } = e.target;
     setShippingMethod(value);
     if (value === 'general') {
-      // 일반택배가 선택되면 폼을 초기화
       setShippingInfo({
         name: '',
         zipCode: '',

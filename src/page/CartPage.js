@@ -13,7 +13,7 @@ import { currencyFormat } from '../utils/number';
 const CartPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { cartList, totalPrice, user } = useSelector((state) => state.cart);
+  const { cartList, user } = useSelector((state) => state.cart);
   const { fullAddress = '' } = useSelector((state) => state.order); // fullAddress 초기값 설정
   const [selectedItems, setSelectedItems] = useState([]); // 선택된 상품을 상태로 관리
 

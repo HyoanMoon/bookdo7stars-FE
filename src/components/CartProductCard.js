@@ -30,7 +30,8 @@ const CartProductCard = ({ item, isSelected, onSelectItem, userLevel, fullAddres
   };
 
   const discountRate = getDiscountRate(userLevel);
-  const originalPrice = item.bookId.priceSales * item.qty;
+  const book = item.bookId || {}; // item.bookId가 undefined일 경우 빈 객체 사용
+  const originalPrice = (book.priceSales || 0) * item.qty; // book.priceSales가 undefined일 경우 0 사용
   const discountAmount = originalPrice * discountRate;
   const discountedPrice = originalPrice - discountAmount;
 
@@ -53,11 +54,11 @@ const CartProductCard = ({ item, isSelected, onSelectItem, userLevel, fullAddres
     <Box display="flex" justifyContent="space-between" mb={3} alignItems="center">
       <Checkbox checked={isSelected} onChange={() => onSelectItem(item._id)} color="primary" />
       <Box display="flex" alignItems="center" width="25%">
-        <img src={item.bookId.cover} width={60} alt={item.bookId.title} />
+        <img src={book.cover} width={60} alt={book.title} />
         <Box ml={2}>
-          <Typography variant="body2">{item.bookId.title}</Typography>
+          <Typography variant="body2">{book.title || '제목 없음'}</Typography>
           <Typography variant="body2" color="textSecondary">
-            {item.bookId.stockStatus === '' ? '재고 있음' : item.bookId.stockStatus}
+            {book.stockStatus === '' ? '재고 있음' : book.stockStatus}
           </Typography>
         </Box>
       </Box>
