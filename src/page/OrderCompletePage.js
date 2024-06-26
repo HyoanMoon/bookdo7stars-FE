@@ -21,6 +21,12 @@ const OrderCompletePage = () => {
   const handleContinueShopping = () => {
     navigate('/');
   };
+  const getDepositDeadline = () => {
+    const now = new Date();
+    now.setHours(now.getHours() + 12);
+    const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+    return now.toLocaleString('ko-KR', options);
+  };
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4, mb: 4, border: '1px solid #ddd', borderRadius: '8px', padding: '16px' }}>
@@ -84,7 +90,14 @@ const OrderCompletePage = () => {
         <Typography variant="h6" gutterBottom>
           결제수단
         </Typography>
-        <Typography variant="body2">{paymentMethod}</Typography>
+        <Typography variant="body2">
+          {paymentMethod}
+          {paymentMethod === 'transfer' && (
+            <Typography variant="body2" color="error" ml={2}>
+              {getDepositDeadline()}까지 입금해주세요.
+            </Typography>
+          )}
+        </Typography>
       </Box>
     </Container>
   );

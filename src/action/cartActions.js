@@ -2,18 +2,26 @@ import api from '../utils/api';
 import * as types from '../constants/cart.constants';
 import { commonUiActions } from './commonUiAction';
 
+export const setDeliveryAddress = (address) => ({
+  type: types.SET_DELIVERY_ADDRESS,
+  payload: address,
+});
+
 // 장바구니 아이템 추가.
-const addToCart = (book, quantity) => async (dispatch) => {
+const addToCart = (book, quantity, deliveryAddress) => async (dispatch) => {
   try {
     dispatch({ type: types.ADD_TO_CART_REQUEST });
-    const response = await api.post('/cart', { bookId: book._id, qty: quantity });
+    const response = await api.post('/cart', { bookId: book._id, qty: quantity, deliveryAddress });
+    console.log(deliveryAddress, 'deliveryAddresssssssss??');
     if (response.status !== 200) throw new Error(response.error);
     dispatch({ type: types.ADD_TO_CART_SUCCESS, payload: response.data });
+    dispatch(setDeliveryAddress(deliveryAddress)); // 주소를 리듀서에 저장
     dispatch(commonUiActions.showToastMessage(`${quantity}개의 책이 장바구니에 담겼습니다.`, 'success'));
   } catch (error) {
     dispatch({ type: types.ADD_TO_CART_FAIL, payload: error.message });
   }
 };
+
 // 장바구니 아이템 조회.
 const getCartList = () => async (dispatch) => {
   try {

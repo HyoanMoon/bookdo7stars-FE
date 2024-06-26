@@ -25,3 +25,6 @@ export const GET_CART_QTY_FAIL = 'GET_CART_QTY_FAIL';
 
 //수량 저장.
 export const SET_QUANTITY = 'SET_QUANTITY';
+
+// 유저 배송 정보 주소 저장.
+export const SET_DELIVERY_ADDRESS = 'SET_DELIVERY_ADDRESS';
