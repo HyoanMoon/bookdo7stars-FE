@@ -297,10 +297,14 @@ const UserInfoPage = () => {
           </Box>
         </Grid>
         <Grid m={5}>
-          <Button variant="contained" color="secondary" onClick={handleInfoChange}>
-            회원정보 수정
+          <Button variant="contained" color="secondary" onClick={handleInfoChange} disabled={loading}>
+            {loading ? '회원 정보 수정 중...' : '회원정보 수정'}
           </Button>
         </Grid>
+
+        <Typography sx={{ mt: 1, textAlign: 'center' }} variant="body2">
+          Copyright © BOOKDO7STARS Corp. All Rights Reserved.
+        </Typography>
       </Container>
     </div>
   );

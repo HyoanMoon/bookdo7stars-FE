@@ -172,10 +172,20 @@ const userInfoChange = (id, newUserInfo) => async (dispatch) => {
     const response = await api.put(`/user/myInfo/${id}`, newUserInfo);
     dispatch({ type: types.USER_INFO_SUCCESS });
     dispatch(commonUiActions.showToastMessage('회원 정보를 수정했습니다.', 'success'));
-    console.log('회원정보수정', response);
   } catch (err) {
     dispatch({ type: types.USER_INFO_FAIL, payload: err.error });
     dispatch(commonUiActions.showToastMessage(err.error, 'error'));
+  }
+};
+
+// 회원 탈퇴
+const deleteUser = (id, password) => async (dispatch) => {
+  try {
+    dispatch({ type: types.USER_DELETE_REQUEST });
+    const response = await api.delete(`/user/${id}`, password);
+    dispatch({ type: types.USER_DELETE_SUCCESS });
+  } catch (err) {
+    dispatch({ type: types.USER_DELETE_FAIL, payload: err.error });
   }
 };
 
@@ -194,4 +204,5 @@ export const userActions = {
   updateUserLevel,
   confirmPassword,
   userInfoChange,
+  deleteUser,
 };
