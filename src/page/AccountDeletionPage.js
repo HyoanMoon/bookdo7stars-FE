@@ -24,7 +24,6 @@ const AccountDeletionPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
-  const { loading, error, success } = useSelector((state) => state.userDelete);
   const [password, setPassword] = useState('');
 
   const handleGoToLogout = () => {
@@ -36,12 +35,8 @@ const AccountDeletionPage = () => {
   };
 
   const handleDeleteAccount = () => {
-    dispatch(userActions.deleteUser(user._id, password));
+    dispatch(userActions.deleteUser(user._id, password, navigate));
   };
-
-  useEffect(() => {
-    if (success) navigate('/');
-  }, [success, navigate]);
 
   return (
     <div style={{ backgroundColor: '#f8f9fa', minHeight: '100vh', marginTop: '10px' }}>
@@ -218,10 +213,9 @@ const AccountDeletionPage = () => {
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                 />
-                <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }} onClick={handleDeleteAccount} disabled={loading}>
-                  {loading ? '탈퇴 중...' : '회원탈퇴'}
+                <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }} onClick={handleDeleteAccount}>
+                  회원탈퇴
                 </Button>
-                {error && <Typography color="error">{error}</Typography>}
               </Box>
             </Container>
           </Box>

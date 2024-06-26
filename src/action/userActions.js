@@ -179,13 +179,17 @@ const userInfoChange = (id, newUserInfo) => async (dispatch) => {
 };
 
 // 회원 탈퇴
-const deleteUser = (id, password) => async (dispatch) => {
+const deleteUser = (id, password, navigate) => async (dispatch) => {
   try {
     dispatch({ type: types.USER_DELETE_REQUEST });
-    const response = await api.delete(`/user/${id}`, password);
+    const response = await api.post(`/user/delete/${id}`, { password });
     dispatch({ type: types.USER_DELETE_SUCCESS });
+    dispatch(logout());
+    navigate('/');
+    dispatch(commonUiActions.showToastMessage('회원 탈퇴를 완료했습니다.', 'success'));
   } catch (err) {
     dispatch({ type: types.USER_DELETE_FAIL, payload: err.error });
+    dispatch(commonUiActions.showToastMessage(err.error, 'error'));
   }
 };
 

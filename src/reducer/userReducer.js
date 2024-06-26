@@ -22,6 +22,7 @@ function userReducer(state = initialState, action) {
     case types.USER_LEVEL_EDIT_REQUEST:
     case types.USER_CONFIRM_REQUEST:
     case types.USER_INFO_REQUEST:
+    case types.USER_DELETE_REQUEST:
       return { ...state, loading: true };
 
     case types.USER_LOGIN_SUCCESS:
@@ -34,6 +35,7 @@ function userReducer(state = initialState, action) {
       return { ...state, loading: false, user: payload, error: '' };
     case types.USER_CONFIRM_SUCCESS:
     case types.USER_INFO_SUCCESS:
+    case types.USER_DELETE_SUCCESS:
       return { ...state, loading: false, error: '' };
 
     case types.USER_LOGIN_FAIL:
@@ -46,6 +48,7 @@ function userReducer(state = initialState, action) {
     case types.USER_LEVEL_EDIT_FAIL:
     case types.USER_CONFIRM_FAIL:
     case types.USER_INFO_FAIL:
+    case types.USER_DELETE_FAIL:
       return { ...state, loading: false, error: payload };
 
     case types.USER_LOGOUT:
