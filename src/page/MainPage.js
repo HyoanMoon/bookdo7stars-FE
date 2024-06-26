@@ -54,11 +54,11 @@ const MainPage = () => {
             margin: 'auto', // 화면 너비가 1000px 이상일 때 적용
           },
           '@media (min-width: 1200px)': {
-            maxWidth: '1400px',
+            maxWidth: '1600px',
             margin: 'auto', // 화면 너비가 1200px 이상일 때 적용
           },
           '@media (min-width: 1400px)': {
-            maxWidth: '1600px', // 화면 너비가 1200px 이상일 때 적용
+            maxWidth: '1800px', // 화면 너비가 1200px 이상일 때 적용
           },
           display: 'flex',
           justifyContent: 'center',
