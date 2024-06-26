@@ -9,6 +9,7 @@ const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
   const [policy, setPolicy] = useState(false);
@@ -59,6 +60,11 @@ const RegisterPage = () => {
     }
 
     if (password !== confirmPassword) {
+      setPasswordError(true);
+      return;
+    }
+
+    if (!password || !confirmPassword) {
       setPasswordError(true);
       return;
     }

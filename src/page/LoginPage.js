@@ -36,13 +36,12 @@ const LoginPage = () => {
     if (password === '') {
       setPasswordError(true);
     }
-
+    const payload = { email, password };
     if (emailError || passwordError) {
       return;
+    } else {
+      dispatch(userActions.loginWithEmail(payload));
     }
-
-    const payload = { email, password };
-    dispatch(userActions.loginWithEmail(payload));
   };
 
   const handleGoogleLogin = useGoogleLogin({

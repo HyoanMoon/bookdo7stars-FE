@@ -80,10 +80,12 @@ const registerUser =
       dispatch({ type: types.REGISTER_USER_REQUEST });
       const response = await api.post('/user', { email, userName, password, role, level, address, phone });
       dispatch({ type: types.REGISTER_USER_SUCCESS, payload: response.data });
-      dispatch(commonUiActions.showToastMessage('Registration completed successfully.', 'success'));
+      dispatch(commonUiActions.showToastMessage('정상적으로 회원가입이 완료되었습니다.', 'success'));
       navigate('/login');
     } catch (error) {
+      console.log('error=>', error);
       dispatch({ type: types.REGISTER_USER_FAIL, payload: error.message });
+      dispatch(commonUiActions.showToastMessage(error.error, 'error'));
     }
   };
 
