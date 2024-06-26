@@ -3,10 +3,9 @@ import { Button, Box } from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { pink } from '@mui/material/colors';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { favoriteActions } from '../../action/favoriteActions';
 import { cartActions } from '../../action/cartActions';
-import { useSelector } from 'react-redux';
 
 const BookToCart = ({ favorite, selectedBook, fullAddress, deliveryInfo }) => {
   const dispatch = useDispatch();

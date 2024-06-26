@@ -1,10 +1,20 @@
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Link, Tabs, Tab, Container, Grid } from '@mui/material';
-import React, { useState } from 'react';
+import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Link, Tabs, Tab, Container, Grid, TableContainer, Paper } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import MyPageCategory from '../components/MyPageCategory';
+import { useDispatch, useSelector } from 'react-redux';
+import { contactActions } from '../action/contactActions';
+import InquiryTable from '../components/InquiryTable';
 
 const MyShoppingPage = () => {
   const [tabIndex, setTabIndex] = useState(0);
   const recentOrderHistory = [{ _id: '12345', createdAt: '2024-06-23', orderNum: '123456', bookTitle: 'BookTitle', status: 'Delivered', none: '' }];
+  const { userContacts } = useSelector((state) => state.contact);
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(contactActions.getContactsByUser());
+  }, []);
 
   return (
     <Container>
@@ -26,7 +36,7 @@ const MyShoppingPage = () => {
           </Typography>
         </Grid>
         <Grid container>
-          <Typography variant="subtitle1">userName님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
+          <Typography variant="subtitle1">{user.userName} 님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
         </Grid>
         <Grid container>
           {/* 마이페이지 좌측 카테고리 */}
@@ -73,9 +83,15 @@ const MyShoppingPage = () => {
               <Typography variant="h6" mt={5} borderBottom={1} borderColor="grey.400">
                 나의 1:1 문의
               </Typography>
-              <Typography mt={1} variant="subtitle1">
-                등록하신 1:1이 없습니다.
-              </Typography>
+              {userContacts.length === 0 ? (
+                <Typography mt={1} variant="subtitle1">
+                  문의 사항이 없습니다.
+                </Typography>
+              ) : (
+                <Box my={4}>
+                  <InquiryTable inquiries={userContacts} />
+                </Box>
+              )}
             </Box>
 
             {/* 위시리스트/ 나의 리뷰 */}

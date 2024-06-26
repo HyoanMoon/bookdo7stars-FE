@@ -83,7 +83,6 @@ const registerUser =
       dispatch(commonUiActions.showToastMessage('정상적으로 회원가입이 완료되었습니다.', 'success'));
       navigate('/login');
     } catch (error) {
-      console.log('error=>', error);
       dispatch({ type: types.REGISTER_USER_FAIL, payload: error.message });
       dispatch(commonUiActions.showToastMessage(error.error, 'error'));
     }

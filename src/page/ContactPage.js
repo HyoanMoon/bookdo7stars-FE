@@ -1,12 +1,10 @@
-// src/page/ContactPage.js
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Paper, Grid, Box } from '@mui/material';
-
 import QnaTop10 from '../components/ContactPage/QnaTop10';
 import InquiryForm from '../components/ContactPage/InquiryForm';
 import Notice from '../components/ContactPage/Notice';
-import PopUp from '../components/ContactPage/PopUp'; // Updated import
+import PopUp from '../components/ContactPage/PopUp';
 import CircularButton from '../components/ContactPage/CircularButton';
 import Sidebar from '../components/ContactPage/Sidebar';
 import ServicesSection from '../components/ContactPage/ServiceSection';

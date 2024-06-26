@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, TextField, Typography, MenuItem, FormControlLabel, Checkbox, FormGroup } from '@mui/material';
-import CloudImageUpload from '../../utils/CloudImageUpload';
 import { useDispatch } from 'react-redux';
-// import { contactActions } from '../action/contactActions';
-
-// const initialFormData = {''}
+import { contactActions } from '../../action/contactActions';
+import CloudImageUploadInquiry from '../../utils/CloudIImageUploadInquiry';
 
 const InquiryForm = () => {
   const dispatch = useDispatch();
@@ -18,10 +16,10 @@ const InquiryForm = () => {
   });
 
   const [privacyAgreementError, setPrivacyAgreementError] = useState(false);
+  // const [imagePreview, setImagePreview] = useState('');
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    console.log('name=>', name, value, type, checked);
 
     setForm((prevForm) => ({
       ...prevForm,
@@ -31,7 +29,7 @@ const InquiryForm = () => {
 
   const handleImageUpload = (newUrl) => {
     setForm((prevForm) => ({ ...prevForm, image: newUrl }));
-    setImagePreview(newUrl ? newUrl : form.image);
+    // setImagePreview(newUrl ? newUrl : form.image);
   };
 
   const handleSubmit = (e) => {
@@ -39,8 +37,7 @@ const InquiryForm = () => {
     if (!form.privacyAgreement) {
       return setPrivacyAgreementError(true);
     }
-    console.log('Form submitted:', form);
-    dispatch(contactAction.createContact(form));
+    dispatch(contactActions.createContact(form));
     setPrivacyAgreementError(false);
     setForm({
       inquiryType: '',
@@ -51,6 +48,16 @@ const InquiryForm = () => {
       privacyAgreement: false,
     });
   };
+
+  useEffect(() => {
+    if (form.image === '') {
+      // 이미지 초기화 코드
+      const imageElement = document.getElementById('uploaded-image');
+      if (imageElement) {
+        imageElement.src = ''; // 이미지 src를 비웁니다.
+      }
+    }
+  }, [form.image]);
 
   return (
     <Box component="form" sx={{ mt: 3 }} onSubmit={handleSubmit}>
@@ -69,14 +76,10 @@ const InquiryForm = () => {
       </Box>
       <Box sx={{ mt: 2 }}>
         <Typography variant="body1">파일첨부</Typography>
-        {/* {imagePreview && (
-          <img
-            src={imagePreview}
-            alt="cover preview"
-            style={{ width: '30%', height: 'auto', marginTop: '20px' }}
-          />
-        )} */}
-        <CloudImageUpload onUpload={handleImageUpload} />
+        {form.image && (
+          <img id="uploaded-image" width="500" src={form.image} alt="Uploaded Image" style={{ width: '100%', height: 'auto', marginTop: '20px' }} />
+        )}
+        <CloudImageUploadInquiry onUpload={handleImageUpload} />
       </Box>
       <Box sx={{ mt: 2 }}>
         <Typography variant="body1">답변메일</Typography>

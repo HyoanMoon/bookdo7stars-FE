@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Grid, Link } from '@mui/material';
-import { useNavigate } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
-import { userActions } from '../action/userActions';
+import React, { useState } from 'react';
 import {
+  Box,
+  Grid,
+  Link,
   Container,
   Typography,
   Table,
@@ -19,6 +18,9 @@ import {
   Button,
   Paper,
 } from '@mui/material';
+import { useNavigate } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { userActions } from '../action/userActions';
 
 const AccountDeletionPage = () => {
   const navigate = useNavigate();
