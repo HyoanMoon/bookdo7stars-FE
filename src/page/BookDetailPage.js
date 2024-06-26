@@ -52,6 +52,7 @@ const BookDetailPage = () => {
               selectedBook={selectedBook}
               fullAddress={fullAddress}
               deliveryInfo={deliveryInfo}
+              deliveryAddress={address} // 전달할 주소 추가
             />
             <Grid item mt={4}>
               {/* <BookDetailInfo pubDate={selectedBook.pubDate} isbn={selectedBook.isbn} /> */}

@@ -3,17 +3,16 @@ import { Button, Box } from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { pink } from '@mui/material/colors';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { favoriteActions } from '../../action/favoriteActions';
 import { cartActions } from '../../action/cartActions';
-import { useSelector } from 'react-redux';
 
-const BookToCart = ({ favorite, selectedBook, fullAddress, deliveryInfo }) => {
+const BookToCart = ({ favorite, selectedBook, fullAddress, deliveryInfo, deliveryAddress }) => {
   const dispatch = useDispatch();
   const { quantity } = useSelector((state) => state.cart);
 
   const handleAddToCart = () => {
-    dispatch(cartActions.addToCart(selectedBook, quantity));
+    dispatch(cartActions.addToCart(selectedBook, quantity, deliveryAddress)); // 배송 정보 추가
   };
 
   const handleFavoriteClick = () => {
