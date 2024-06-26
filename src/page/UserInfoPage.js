@@ -80,7 +80,7 @@ const UserInfoPage = () => {
 
   const handleInfoChange = () => {
     if (openSensitive === false) {
-      alert('[숨은 정보 해제] 버튼을 누르시면 * 표시로 가려져 보이는 정보를 확인 및 수정하실 수 있습니다.');
+      return alert('[숨은 정보 해제] 버튼을 누르시면 * 표시로 가려져 보이는 정보를 확인 및 회원정보 수정을 하실 수 있습니다.');
     }
     dispatch(userActions.userInfoChange(user._id, userInfo));
   };
@@ -121,7 +121,7 @@ const UserInfoPage = () => {
         return value.replace(/.(?=.{1,}$)/g, '*'); // 첫 글자를 제외한 모든 문자를 '*'로 처리
       } else {
         // 문자열 길이가 5 이상인 경우 첫 1글자 + 마지막 2글자를 제외하고 나머지를 '*'로 처리
-        const visiblePart = value.slice(0, 4) + '*'.repeat(value.length - 7);
+        const visiblePart = value.slice(0, 2) + '*'.repeat(value.length - 7);
         return visiblePart + value.slice(-2);
       }
     }
@@ -253,7 +253,13 @@ const UserInfoPage = () => {
                           </Button>
                         </Grid>
                         <Grid item xs={12} sx={{ marginTop: '10px' }}>
-                          <TextField fullWidth label="주소" name="address1" value={userInfo.address1} onChange={handleUserInfoChange} />
+                          <TextField
+                            fullWidth
+                            label="주소"
+                            name="address1"
+                            value={userInfo.address1 === '' ? user?.address : userInfo.address1}
+                            onChange={handleUserInfoChange}
+                          />
                         </Grid>
                         <Grid item xs={12} sx={{ marginTop: '10px' }}>
                           <TextField fullWidth label="상세 주소" name="address2" value={userInfo.address2} onChange={handleUserInfoChange} />
