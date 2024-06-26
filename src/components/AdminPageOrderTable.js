@@ -35,6 +35,8 @@ const AdminPageOrderTable = ({ orderTableHead, orderList, handleOpenOrderDialog 
     setPage(0);
   };
 
+  console.log('orderList', orderList);
+
   return (
     <>
       {/* 상품 테이블 */}
@@ -57,14 +59,18 @@ const AdminPageOrderTable = ({ orderTableHead, orderList, handleOpenOrderDialog 
                 <StyledTableRow key={order?._id} onClick={() => handleOpenOrderDialog(order)}>
                   <StyledTableCell>{index + 1}</StyledTableCell>
                   <StyledTableCell>{order?.orderNum}</StyledTableCell>
-                  <StyledTableCell>{order?.createdAt}</StyledTableCell>
-                  <StyledTableCell>{order?.userID?.email}</StyledTableCell>
-                  {/* <StyledTableCell>{order?.items?.BookID?.title}</StyledTableCell>
-                  <StyledTableCell>{order?.shipTo?.address}</StyledTableCell>
-                  <StyledTableCell>{order?.totalPrice}</StyledTableCell> */}
-                  <StyledTableCell>test</StyledTableCell>
-                  <StyledTableCell>test</StyledTableCell>
-                  <StyledTableCell>12000</StyledTableCell>
+                  <StyledTableCell>{order?.createdAt.slice(0, 10)}</StyledTableCell>
+                  <StyledTableCell>{order?.contact?.name}</StyledTableCell>
+                  {order.items.length > 0 ? (
+                    <StyledTableCell>
+                      {order.items[0]?.bookId.title}
+                      {order.items.length > 1 && `외 ${order.items.length - 1}개`}
+                    </StyledTableCell>
+                  ) : (
+                    <StyledTableCell></StyledTableCell>
+                  )}
+                  <StyledTableCell>{order?.shipTo?.address1}</StyledTableCell>
+                  <StyledTableCell>{order?.totalPrice}</StyledTableCell>
                   <StyledTableCell>{order?.status}</StyledTableCell>
                 </StyledTableRow>
               ))

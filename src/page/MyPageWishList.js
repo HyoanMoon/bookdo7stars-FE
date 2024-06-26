@@ -35,7 +35,7 @@ const MyPageWishList = () => {
           </Typography>
         </Grid>
         <Grid container>
-          <Typography variant="subtitle1">userName님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
+          <Typography variant="subtitle1">{user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
         </Grid>
 
         <Grid container>

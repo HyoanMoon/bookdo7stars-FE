@@ -2,8 +2,10 @@ import React from 'react';
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Link, Container, Grid, Button } from '@mui/material';
 import MyPageCategory from '../components/MyPageCategory';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const MyPageOrderClaimList = () => {
+  const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const handleClaim = () => {
     navigate('');
@@ -29,7 +31,7 @@ const MyPageOrderClaimList = () => {
           </Typography>
         </Grid>
         <Grid container>
-          <Typography variant="subtitle1">userName님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
+          <Typography variant="subtitle1">{user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
         </Grid>
 
         <Grid container>
