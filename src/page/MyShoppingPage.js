@@ -36,7 +36,7 @@ const MyShoppingPage = () => {
           </Typography>
         </Grid>
         <Grid container>
-          <Typography variant="subtitle1">{user.userName} 님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
+          <Typography variant="subtitle1">{user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
         </Grid>
         <Grid container>
           {/* 마이페이지 좌측 카테고리 */}
@@ -48,7 +48,14 @@ const MyShoppingPage = () => {
           <Grid item md={9} pl={3}>
             {/* 최근 주문 내역 */}
             <Box mt={2}>
-              <Typography variant="h6">최근 주문 내역</Typography>
+              <Grid sx={{ display: 'flex' }}>
+                <Typography variant="h6">최근 주문 내역</Typography>
+                <Link ml={1} mt={1} href="/mypage/order-list" underline="hover" color="inherit">
+                  <Typography variant="subtitle2" color="primary">
+                    더보기
+                  </Typography>
+                </Link>
+              </Grid>
               <Table>
                 {/* 테이블 헤드 */}
                 <TableHead>

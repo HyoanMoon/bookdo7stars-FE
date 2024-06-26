@@ -1,7 +1,7 @@
-// AdminPageOrderSearchBox.js
 import React, { useState } from 'react';
 import { Box, TextField, Button, Grid, Select, MenuItem, InputLabel } from '@mui/material';
 import { format, isValid } from 'date-fns';
+import { startOfDay, endOfDay } from 'date-fns';
 import DateFilter from './DateFilter';
 
 const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery, resetSearch }) => {
@@ -12,7 +12,14 @@ const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery, resetSearch }) =
   const handleSearch = (event) => {
     event.preventDefault();
     if (startDate && endDate && isValid(new Date(startDate)) && isValid(new Date(endDate))) {
-      setSearchQuery({ ...searchQuery, startDate: format(new Date(startDate), 'yyyy-MM-dd'), endDate: format(new Date(endDate), 'yyyy-MM-dd') });
+      const formattedStartDate = startOfDay(new Date(startDate));
+      const formattedEndDate = endOfDay(new Date(endDate));
+
+      setSearchQuery({
+        ...searchQuery,
+        startDate: format(formattedStartDate, 'yyyy-MM-dd HH:mm:ss'),
+        endDate: format(formattedEndDate, 'yyyy-MM-dd HH:mm:ss'),
+      });
     } else {
       setSearchQuery({ ...searchQuery, startDate: null, endDate: null });
     }
@@ -35,12 +42,13 @@ const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery, resetSearch }) =
               }}
               fullWidth>
               <MenuItem value="orderNum">주문 번호</MenuItem>
-              <MenuItem value="userEmail">구매자</MenuItem>
+              <MenuItem value="userName">구매자</MenuItem>
             </Select>
           </Grid>
           <Grid item xs={12} sm={2}>
             <TextField
-              label={selectedOption}
+              // label={selectedOption}
+              label={selectedOption === 'orderNum' ? '주문 번호' : '구매자'}
               variant="outlined"
               fullWidth
               value={searchQuery[selectedOption] || ''}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Typography,
@@ -19,30 +19,66 @@ import {
   Checkbox,
 } from '@mui/material';
 import MyPageCategory from '../components/MyPageCategory';
+import { format, isValid } from 'date-fns';
+import { startOfDay, endOfDay } from 'date-fns';
 import DateFilter from '../components/DateFilter';
+import { useDispatch, useSelector } from 'react-redux';
+import { orderActions } from '../action/orderActions';
 
 const MyPageOrderList = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+  const { myOrderList } = useSelector((state) => state.order);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [selectedOption, setSelectedOption] = useState('orderAll');
+
   const [searchQuery, setSearchQuery] = useState({});
+
   const [recentChecked, setRecentChecked] = useState(false);
   const [oldChecked, setOldChecked] = useState(false);
+  const [sortOrder, setSortOrder] = useState('recent');
+
+  console.log('myOrderList', myOrderList);
+  console.log('user', user);
+
+  useEffect(() => {
+    dispatch(orderActions.getMyOrder());
+  }, [dispatch]);
 
   const handleSearch = (event) => {
     event.preventDefault();
-    // 나중에 기능 넣기~~
+    if (startDate && endDate && isValid(new Date(startDate)) && isValid(new Date(endDate))) {
+      const formattedStartDate = startOfDay(new Date(startDate));
+      const formattedEndDate = endOfDay(new Date(endDate));
+
+      setSearchQuery({
+        ...searchQuery,
+        startDate: format(formattedStartDate, 'yyyy-MM-dd HH:mm:ss'),
+        endDate: format(formattedEndDate, 'yyyy-MM-dd HH:mm:ss'),
+      });
+    } else {
+      setSearchQuery({ ...searchQuery, startDate: null, endDate: null });
+    }
   };
 
   const handleRecentChange = (event) => {
     setRecentChecked(event.target.checked);
-    // 최근순 ~~
+    setOldChecked(!event.target.value);
+    setSortOrder('recent');
   };
-
   const handleOldChange = (event) => {
     setOldChecked(event.target.checked);
-    // 오래된순~~
+    setRecentChecked(!event.target.value);
+    setSortOrder('old');
   };
+  const sortedMyOrderList = [...myOrderList].sort((a, b) => {
+    if (sortOrder === 'recent') {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    } else {
+      return new Date(a.createdAt) - new Date(b.createdAt);
+    }
+  });
 
   return (
     <Container>
@@ -64,7 +100,7 @@ const MyPageOrderList = () => {
           </Typography>
         </Grid>
         <Grid container>
-          <Typography variant="subtitle1">userName님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
+          <Typography variant="subtitle1">{user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
         </Grid>
 
         <Grid container>
@@ -125,7 +161,6 @@ const MyPageOrderList = () => {
               </Typography>
 
               {/* 정렬기준 */}
-              {/* 데이터 바인딩 해보고 기준 하나 삭제하기 */}
               <FormGroup style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
                 <FormControlLabel
                   control={<Checkbox checked={recentChecked} onChange={handleRecentChange} />}
@@ -151,15 +186,17 @@ const MyPageOrderList = () => {
                   </TableHead>
                   {/* 테이블 바디 */}
                   <TableBody>
-                    {/* {recentOrderHistory?.map((item) => ( */}
-                    <TableRow>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                    </TableRow>
-                    {/* ))} */}
+                    {sortedMyOrderList?.length > 0 &&
+                      sortedMyOrderList?.map((item, index) => (
+                        <TableRow key={item._id}>
+                          <TableCell>{item.orderNum}</TableCell>
+                          <TableCell>{item.createdAt.slice(0, 10)}</TableCell>
+                          {/* <TableCell>{item.items.map((book) => book.bookId.title).join('.')}</TableCell> */}
+                          <TableCell>{item.items[0].bookId.title}</TableCell>
+                          <TableCell>{item.totalPrice}</TableCell>
+                          <TableCell>{item.status}</TableCell>
+                        </TableRow>
+                      ))}
                   </TableBody>
                 </Table>
               </Box>

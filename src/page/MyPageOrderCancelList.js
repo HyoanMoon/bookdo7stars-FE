@@ -16,8 +16,10 @@ import {
   Checkbox,
 } from '@mui/material';
 import MyPageCategory from '../components/MyPageCategory';
+import { useSelector } from 'react-redux';
 
 const MyPageOrderCancelList = () => {
+  const { user } = useSelector((state) => state.user);
   const [recentChecked, setRecentChecked] = useState(false);
   const [oldChecked, setOldChecked] = useState(false);
 
@@ -51,7 +53,7 @@ const MyPageOrderCancelList = () => {
           </Typography>
         </Grid>
         <Grid container>
-          <Typography variant="subtitle1">userName님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
+          <Typography variant="subtitle1">{user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
         </Grid>
 
         <Grid container>
