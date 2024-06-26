@@ -54,7 +54,6 @@ function cartReducer(state = initialState, action) {
         totalPrice: payload.items.reduce((total, item) => total + item.bookId.priceSales * item.qty, 0),
       };
     case types.GET_CART_QTY_SUCCESS:
-      console.log('거지같은', payload);
       return {
         ...state,
         cartItemCount: payload,
