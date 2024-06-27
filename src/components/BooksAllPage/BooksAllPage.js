@@ -1,22 +1,57 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Container } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import BooksAllContainer from './BooksAllContainer';
+import FilterBar from './FilterBar';
 
 const BooksAllPage = () => {
   const { bookList } = useSelector((state) => state.book);
+  const [filteredBooks, setFilteredBooks] = useState(bookList); // 필터된 책 목록
+  const [isFilterApplied, setIsFilterApplied] = useState(false); // 필터가 적용되었는지 여부
+
+  useEffect(() => {
+    setFilteredBooks(bookList);
+  }, [bookList]);
 
   if (!bookList) {
-    return;
+    return null; // 데이터가 로드되지 않았을 경우 예외 처리
   }
+
+  // 필터 적용 함수
+  const handleFilterChange = ({ priceRange, sortOrder }) => {
+    let filtered = bookList.filter((book) => {
+      const isPriceInRange = book.priceStandard >= priceRange[0] && book.priceStandard <= priceRange[1];
+      return isPriceInRange;
+    });
+
+    if (sortOrder) {
+      filtered = filtered.sort((a, b) => {
+        if (sortOrder === 'asc') {
+          return new Date(a.pubDate) - new Date(b.pubDate);
+        } else {
+          return new Date(b.pubDate) - new Date(a.pubDate);
+        }
+      });
+    }
+
+    setFilteredBooks(filtered);
+    setIsFilterApplied(true); // 필터가 적용되었음을 표시
+  };
+
+  // 전체 도서 목록 보여주기
+  const handleShowAllBooks = () => {
+    setFilteredBooks(bookList);
+    setIsFilterApplied(false); // 필터가 적용되지 않음을 표시
+  };
+
   return (
-    <Container sx={{ width: '100vw', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-      <Box sx={{ marginBottom: '50px', marginTop: '10px' }}>
-        <BooksAllContainer bookList={bookList} title="전체 도서" />
+    <Container sx={{ width: '100vw', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+      <Box sx={{ marginBottom: '50px', marginTop: '250px', marginRight: '120px' }}>
+        <FilterBar onFilterChange={handleFilterChange} onShowAllBooks={handleShowAllBooks} />
       </Box>
+      <BooksAllContainer bookList={filteredBooks} title="전체 도서" />
     </Container>
   );
 };
-export default BooksAllPage;
 
-//backgroundColor: 'primary.light'
+export default BooksAllPage;

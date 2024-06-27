@@ -12,6 +12,8 @@ import '../App.css';
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -20,8 +22,26 @@ const LoginPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    // Reset errors
+    setEmailError(false);
+    setPasswordError(false);
+
+    // Validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setEmailError(true);
+    }
+
+    if (password === '') {
+      setPasswordError(true);
+    }
     const payload = { email, password };
-    dispatch(userActions.loginWithEmail(payload));
+    if (emailError || passwordError) {
+      return;
+    } else {
+      dispatch(userActions.loginWithEmail(payload));
+    }
   };
 
   const handleGoogleLogin = useGoogleLogin({
@@ -46,16 +66,53 @@ const LoginPage = () => {
   }, [user, navigate]);
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="md" sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Box
+        sx={{
+          width: '100%',
+          marginTop: '40px',
+          marginBottom: '40px',
+          bgcolor: 'primary.main',
+          color: 'white',
+          p: 2,
+          textAlign: 'center',
+          borderRadius: '9px',
+        }}>
+        <Typography variant="h6">북두칠성 서점에 오신 것을 환영합니다.</Typography>
+      </Box>
       <Grid container spacing={1}>
-        <Grid item xs={12} md={6} sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'center', alignItems: 'center' }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 8, marginBottom: 10, marginRight: { md: 10, xs: 0 } }}>
+        <Grid item xs={12} md={6} sx={{ order: { xs: 1, md: 2 }, display: { xs: 'none', md: 'flex' }, alignItems: 'center', justifyContent: 'center', p: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: { md: 5, xs: 0 }, marginTop: 0 }}>
+            <img style={{ width: '100%', maxHeight: '100%', objectFit: 'contain' }} src="/image/login.png" alt="Login Illustration" />
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              boxShadow: 3,
+              p: 3,
+              borderRadius: 2,
+              width: '100%',
+              maxWidth: '400px',
+            }}>
             <Typography component="h1" variant="h5">
               Login
             </Typography>
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
               <FormControl margin="normal" required fullWidth>
-                <TextField label="Email Address" name="email" autoComplete="email" autoFocus value={email} onChange={(e) => setEmail(e.target.value)} />
+                <TextField
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  autoFocus
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  error={emailError}
+                  helperText={emailError ? 'Please enter a valid email address.' : ''}
+                />
               </FormControl>
               <FormControl margin="normal" required fullWidth>
                 <TextField
@@ -65,6 +122,8 @@ const LoginPage = () => {
                   autoComplete="current-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  error={passwordError}
+                  helperText={passwordError ? 'Please enter your password.' : ''}
                 />
               </FormControl>
               <Button type="submit" fullWidth variant="contained" color="primary" sx={{ mt: 3, mb: 2 }}>
@@ -91,12 +150,20 @@ const LoginPage = () => {
             </Box>
           </Box>
         </Grid>
-        <Grid item xs={12} md={6} sx={{ order: { xs: 1, md: 2 }, display: { xs: 'none', md: 'flex' }, justifyContent: 'center', alignItems: 'center' }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', marginLeft: { md: 5, xs: 0 }, marginTop: 8 }}>
-            <img style={{ marginLeft: '10px', marginRight: '150px', width: '500px', height: '400px' }} src="/image/login2.png" alt="Login Illustration" />
-          </Box>
-        </Grid>
       </Grid>
+      <Box
+        sx={{
+          width: '100%',
+          marginTop: '40px',
+          marginBottom: '40px',
+          bgcolor: 'primary.main',
+          color: 'white',
+          p: 2,
+          textAlign: 'center',
+          borderRadius: '9px',
+        }}>
+        <Typography variant="body1">Need help? Contact us at support@example.com</Typography>
+      </Box>
     </Container>
   );
 };

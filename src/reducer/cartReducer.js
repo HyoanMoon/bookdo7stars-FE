@@ -10,6 +10,7 @@ const initialState = {
   totalPrice: 0,
   user: {},
   quantity: 1,
+  addToCartDone: false,
   deliveryAddress: '',
 };
 
