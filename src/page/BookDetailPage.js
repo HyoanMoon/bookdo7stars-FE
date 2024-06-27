@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Container, Grid } from '@mui/material';
-import Box from '@mui/material/Box';
+import { Container, Grid, Button, Box, IconButton } from '@mui/material';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import BookImage from '../components/BookDetailPage/Book.image';
 import BookBasicInfo from '../components/BookDetailPage/BookBasicInfo';
 import BookToCart from '../components/BookDetailPage/BookToCart';
@@ -34,6 +34,10 @@ const BookDetailPage = () => {
     }
   }, [bookid]);
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   if (getBooksLoading || !selectedBook) {
     return <div className="loading"></div>;
   }
@@ -52,24 +56,35 @@ const BookDetailPage = () => {
               selectedBook={selectedBook}
               fullAddress={fullAddress}
               deliveryInfo={deliveryInfo}
-              deliveryAddress={address} // 전달할 주소 추가
+              deliveryAddress={address}
             />
             <Grid item mt={4}>
-              {/* <BookDetailInfo pubDate={selectedBook.pubDate} isbn={selectedBook.isbn} /> */}
-              {/* 여기에 다음 API */}
-              <div style={{ fontWeight: 'bold' }}> 배송 정보 </div>
-              <h6>{address}</h6>
-              <AddressChange setAddress={setAddress} />
+              <Box display="flex" alignItems="center" sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5', padding: '8px', borderRadius: '4px' }}>
+                <div style={{ marginRight: '14px' }}>배송 정보</div>
+                <h6 style={{ margin: 0, marginRight: '13px' }}>{address}</h6>
+                <AddressChange setAddress={setAddress} />
+              </Box>
               <DeliveryEstimate address={address} />
             </Grid>
           </Grid>
-          {/* <Grid item xs={12} sm={12} md={12}>
-            <BookDescription description={selectedBook.description} />
-          </Grid> */}
           <Grid item xs={12} sm={12} md={12}>
             <Info3 selectedBook={selectedBook} otherBooksByAuthor={otherBooksByAuthor} />
           </Grid>
         </Grid>
+        <Box
+          sx={{
+            position: 'fixed',
+            bottom: 50,
+            right: 50,
+            zIndex: 1000,
+          }}>
+          <IconButton
+            color="#608020"
+            onClick={scrollToTop}
+            sx={{ backgroundColor: '#608020', color: '#fff', '&:hover': { backgroundColor: '#d3ddbd' }, borderRadius: '50%', width: 56, height: 56 }}>
+            <ArrowUpwardIcon />
+          </IconButton>
+        </Box>
       </Container>
     </Box>
   );
