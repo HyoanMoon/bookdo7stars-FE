@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Container, Grid, Drawer, IconButton, useMediaQuery } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { bookActions } from '../../action/bookActions';
@@ -13,6 +14,7 @@ const BooksGroupPage = () => {
   const { bookList, groupBooks } = useSelector((state) => state.book);
   const [category, setCategory] = useState('국내도서');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false); // 드로어 열림 상태
+  const [displayCount, setDisplayCount] = useState(3); // 모바일에서 보이는 책의 개수
   const isMobile = useMediaQuery('(max-width: 600px)'); // 모바일 여부 확인
 
   const bookGroup = useParams();
@@ -49,6 +51,10 @@ const BooksGroupPage = () => {
     }
   });
 
+  const handleLoadMore = () => {
+    setDisplayCount((prevCount) => prevCount + 3);
+  };
+
   return (
     <Container
       sx={{
@@ -84,7 +90,7 @@ const BooksGroupPage = () => {
           </Grid>
         )}
         {isMobile && (
-          <IconButton onClick={toggleDrawer(true)} color="primary" aria-label="filter">
+          <IconButton onClick={toggleDrawer(true)} color="primary" aria-label="filter" sx={{ marginLeft: '10px' }}>
             <MenuIcon />
           </IconButton>
         )}
@@ -92,8 +98,15 @@ const BooksGroupPage = () => {
           <CategoryList totalCategories={totalCategories} onCategoryClick={onCategoryClick} groupName={groupNameInKorean} />
         </Drawer>
         <Grid item xs={12} sm={10}>
-          <Box sx={{ marginLeft: { xs: 0, sm: 2 } }}>
-            <BooksGroupContainer bookList={groupBooksByCategory} title={groupNameInKorean} />
+          <Box>
+            <BooksGroupContainer bookList={groupBooksByCategory.slice(0, displayCount)} title={groupNameInKorean} />
+            {groupBooksByCategory.length > displayCount && (
+              <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+                <IconButton onClick={handleLoadMore} color="primary">
+                  <AddIcon />
+                </IconButton>
+              </Box>
+            )}
           </Box>
         </Grid>
       </Grid>
