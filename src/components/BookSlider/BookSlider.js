@@ -40,7 +40,7 @@ const BookSlider = ({ bookList, isMobile }) => {
   }, [dispatch, user]);
 
   return (
-    <Box sx={{ height: 'auto', backgroundColor: 'blue', justifyContent: 'center' }}>
+    <Box sx={{ height: 'auto', justifyContent: 'center' }}>
       <Carousel containerClass="carousel-container" responsive={responsive} customLeftArrow={<CustomLeftArrow />} customRightArrow={<CustomRightArrow />}>
         {bookList.map((book, index) => (
           <Box key={index} sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>

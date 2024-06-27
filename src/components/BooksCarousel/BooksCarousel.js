@@ -57,7 +57,6 @@ const BooksCarousel = ({ bookList, title, categories, sx }) => {
             display: 'flex',
             flexDirection: 'column',
             borderRadius: 2,
-            backgroundColor: 'yellow',
           }}>
           <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
             <Box sx={{ display: 'flex', justifyContent: isMobile ? 'center' : 'left', flexGrow: 1 }}>

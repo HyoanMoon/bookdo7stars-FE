@@ -39,10 +39,6 @@ const BookContainer = ({ bookList, categories, sx, title }) => {
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
-        backgroundColor: 'red',
-        // paddingLeft: '0px',
-        // paddingRight: '0px',
-        // marginTop: '60px',
       }}>
       <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
         <Typography variant="h3" component="div" gutterBottom sx={{ fontWeight: 'bold', display: 'flex', justifyContent: 'center', margin: 0 }}>
@@ -90,7 +86,7 @@ const BookContainer = ({ bookList, categories, sx, title }) => {
           </Tabs>
         </Box>
       )}
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto', pt: 2, pb: 2, backgroundColor: 'green' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto', pt: 2, pb: 2 }}>
         <Grid container spacing={2}>
           {filteredBooks.map((book) => (
             <Grid key={book._id} item xs={12} sm={6} md={4} lg={3} sx={{ display: 'flex', justifyContent: 'center' }}>
