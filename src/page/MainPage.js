@@ -77,7 +77,7 @@ const MainPage = () => {
           <BooksCarousel bookList={newAllBooks.slice(0, 100)} categories={newAllBooksCategories} title={'신간 도서'} />
         </Box>
         <Box>
-          <BookContainer bookList={bestSeller.slice(7, 11)} title={'에디터 추천'} />
+          <BookContainer bookList={blogBestBooks.slice(0, 4)} title={'에디터 추천'} />
         </Box>
       </Container>
     </>
