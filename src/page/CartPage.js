@@ -77,6 +77,23 @@ const CartPage = () => {
   const shippingFee = selectedItems.length > 0 ? (finalTotalPrice > 100000 ? 0 : 2500) : 0;
   const pointsEarned = finalTotalPrice * 0.05;
   const grandTotal = finalTotalPrice + shippingFee;
+  const recommend =
+    selectedItems.length > 0 ? (
+      finalTotalPrice > 100000 ? (
+        '무료배송 금액을 충족하셨어요!'
+      ) : (
+        <Box display="flex" alignItems="center">
+          <Typography variant="h6" component="span" mr={2}>
+            ₩{currencyFormat(100000 - finalTotalPrice)} 더 담으면 무료 배송 🚚
+          </Typography>
+          <Button variant="contained" color="primary" onClick={() => navigate('/')}>
+            더 담으러 가기
+          </Button>
+        </Box>
+      )
+    ) : (
+      <Typography variant="h6">10만원 이상 구매 시 무료배송 🚚</Typography>
+    );
 
   const handleCheckout = () => {
     navigate('/payment', {
@@ -87,15 +104,31 @@ const CartPage = () => {
   return (
     <ThemeProvider theme={theme}>
       <Container>
-        <Box display="flex" flexDirection="column" alignItems="flex-start" mb={4} p={1} bgcolor="#f5f5f5" borderRadius="4px">
-          <Typography variant="h6">{user?.userName?.toUpperCase()}님</Typography>
-          <Typography variant="body1">Level: {user?.level}</Typography>
+        {/* 유저 정보 박스 */}
+        <Box display="flex" flexDirection="column" alignItems="flex-start" ml={10} mr={10} p={2} pl={4} bgcolor="#f5f5f5" borderRadius="25px">
+          <Typography variant="h6" pb={1}>
+            반갑습니다 {user?.userName?.toUpperCase()}님!
+          </Typography>
+          <Typography variant="body1">
+            {user?.userName?.toUpperCase()}님의 등급은{' '}
+            <Box component="span" fontWeight="bold" color="primary">
+              {user?.level?.toUpperCase()}
+            </Box>{' '}
+            입니다.
+          </Typography>
         </Box>
-        <Box mb={4} display="flex" justifyContent="flex-end">
+        <Box mb={4} display="flex" justifyContent="flex-end" mr={10}>
           <SortMenu selectedSortOption={selectedSortOption} onSelectSortOption={handleSortOptionSelect} />
         </Box>
-        <Box display="flex" justifyContent="space-between">
+        {/* 무료 배송 정보 헤더 */}
+
+        <Box display="flex" justifyContent="space-between" mb={2} mt={2} alignItems="center" p={1}>
+          <Typography variant="h6">{recommend}</Typography>
+        </Box>
+
+        <Box display="flex" justifyContent="space-between" mt={2}>
           <Box flex={3} mb={4}>
+            {/* 상품 정보 헤더 아래 박스 */}
             <Box display="flex" justifyContent="space-between" mb={2} alignItems="center" p={1} bgcolor="#f5f5f5" borderRadius="4px">
               <FormControlLabel
                 control={<Checkbox checked={selectedItems.length === cartList.length} onChange={handleSelectAll} color="primary" />}

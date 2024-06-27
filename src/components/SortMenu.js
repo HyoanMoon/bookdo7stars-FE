@@ -24,10 +24,8 @@ const SortMenu = ({ selectedSortOption, onSelectSortOption }) => {
         onClick={handleClick}
         endIcon={<ArrowDropDownIcon />}
         sx={{
-          backgroundColor: 'transparent',
           color: 'black',
           '&:hover': {
-            backgroundColor: '#d3ddbd',
             color: 'brown',
           },
         }}>
@@ -38,6 +36,7 @@ const SortMenu = ({ selectedSortOption, onSelectSortOption }) => {
         <MenuItem onClick={() => handleClose('상품명순')}>상품명순</MenuItem>
         <MenuItem onClick={() => handleClose('높은가격순')}>높은가격순</MenuItem>
         <MenuItem onClick={() => handleClose('낮은가격순')}>낮은가격순</MenuItem>
+        <MenuItem onClick={() => handleClose('출간일순')}>출간일순</MenuItem>
       </Menu>
     </div>
   );
