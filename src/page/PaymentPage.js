@@ -66,40 +66,6 @@ const PaymentPage = () => {
     cvc: '',
   });
 
-  const handleOrderSubmit = async (e) => {
-    e.preventDefault();
-    await handlePaymentSuccess();
-  };
-
-  const handlePaymentSuccess = async () => {
-    const { name, zipCode, address1, address2, phone, email } = shippingInfo;
-    const data = {
-      totalPrice: grandTotal,
-      shipTo: { zipCode, address1, address2 },
-      contact: { name, phone, email },
-      orderList: selectedCartList.map((item) => {
-        return {
-          bookId: item.bookId,
-          qty: item.qty,
-          price: item.bookId.priceSales,
-        };
-      }),
-    };
-
-    try {
-      const response = await dispatch(orderActions.createOrder(data));
-      navigate('/payment/success', {
-        state: {
-          shippingInfo,
-          grandTotal,
-          paymentMethod,
-        },
-      });
-    } catch (error) {
-      console.error('Order creation failed:', error);
-    }
-  };
-
   const handleShippingInfoChange = (e) => {
     const { name, value } = e.target;
     setShippingInfo((prevInfo) => ({
@@ -350,8 +316,8 @@ const PaymentPage = () => {
             finalTotalPrice={finalTotalPrice}
             hasSelectedItems={selectedCartList.length > 0}
             cartList={selectedCartList}
-            handleCheckout={handleOrderSubmit}
             shippingInfo={shippingInfo} // shippingInfo를 props로 전달
+            cardInfo={cardInfo} // cardInfo를 props로 전달
             sticky={true}
           />
         </Box>
