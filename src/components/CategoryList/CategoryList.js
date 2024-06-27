@@ -17,7 +17,6 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName }) => {
   }, [groupName]);
 
   useEffect(() => {
-    // 최상위 카테고리를 열림 상태로 설정
     const initialOpenState = {};
     const topCategories = Object.keys(categoryHierarchy);
     topCategories.forEach((category) => {
@@ -28,7 +27,6 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName }) => {
 
   useEffect(() => {
     if (selectedCategory) {
-      // 선택된 경로와 상위 경로의 카테고리를 열림 상태로 설정
       const paths = selectedCategory.split('>');
       const openState = {};
       let currentPath = '';
@@ -40,31 +38,21 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName }) => {
     }
   }, [selectedCategory]);
 
-  // 카테고리 클릭 처리
   const handleItemClick = (categoryPath) => {
     if (selectedCategory === categoryPath) {
-      setSelectedCategory(''); // 이미 선택된 카테고리를 다시 클릭하면 선택 취소
+      setSelectedCategory('');
       setSelectedPath([]);
     } else {
       setSelectedCategory(categoryPath);
       setSelectedPath(categoryPath.split('>'));
+      setOpen((prevOpen) => ({ ...prevOpen, [categoryPath]: true }));
 
-      // 선택된 경로와 상위 경로의 카테고리를 열림 상태로 설정
-      const paths = categoryPath.split('>');
-      const openState = {};
-      let currentPath = '';
-      paths.forEach((path) => {
-        currentPath = currentPath ? `${currentPath}>${path}` : path;
-        openState[currentPath] = true;
-      });
-      setOpen((prevOpen) => ({ ...prevOpen, ...openState }));
-    }
-    if (onCategoryClick) {
-      onCategoryClick(categoryPath);
+      if (onCategoryClick) {
+        onCategoryClick(categoryPath);
+      }
     }
   };
 
-  // 카테고리 열기/닫기 처리
   const handleClick = (categoryPath, hasSubCategories) => {
     if (hasSubCategories) {
       setOpen((prevOpen) => ({
@@ -83,32 +71,35 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName }) => {
       return (
         <div key={index}>
           <ListItem
+            button
             onClick={() => handleItemClick(categoryPath)}
+            selected={selectedCategory === categoryPath}
             sx={{
               backgroundColor: selectedCategory === categoryPath ? 'primary.light' : 'inherit',
               '&:hover': {
                 backgroundColor: 'primary.light',
               },
               cursor: 'pointer',
-              minWidth: '200px', // 기본 minWidth 설정
+              minWidth: '200px',
               '@media (max-width: 600px)': {
-                minWidth: '150px', // 작은 화면에서 minWidth 조정
+                minWidth: '150px',
                 '& .MuiTypography-root': {
-                  fontSize: '0.8rem', // 작은 화면에서 글자 크기 조정
+                  fontSize: '0.8rem',
                 },
                 '& .MuiIconButton-root': {
-                  padding: '4px', // 작은 화면에서 IconButton 크기 조정
+                  padding: '4px',
                 },
               },
             }}>
             <ListItemText primary={category} />
             {hasSubCategories && (
               <IconButton
+                size="small"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleClick(categoryPath, hasSubCategories);
                 }}>
-                {open[categoryPath] ? <ExpandMoreIcon /> : <ChevronRightIcon />}
+                {open[categoryPath] ? <ExpandMoreIcon fontSize="small" /> : <ChevronRightIcon fontSize="small" />}
               </IconButton>
             )}
           </ListItem>
@@ -126,7 +117,6 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName }) => {
 
   return (
     <div>
-      {/* 선택된 카테고리 경로 표시 */}
       {selectedPath.length > 0 && (
         <div style={{ marginBottom: '10px', fontSize: '12px' }}>
           {selectedPath.map((pathItem, index) => (
@@ -139,8 +129,6 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName }) => {
           ))}
         </div>
       )}
-
-      {/* 카테고리 리스트 */}
       <List>{renderCategories(categoryHierarchy)}</List>
     </div>
   );
