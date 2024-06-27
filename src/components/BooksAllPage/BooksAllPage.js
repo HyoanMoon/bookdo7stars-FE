@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Container } from '@mui/material';
+import { Box, Container, useMediaQuery } from '@mui/material';
 import { useSelector } from 'react-redux';
 import BooksAllContainer from './BooksAllContainer';
 import FilterBar from './FilterBar';
@@ -8,6 +8,7 @@ const BooksAllPage = () => {
   const { bookList } = useSelector((state) => state.book);
   const [filteredBooks, setFilteredBooks] = useState(bookList); // 필터된 책 목록
   const [isFilterApplied, setIsFilterApplied] = useState(false); // 필터가 적용되었는지 여부
+  const isMobile = useMediaQuery('(max-width: 600px)'); // 모바일 화면 크기 확인
 
   useEffect(() => {
     setFilteredBooks(bookList);
@@ -45,11 +46,14 @@ const BooksAllPage = () => {
   };
 
   return (
-    <Container sx={{ width: '100vw', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-      <Box sx={{ marginBottom: '50px', marginTop: '250px', marginRight: '120px' }}>
-        <FilterBar onFilterChange={handleFilterChange} onShowAllBooks={handleShowAllBooks} />
-      </Box>
-      <BooksAllContainer bookList={filteredBooks} title="전체 도서" />
+    <Container sx={{ width: '100vw', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      <BooksAllContainer
+        bookList={filteredBooks}
+        title="전체 도서"
+        isMobile={isMobile}
+        handleFilterChange={handleFilterChange}
+        handleShowAllBooks={handleShowAllBooks}
+      />
     </Container>
   );
 };

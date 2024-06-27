@@ -1,12 +1,13 @@
-import { Box, Button, Container, Tab, Tabs, Typography } from '@mui/material';
-import BookSlider from '../BookSlider/BookSlider';
 import React, { useState } from 'react';
+import { Box, Button, Container, Tab, Tabs, Typography, useMediaQuery } from '@mui/material';
 import { AddCircleOutline } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import BookSlider from '../BookSlider/BookSlider';
 
 const BooksCarousel = ({ bookList, title, categories, sx }) => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('전체');
+  const isMobile = useMediaQuery('(max-width: 600px)'); // 모바일 화면 크기 확인
 
   const handleCategoryChange = (event, newValue) => {
     setSelectedCategory(newValue);
@@ -27,7 +28,6 @@ const BooksCarousel = ({ bookList, title, categories, sx }) => {
             width: '100%',
             height: '50vh',
             display: 'flex',
-            // justifyContent: 'space-between',
             flexDirection: 'column',
             borderRadius: 2,
             paddingLeft: '0px',
@@ -35,12 +35,19 @@ const BooksCarousel = ({ bookList, title, categories, sx }) => {
             marginTop: '60px',
           }}>
           <Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Typography variant="h3" component="div" gutterBottom sx={{ fontWeight: 'bold', display: 'flex', margin: 0 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Typography
+                variant={isMobile ? 'h4' : 'h3'}
+                component="div"
+                gutterBottom
+                sx={{ fontWeight: 'bold', display: 'flex', margin: 0, justifyContent: 'left', flexGrow: 1, padding: '5px' }}>
                 {title}
               </Typography>
-
-              <Button size="large" endIcon={<AddCircleOutline />} onClick={() => onClickMore(bookGroup)} sx={{ justifyContent: 'flex-end' }}>
+              <Button
+                size="large"
+                endIcon={<AddCircleOutline />}
+                onClick={() => onClickMore(bookGroup)}
+                sx={{ justifyContent: 'flex-end', marginLeft: isMobile ? 0 : 'auto' }}>
                 더보기
               </Button>
             </Box>
@@ -54,7 +61,6 @@ const BooksCarousel = ({ bookList, title, categories, sx }) => {
             width: '100%',
             height: '60vh',
             display: 'flex',
-            // justifyContent: 'space-between',
             flexDirection: 'column',
             borderRadius: 2,
             paddingLeft: '0px',
@@ -63,13 +69,20 @@ const BooksCarousel = ({ bookList, title, categories, sx }) => {
           }}>
           <Box>
             <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Box sx={{ fontWeight: 'bold', display: 'flex', justifyContent: 'center', margin: 0 }}>
-                <Typography variant="h3" component="div" gutterBottom sx={{ fontWeight: 'bold' }}>
+              <Box sx={{ display: 'flex', justifyContent: isMobile ? 'center' : 'left', flexGrow: 1 }}>
+                <Typography
+                  variant={isMobile ? 'h4' : 'h3'}
+                  component="div"
+                  gutterBottom
+                  sx={{ fontWeight: 'bold', display: 'flex', margin: 0, justifyContent: 'left', flexGrow: 1, padding: '5px' }}>
                   {title}
                 </Typography>
               </Box>
-
-              <Button size="large" endIcon={<AddCircleOutline />} onClick={() => onClickMore(bookGroup)} sx={{ justifyContent: 'flex-end' }}>
+              <Button
+                size="large"
+                endIcon={<AddCircleOutline />}
+                onClick={() => onClickMore(bookGroup)}
+                sx={{ justifyContent: 'flex-end', marginLeft: isMobile ? 0 : 'auto' }}>
                 더보기
               </Button>
             </Box>
@@ -80,29 +93,30 @@ const BooksCarousel = ({ bookList, title, categories, sx }) => {
                 onChange={handleCategoryChange}
                 aria-label="category tabs"
                 allowScrollButtonsMobile
-                variant="scrollable" // 탭 너비를 꽉 채우도록 설정
-                indicatorColor="primary" // 선택된 탭의 인디케이터 색상 설정
+                variant="scrollable"
+                indicatorColor="primary"
                 textColor="primary"
-                scrollbuttons="auto">
-                // 탭 텍스트 색상 설정
+                scrollButtons="auto">
                 {categories.map((category) => (
                   <Tab
                     key={category.id}
                     label={category.label}
                     value={category.id}
                     sx={{
-                      fontSize: '1rem', // 폰트 사이즈 설정
+                      fontSize: '1rem',
                       '&.Mui-selected': {
-                        fontWeight: 'bold', // 선택된 탭 폰트 볼드 처리
-                        borderBottom: '2px solid #608020', // 선택된 탭에 밑줄 스타일
-                        transition: 'border-bottom 0.3s ease', // 밑줄에 트랜지션 적용
+                        fontWeight: 'bold',
+                        borderBottom: '2px solid #608020',
+                        transition: 'border-bottom 0.3s ease',
                       },
                     }}
                   />
                 ))}
               </Tabs>
             </Box>
-            <BookSlider bookList={filteredBooks} />
+            <Box sx={{ paddingTop: '20px' }}>
+              <BookSlider bookList={filteredBooks} />
+            </Box>
           </Box>
         </Container>
       )}
@@ -111,6 +125,3 @@ const BooksCarousel = ({ bookList, title, categories, sx }) => {
 };
 
 export default BooksCarousel;
-
-// , fontStyle: 'italic'
-// variant="outlined"

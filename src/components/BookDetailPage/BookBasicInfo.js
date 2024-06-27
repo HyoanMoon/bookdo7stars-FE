@@ -4,6 +4,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import { useDispatch } from 'react-redux';
 import * as types from '../../constants/cart.constants';
+// eslint-disable-next-line import/no-named-as-default
 import styled from 'styled-components';
 
 const TaxDeductionLabel = styled.div`
