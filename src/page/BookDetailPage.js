@@ -43,13 +43,13 @@ const BookDetailPage = () => {
   }
 
   return (
-    <Box sx={{ mt: 20 }}>
+    <Box sx={{ mt: { xs: 10, md: 20 } }}>
       <Container>
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-          <Grid item xs={10} sm={12} md={4}>
+        <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          <Grid item xs={12} md={4} sx={{ textAlign: 'center' }}>
             {selectedBook.cover && <BookImage cover={selectedBook.cover} />}
           </Grid>
-          <Grid item xs={6} sm={12} md={8}>
+          <Grid item xs={12} md={8}>
             <BookBasicInfo title={selectedBook.title} author={selectedBook.author} publisher={selectedBook.publisher} price={selectedBook.priceStandard} />
             <BookToCart
               favorite={favorite?.some((favorite) => favorite._id === selectedBook._id)}
@@ -58,16 +58,16 @@ const BookDetailPage = () => {
               deliveryInfo={deliveryInfo}
               deliveryAddress={address}
             />
-            <Grid item mt={4}>
+            <Box mt={4}>
               <Box display="flex" alignItems="center" sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5', padding: '8px', borderRadius: '4px' }}>
                 <div style={{ marginRight: '14px' }}>배송 정보</div>
                 <h6 style={{ margin: 0, marginRight: '13px' }}>{address}</h6>
                 <AddressChange setAddress={setAddress} />
               </Box>
               <DeliveryEstimate address={address} />
-            </Grid>
+            </Box>
           </Grid>
-          <Grid item xs={12} sm={12} md={12}>
+          <Grid item xs={12}>
             <Info3 selectedBook={selectedBook} otherBooksByAuthor={otherBooksByAuthor} />
           </Grid>
         </Grid>
@@ -79,9 +79,15 @@ const BookDetailPage = () => {
             zIndex: 1000,
           }}>
           <IconButton
-            color="#608020"
             onClick={scrollToTop}
-            sx={{ backgroundColor: '#608020', color: '#fff', '&:hover': { backgroundColor: '#d3ddbd' }, borderRadius: '50%', width: 56, height: 56 }}>
+            sx={{
+              backgroundColor: '#608020',
+              color: '#fff',
+              '&:hover': { backgroundColor: '#d3ddbd' },
+              borderRadius: '50%',
+              width: 56,
+              height: 56,
+            }}>
             <ArrowUpwardIcon />
           </IconButton>
         </Box>
