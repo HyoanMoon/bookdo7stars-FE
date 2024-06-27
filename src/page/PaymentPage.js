@@ -68,6 +68,10 @@ const PaymentPage = () => {
 
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
+    await handlePaymentSuccess();
+  };
+
+  const handlePaymentSuccess = async () => {
     const { name, zipCode, address1, address2, phone, email } = shippingInfo;
     const data = {
       totalPrice: grandTotal,
@@ -347,15 +351,10 @@ const PaymentPage = () => {
             hasSelectedItems={selectedCartList.length > 0}
             cartList={selectedCartList}
             handleCheckout={handleOrderSubmit}
+            shippingInfo={shippingInfo} // shippingInfo를 props로 전달
             sticky={true}
           />
         </Box>
-      </Box>
-
-      <Box display="flex" justifyContent="center" mt={4}>
-        <Button variant="contained" color="primary" size="large" onClick={handleOrderSubmit}>
-          결제하기
-        </Button>
       </Box>
     </Container>
   );

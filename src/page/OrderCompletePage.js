@@ -27,6 +27,9 @@ const OrderCompletePage = () => {
     const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
     return now.toLocaleString('ko-KR', options);
   };
+  if (orderNum === '') {
+    navigate('/');
+  }
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4, mb: 4, border: '1px solid #ddd', borderRadius: '8px', padding: '16px' }}>

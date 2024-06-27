@@ -2,16 +2,45 @@ import React from 'react';
 import { Box, Typography, Paper, Divider, Button } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { currencyFormat } from '../utils/number';
+import { useDispatch } from 'react-redux';
+import { orderActions } from '../action/orderActions';
 
-const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheckout, sticky }) => {
+const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheckout, sticky, shippingInfo }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const shippingFee = hasSelectedItems ? (finalTotalPrice > 100000 ? 0 : 2500) : 0;
   const pointsEarned = finalTotalPrice * 0.05;
   const grandTotal = finalTotalPrice + shippingFee;
 
-  const handlePaymentSuccess = () => {
-    navigate('/payment/success');
+  const handlePaymentSuccess = async () => {
+    const { name, zipCode, address1, address2, phone, email } = shippingInfo;
+    const data = {
+      totalPrice: grandTotal,
+      shipTo: { zipCode, address1, address2 },
+      contact: { name, phone, email },
+      orderList: cartList.map((item) => {
+        return {
+          bookId: item.bookId,
+          qty: item.qty,
+          price: item.bookId.priceSales,
+        };
+      }),
+    };
+
+    try {
+      const response = await dispatch(orderActions.createOrder(data));
+      navigate('/payment/success', {
+        state: {
+          shippingInfo,
+          grandTotal,
+          paymentMethod: 'creditCard', // 예시로 신용카드로 설정, 실제로는 PaymentPage에서 전달 필요
+        },
+      });
+    } catch (error) {
+      console.error('Order creation failed:', error);
+    }
   };
 
   return (
