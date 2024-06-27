@@ -83,7 +83,7 @@ const RegisterPage = () => {
       <Box
         sx={{
           width: '100%',
-          marginTop: '40px',
+          marginTop: '18px',
           marginBottom: '40px',
           bgcolor: 'primary.main',
           color: 'white',
@@ -239,7 +239,7 @@ const RegisterPage = () => {
           p: 2,
           textAlign: 'center',
           borderRadius: 1,
-          mt: 4,
+          mt: 3,
         }}>
         <Typography variant="body1">Need help? Contact us at support@example.com</Typography>
       </Box>
