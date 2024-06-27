@@ -40,10 +40,10 @@ const BookSlider = ({ bookList }) => {
   }, [dispatch, user]);
 
   return (
-    <Box sx={{ mt: 2, height: '300px' }}>
+    <Box sx={{ height: '380px' }}>
       <Carousel containerClass="carousel-container" responsive={responsive} customLeftArrow={<CustomLeftArrow />} customRightArrow={<CustomRightArrow />}>
         {bookList.map((book, index) => (
-          <Box key={index} sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Box key={index} sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
             <BookCard book={book} favorite={favorite.some((favorite) => favorite._id === book._id)} />
           </Box>
         ))}

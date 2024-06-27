@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AppBar, Toolbar, Typography, MenuItem, Box, IconButton } from '@mui/material';
+import { AppBar, Toolbar, Typography, MenuItem, Box, IconButton, useTheme, useMediaQuery } from '@mui/material';
 import { categoryActions } from '../action/categoryActions';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +9,6 @@ import { getSubCategories } from '../_helper/getSubCategories';
 import { getKeyByValue } from '../_helper/getKeyByValue';
 import { getBookGroupArray } from '../_helper/getBookGroupArray';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useTheme, useMediaQuery } from '@mui/material';
 
 const CategoryBar = ({ bookList }) => {
   const dispatch = useDispatch();

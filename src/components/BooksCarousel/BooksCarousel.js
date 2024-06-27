@@ -30,9 +30,9 @@ const BooksCarousel = ({ bookList, title, categories, sx }) => {
             display: 'flex',
             flexDirection: 'column',
             borderRadius: 2,
-            paddingLeft: '0px',
-            paddingRight: '0px',
-            marginTop: '60px',
+            // paddingLeft: '0px',
+            // paddingRight: '0px',
+            // marginTop: '60px',
           }}>
           <Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -63,9 +63,9 @@ const BooksCarousel = ({ bookList, title, categories, sx }) => {
             display: 'flex',
             flexDirection: 'column',
             borderRadius: 2,
-            paddingLeft: '0px',
-            paddingRight: '0px',
-            marginTop: '60px',
+            // paddingLeft: '0px',
+            // paddingRight: '0px',
+            // marginTop: '60px',
           }}>
           <Box>
             <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -87,7 +87,7 @@ const BooksCarousel = ({ bookList, title, categories, sx }) => {
               </Button>
             </Box>
 
-            <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: '20px' }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs
                 value={selectedCategory}
                 onChange={handleCategoryChange}
@@ -114,7 +114,7 @@ const BooksCarousel = ({ bookList, title, categories, sx }) => {
                 ))}
               </Tabs>
             </Box>
-            <Box sx={{ paddingTop: '20px' }}>
+            <Box sx={{ pt: 2, pb: 2 }}>
               <BookSlider bookList={filteredBooks} />
             </Box>
           </Box>

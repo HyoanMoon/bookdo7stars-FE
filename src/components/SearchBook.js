@@ -1,11 +1,10 @@
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import * as React from 'react';
-import { Box, InputAdornment } from '@mui/material';
+import { Box, InputAdornment, useMediaQuery } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useMediaQuery } from '@mui/material';
 
 const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch }) => {
   const [selectedField, setSelectedField] = useState(fields[0]);
