@@ -1,20 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Container,
-  Typography,
-  Box,
-  Divider,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  TableContainer,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  Paper,
-} from '@mui/material';
+import { Container, Typography, Box, Button, Checkbox, FormControlLabel, TableContainer, Table, TableBody, TableCell, TableRow, Paper } from '@mui/material';
 import CartProductCard from '../components/CartProductCard';
 import OrderReceipt from '../components/OrderReceipt';
 import '../style/cart.style.css';
@@ -101,13 +87,9 @@ const CartPage = () => {
   return (
     <ThemeProvider theme={theme}>
       <Container>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
-          <Box p={1} bgcolor="#f5f5f5" borderRadius="4px">
-            <Typography variant="h6">{user?.userName?.toUpperCase()}님</Typography>
-          </Box>
-          <Box p={1} bgcolor="#f5f5f5" borderRadius="4px">
-            <Typography variant="body1">Level: {user?.level}</Typography>
-          </Box>
+        <Box display="flex" flexDirection="column" alignItems="flex-start" mb={4} p={1} bgcolor="#f5f5f5" borderRadius="4px">
+          <Typography variant="h6">{user?.userName?.toUpperCase()}님</Typography>
+          <Typography variant="body1">Level: {user?.level}</Typography>
         </Box>
         <Box mb={4} display="flex" justifyContent="flex-end">
           <SortMenu selectedSortOption={selectedSortOption} onSelectSortOption={handleSortOptionSelect} />
@@ -132,7 +114,7 @@ const CartPage = () => {
                   key={item._id}
                   isSelected={selectedItems.includes(item._id)} // 선택된 상태 전달
                   onSelectItem={handleSelectItem} // 선택 상태 변경 함수 전달
-                  userLevel={user.level} // 사용자 레벨 전달
+                  userLevel={user.level}
                   deliveryAddress={deliveryAddress}
                 />
               ))
@@ -196,12 +178,13 @@ const CartPage = () => {
               </TableContainer>
             )}
           </Box>
-          <Box flex={1} ml={3} sx={{ position: 'sticky', top: '20px' }}>
+          <Box flex={1} ml={3}>
             <OrderReceipt
               cartList={selectedCartList}
               finalTotalPrice={finalTotalPrice}
               hasSelectedItems={selectedItems.length > 0}
               handleCheckout={handleCheckout}
+              sticky={true} // Sticky prop 추가
             />
           </Box>
         </Box>

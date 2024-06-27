@@ -3,7 +3,7 @@ import { Box, Typography, Paper, Divider, Button } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom'; // react-router-dom에서 useNavigate 가져오기
 import { currencyFormat } from '../utils/number';
 
-const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheckout }) => {
+const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheckout, sticky }) => {
   const location = useLocation();
   const navigate = useNavigate(); // useNavigate 훅 사용
   const shippingFee = hasSelectedItems ? (finalTotalPrice > 100000 ? 0 : 2500) : 0; // 선택된 상품이 있으면 100불 이상 무료 배송, 그 외 2500원, 선택된 상품이 없으면 배송비 0
@@ -11,7 +11,16 @@ const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheck
   const grandTotal = finalTotalPrice + shippingFee;
 
   return (
-    <Paper elevation={3} sx={{ padding: '16px', width: '100%', borderRadius: '10px' }}>
+    <Paper
+      elevation={3}
+      sx={{
+        padding: '16px',
+        width: '100%',
+        maxWidth: '600px',
+        borderRadius: '10px',
+        position: sticky ? 'sticky' : 'static', // Sticky 속성 추가
+        top: sticky ? '20px' : 'auto', // Sticky 속성 추가
+      }}>
       <Typography variant="h6" align="center" sx={{ fontWeight: 'bold', marginBottom: '16px' }}>
         Order Summary
       </Typography>
