@@ -39,11 +39,11 @@ const MyPageOrderList = () => {
   const [sortOrder, setSortOrder] = useState('recent');
 
   console.log('myOrderList', myOrderList);
-  console.log('user', user);
+  // console.log('user', user);
 
   useEffect(() => {
     dispatch(orderActions.getMyOrder());
-  }, [dispatch]);
+  }, [user, dispatch]);
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -177,21 +177,26 @@ const MyPageOrderList = () => {
                 <Table>
                   {/* 테이블 헤드 */}
                   <TableHead>
-                    <TableCell>주문 번호</TableCell>
-                    <TableCell>주문 일자</TableCell>
-                    <TableCell>주문 내역</TableCell>
-                    <TableCell>주문 금액/수량</TableCell>
-                    <TableCell>주문 상태</TableCell>
+                    <TableCell>주문번호</TableCell>
+                    <TableCell>주문일자</TableCell>
+                    <TableCell>주문내역</TableCell>
+                    <TableCell>총주문액</TableCell>
+                    <TableCell>주문상태</TableCell>
                   </TableHead>
                   {/* 테이블 바디 */}
                   <TableBody>
                     {sortedMyOrderList?.length > 0 &&
-                      sortedMyOrderList?.map((item, index) => (
+                      sortedMyOrderList?.map((item) => (
                         <TableRow key={item._id}>
                           <TableCell>{item.orderNum}</TableCell>
                           <TableCell>{item.createdAt.slice(0, 10)}</TableCell>
-                          {/* <TableCell>{item.items.map((book) => book.bookId.title).join('.')}</TableCell> */}
-                          <TableCell>{item.items[0].bookId.title}</TableCell>
+                          {/* <TableCell>{item.items[0].bookId.title}</TableCell> */}
+                          <TableCell>
+                            {`${item?.items
+                              ?.map((item) => item.bookId?.title)
+                              .join(', ')
+                              .slice(0, 25)}...`}
+                          </TableCell>
                           <TableCell>{item.totalPrice}</TableCell>
                           <TableCell>{item.status}</TableCell>
                         </TableRow>

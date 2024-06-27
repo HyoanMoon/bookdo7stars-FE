@@ -7,9 +7,9 @@ const InquiryTable = ({ inquiries }) => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>문의 유형</TableCell>
+            <TableCell>문의유형</TableCell>
             <TableCell>이미지</TableCell>
-            <TableCell>문의 내용</TableCell>
+            <TableCell>문의내용</TableCell>
             <TableCell>이메일로 응답</TableCell>
             <TableCell>SMS로 응답</TableCell>
             <TableCell>작성일</TableCell>

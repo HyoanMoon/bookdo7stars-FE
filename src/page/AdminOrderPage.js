@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Grid } from '@mui/material';
+import { Container, Grid, Box, Paper, Tabs, Tab } from '@mui/material';
 import AdminPageOrderSearchBox from '../components/AdminPageOrderSearchBox';
 import AdminPageOrderTable from '../components/AdminPageOrderTable';
 import AdminPageOrderDialog from '../components/AdminPageOrderDialog';
+import AdminPageClaimTable from '../components/AdminPageClaimTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { orderActions } from '../action/orderActions';
@@ -12,11 +13,18 @@ const AdminOrderPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [openDialog, setOpenDialog] = useState(false);
-  const orderTableHead = ['', '주문 번호', '주문 일시', '구매자', '도서명', '주소', '총가격', '주문 상태'];
+  const orderTableHead = ['', '주문번호', '주문일자', '구매자', '도서명', '주소', '총주문액', '주문상태'];
+  const claimTableHead = ['', '주문번호', '주문일자', '구매자', '요청사항', '처리상태'];
   const orderDialogTableHead = ['ID', '도서명', '권당 가격', '수량', '전체 가격'];
   const { orderList } = useSelector((state) => state.order);
+  const { requestList } = useSelector((state) => state.order);
   const [query, setQuery] = useSearchParams();
   const fields = ['orderNum', 'userName'];
+  const [tabIndex, setTabIndex] = useState(0);
+
+  const handleTabChange = (event, newValue) => {
+    setTabIndex(newValue);
+  };
 
   const totalField = fields.reduce((total, option) => {
     total[option] = query.get(option) || '';
@@ -36,7 +44,10 @@ const AdminOrderPage = () => {
     });
     navigate('?' + params.toString());
     dispatch(orderActions.getOrderList({ ...searchQuery }));
+    dispatch(orderActions.getRequestList({ ...searchQuery }));
   }, [searchQuery]);
+
+  console.log('getRequestList', requestList);
 
   // 검색한 값을 리셋하기.
   const resetSearch = () => {
@@ -51,11 +62,7 @@ const AdminOrderPage = () => {
     const orderDate = new Date(order.createdAt);
     const startDate = searchQuery.startDate ? new Date(searchQuery.startDate) : null;
     const endDate = searchQuery.endDate ? new Date(searchQuery.endDate) : null;
-
-    // const matchorderNum = !searchQuery.orderNum || order.orderNum.toString().includes(searchQuery.orderNum);
-    // const matchUserName = !searchQuery.userName || order.contact.name.toLowerCase().includes(searchQuery.userName.toLowerCase());
     const withinDateRange = (!startDate || orderDate >= startDate) && (!endDate || orderDate <= endDate);
-
     return withinDateRange && orderList;
   });
 
@@ -75,7 +82,22 @@ const AdminOrderPage = () => {
       <Grid container>
         <Grid item xs={11} md={11}>
           <AdminPageOrderSearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} resetSearch={resetSearch} />
-          <AdminPageOrderTable orderTableHead={orderTableHead} orderList={filteredOrders} handleOpenOrderDialog={handleOpenOrderDialog} />
+
+          <Box p={3}>
+            <Paper square>
+              <Tabs value={tabIndex} indicatorColor="primary" textColor="primary" onChange={handleTabChange} aria-label="admin tabs" variant="fullWidth">
+                <Tab label="주문 관리" />
+                <Tab label="클레임 관리" />
+              </Tabs>
+            </Paper>
+            <Box mt={3}>
+              {tabIndex === 0 && (
+                <AdminPageOrderTable orderTableHead={orderTableHead} orderList={filteredOrders} handleOpenOrderDialog={handleOpenOrderDialog} />
+              )}
+              {tabIndex === 1 && <AdminPageClaimTable claimTableHead={claimTableHead} requestList={requestList} />}
+            </Box>
+          </Box>
+
           {openDialog && <AdminPageOrderDialog open={openDialog} handleClose={handleCloseOrderDialog} orderDialogTableHead={orderDialogTableHead} />}
         </Grid>
       </Grid>

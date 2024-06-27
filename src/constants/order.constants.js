@@ -28,6 +28,21 @@ export const SET_SELECTED_ORDER = 'SET_SELECTED_ORDER';
 export const SET_FULL_ADDRESS = 'SET_FULL_ADDRESS';
 export const SET_DELIVERY_INFO = 'SET_DELIVERY_INFO';
 
+// 주문 문의 요청.
+export const REQUEST_ORDER_REQUEST = 'REQUEST_ORDER_REQUEST';
+export const REQUEST_ORDER_SUCCESS = 'REQUEST_ORDER_SUCCESS';
+export const REQUEST_ORDER_FAIL = 'REQUEST_ORDER_FAIL';
+
+// 모든 주문 문의 조회.
+export const GET_REQUEST_LIST_REQUEST = 'GET_REQUEST_LIST_REQUEST';
+export const GET_REQUEST_LIST_SUCCESS = 'GET_REQUEST_LIST_SUCCESS';
+export const GET_REQUEST_LIST_FAIL = 'GET_REQUEST_LIST_FAIL';
+
+// 내 주문 문의 조회.
+export const GET_REQUEST_REQUEST = 'GET_REQUEST_REQUEST';
+export const GET_REQUEST_SUCCESS = 'GET_REQUEST_SUCCESS';
+export const GET_REQUEST_FAIL = 'GET_REQUEST_FAIL';
+
 export const badgeBg = {
   // 아래 항목을 채워주세요.
   // preparing:

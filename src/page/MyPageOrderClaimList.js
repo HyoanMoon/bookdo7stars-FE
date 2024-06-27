@@ -1,14 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Link, Container, Grid, Button } from '@mui/material';
 import MyPageCategory from '../components/MyPageCategory';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { orderActions } from '../action/orderActions';
 
 const MyPageOrderClaimList = () => {
-  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.user);
+  const { myRequestList } = useSelector((state) => state.order);
+  const { myOrderList } = useSelector((state) => state.order);
+
+  // console.log('myOrderList', myOrderList);
+  // console.log('myRequestList', myRequestList);
+  // console.log('user', user);
+
+  useEffect(() => {
+    dispatch(orderActions.getMyRequest());
+    dispatch(orderActions.getMyOrder());
+  }, [user, dispatch]);
+
   const handleClaim = () => {
-    navigate('');
+    navigate('/mypage/order-request');
   };
 
   return (
@@ -51,7 +65,7 @@ const MyPageOrderClaimList = () => {
                   sx={{ ml: 1, width: '25ch', height: '30px', borderRadius: '20px' }}
                   onClick={handleClaim}>
                   <Typography variant="subtitle2" color="white">
-                    반품/교환 신청하기
+                    반품/교환/취소 신청하기
                   </Typography>
                 </Button>
               </Grid>
@@ -62,23 +76,44 @@ const MyPageOrderClaimList = () => {
                 <Table>
                   {/* 테이블 헤드 */}
                   <TableHead>
-                    <TableCell>접수 일자</TableCell>
-                    <TableCell>주문 번호</TableCell>
-                    <TableCell>주문 내역</TableCell>
-                    <TableCell>신청 내용</TableCell>
-                    <TableCell>처리 상태</TableCell>
+                    <TableCell>접수일자</TableCell>
+                    <TableCell>주문내역</TableCell>
+                    <TableCell>총주문액</TableCell>
+                    <TableCell>요청사항</TableCell>
+                    <TableCell>처리상태</TableCell>
                   </TableHead>
+
                   {/* 테이블 바디 */}
                   <TableBody>
-                    {/* {recentOrderHistory?.map((item) => ( */}
-                    <TableRow>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                    </TableRow>
-                    {/* ))} */}
+                    {myRequestList?.length > 0 ? (
+                      myRequestList
+                        .filter((item) => item.request.requestType !== '취소')
+                        .map((item, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{item.createdAt.slice(0, 10)}</TableCell>
+                            <TableCell>
+                              {`${
+                                (myOrderList.length > 0 &&
+                                  myOrderList
+                                    .find((order) => order.orderNum === item.orderNum)
+                                    ?.items.map((orderItem) => orderItem.bookId?.title)
+                                    .join(', ')
+                                    .slice(0, 25)) ||
+                                '제목 없음'
+                              }...`}
+                            </TableCell>
+                            <TableCell>{item.totalPrice}</TableCell>
+                            <TableCell>{item.request.requestType}</TableCell>
+                            <TableCell>{item.request.status}</TableCell>
+                          </TableRow>
+                        ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={5} style={{ textAlign: 'center' }}>
+                          주문이 존재하지 않습니다.
+                        </TableCell>
+                      </TableRow>
+                    )}
                   </TableBody>
                 </Table>
               </Box>

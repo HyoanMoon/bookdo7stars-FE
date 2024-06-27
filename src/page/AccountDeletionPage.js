@@ -198,7 +198,7 @@ const AccountDeletionPage = () => {
                     </Grid>
                     <Grid item xs={12} md={4}>
                       <FormControlLabel value="시스템 오류" control={<Radio />} label="시스템 오류" />
-                      <FormControlLabel value="예스24 이용안함" control={<Radio />} label="예스24 이용안함" />
+                      <FormControlLabel value="북두칠성 이용안함" control={<Radio />} label="예스24 이용안함" />
                       <FormControlLabel value="개인정보 및 보안 우려" control={<Radio />} label="개인정보 및 보안 우려" />
                     </Grid>
                   </Grid>

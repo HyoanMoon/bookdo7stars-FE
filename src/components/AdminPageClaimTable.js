@@ -22,7 +22,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const AdminPageOrderTable = ({ orderTableHead, orderList, handleOpenOrderDialog }) => {
+const AdminPageClaimTable = ({ claimTableHead, requestList }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -30,46 +30,38 @@ const AdminPageOrderTable = ({ orderTableHead, orderList, handleOpenOrderDialog 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
 
+  console.log('requestList', requestList);
+
   return (
     <>
-      {/* 상품 테이블 */}
+      {/* 문의 테이블 */}
       <TableContainer component={Paper}>
         <Table>
           {/* 테이블 헤더 */}
           <TableHead>
             <TableRow>
-              {orderTableHead.map((head, index) => (
+              {claimTableHead.map((head, index) => (
                 <TableCell key={index}>{head}</TableCell>
               ))}
             </TableRow>
           </TableHead>
-          {/* ex: 이 도서 외 2개 */}
 
-          {/* 테이블 바디 */}
           <TableBody>
-            {orderList.length > 0 ? (
-              orderList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => (
+            {requestList.length > 0 ? (
+              requestList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => (
                 <StyledTableRow key={order?._id} onClick={() => handleOpenOrderDialog(order)}>
                   <StyledTableCell>{index + 1}</StyledTableCell>
                   <StyledTableCell>{order?.orderNum}</StyledTableCell>
                   <StyledTableCell>{order?.createdAt.slice(0, 10)}</StyledTableCell>
                   <StyledTableCell>{order?.contact?.name}</StyledTableCell>
-                  {order.items.length > 0 ? (
-                    <StyledTableCell>
-                      {order.items[0]?.bookId.title}
-                      {order.items.length > 1 && `외 ${order.items.length - 1}개`}
-                    </StyledTableCell>
-                  ) : (
-                    <StyledTableCell></StyledTableCell>
-                  )}
-                  <StyledTableCell>{order?.shipTo?.address1}</StyledTableCell>
-                  <StyledTableCell>{order?.totalPrice}</StyledTableCell>
-                  <StyledTableCell>{order?.status}</StyledTableCell>
+                  <StyledTableCell>{order?.request?.requestType}</StyledTableCell>
+                  <StyledTableCell>{order?.request?.status}</StyledTableCell>
                 </StyledTableRow>
               ))
             ) : (
@@ -81,7 +73,7 @@ const AdminPageOrderTable = ({ orderTableHead, orderList, handleOpenOrderDialog 
       <TablePagination
         rowsPerPageOptions={[5, 10, 15]}
         component="div"
-        count={orderList?.length}
+        count={requestList?.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -91,4 +83,4 @@ const AdminPageOrderTable = ({ orderTableHead, orderList, handleOpenOrderDialog 
   );
 };
 
-export default AdminPageOrderTable;
+export default AdminPageClaimTable;

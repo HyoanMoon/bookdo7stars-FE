@@ -4,17 +4,21 @@ import MyPageCategory from '../components/MyPageCategory';
 import { useDispatch, useSelector } from 'react-redux';
 import { contactActions } from '../action/contactActions';
 import InquiryTable from '../components/InquiryTable';
+import { orderActions } from '../action/orderActions';
 
 const MyShoppingPage = () => {
   const [tabIndex, setTabIndex] = useState(0);
-  const recentOrderHistory = [{ _id: '12345', createdAt: '2024-06-23', orderNum: '123456', bookTitle: 'BookTitle', status: 'Delivered', none: '' }];
-  const { userContacts } = useSelector((state) => state.contact);
   const { user } = useSelector((state) => state.user);
+  const { myOrderList } = useSelector((state) => state.order);
+  const { userContacts } = useSelector((state) => state.contact);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(orderActions.getMyOrder());
     dispatch(contactActions.getContactsByUser());
-  }, []);
+  }, [user, dispatch]);
+
+  // console.log('myOrderList', myOrderList);
 
   return (
     <Container>
@@ -59,23 +63,29 @@ const MyShoppingPage = () => {
               <Table>
                 {/* 테이블 헤드 */}
                 <TableHead>
-                  <TableCell>주문 일자</TableCell>
-                  <TableCell>주문 번호</TableCell>
-                  <TableCell>주문 내역</TableCell>
-                  <TableCell>주문 상태</TableCell>
+                  <TableCell>주문번호</TableCell>
+                  <TableCell>주문일자</TableCell>
+                  <TableCell>주문내역</TableCell>
+                  <TableCell>주문상태</TableCell>
                   <TableCell>비고</TableCell>
                 </TableHead>
                 {/* 테이블 바디 */}
                 <TableBody>
-                  {recentOrderHistory?.map((item) => (
-                    <TableRow key={item._id}>
-                      <TableCell>{item.createdAt}</TableCell>
-                      <TableCell>{item.orderNum}</TableCell>
-                      <TableCell>{item.bookTitle}</TableCell>
-                      <TableCell>{item.status}</TableCell>
-                      <TableCell>{item.none}</TableCell>
-                    </TableRow>
-                  ))}
+                  {myOrderList.length > 0 &&
+                    myOrderList?.map((item) => (
+                      <TableRow key={item._id}>
+                        <TableCell>{item?.orderNum}</TableCell>
+                        <TableCell>{item?.createdAt.slice(0, 10)}</TableCell>
+                        <TableCell>
+                          {`${item?.items
+                            ?.map((item) => item.bookId?.title)
+                            .join(', ')
+                            .slice(0, 20)}...`}
+                        </TableCell>
+                        <TableCell>{item?.status}</TableCell>
+                        <TableCell>{''}</TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </Box>

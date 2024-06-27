@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Typography,
@@ -16,14 +16,28 @@ import {
   Checkbox,
 } from '@mui/material';
 import MyPageCategory from '../components/MyPageCategory';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { orderActions } from '../action/orderActions';
 
 const MyPageOrderCancelList = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
+  const { myRequestList } = useSelector((state) => state.order);
+  const { myOrderList } = useSelector((state) => state.order);
   const [recentChecked, setRecentChecked] = useState(false);
   const [oldChecked, setOldChecked] = useState(false);
 
-  const handleRecentChange = (event) => {
+  useEffect(() => {
+    dispatch(orderActions.getMyRequest());
+    dispatch(orderActions.getMyOrder());
+  }, [user, dispatch]);
+
+  const handleGoToBuyTheBook = (orderNum) => {
+    navigate(`/order-detail/${orderNum}`);
+  };
+
+const handleRecentChange = (event) => {
     setRecentChecked(event.target.checked);
     // 최근순 ~~
   };
@@ -75,6 +89,9 @@ const MyPageOrderCancelList = () => {
                   <Typography variant="subtitle2" pl={1}>
                     입금확인 이전 취소된 주문인 경우, 고객센터로 결제정보를 알려주셔야만 입금확인 후 환불이 가능합니다.
                   </Typography>
+                  <Typography variant="subtitle2" pl={1} color="red">
+                    취소 신청은 마이페이지 [반품/교환 신청 및 조회] 페이지에서 진행하실 있습니다.
+                  </Typography>
                 </Grid>
               </Grid>
 
@@ -97,27 +114,52 @@ const MyPageOrderCancelList = () => {
                 <Table>
                   {/* 테이블 헤드 */}
                   <TableHead>
-                    <TableCell>주문 일시</TableCell>
-                    <TableCell>주문 번호</TableCell>
-                    <TableCell>주문 내역</TableCell>
-                    <TableCell>다시 주문</TableCell>
+                    <TableCell>접수일자</TableCell>
+                    <TableCell>주문내역</TableCell>
+                    <TableCell>총주문액</TableCell>
+                    <TableCell>요청사항</TableCell>
+                    <TableCell>처리상태</TableCell>
+                    <TableCell>다시주문</TableCell>
                   </TableHead>
+
                   {/* 테이블 바디 */}
                   <TableBody>
-                    {/* {recentOrderHistory?.map((item) => ( */}
-                    <TableRow>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell>
-                        <Button variant="contained" color="secondary" fullWidth sx={{ ml: 1, width: '10ch', height: '20px', borderRadius: '5px' }}>
-                          <Typography variant="subtitle2" color="white">
-                            이동
-                          </Typography>
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                    {/* ))} */}
+                    {myRequestList?.length > 0 ? (
+                      myRequestList
+                        .filter((item) => item.request.requestType !== ('반품' || '교환'))
+                        .map((item, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{item.createdAt.slice(0, 10)}</TableCell>
+                            <TableCell>
+                              {`${
+                                (myOrderList.length > 0 &&
+                                  myOrderList
+                                    .find((order) => order.orderNum === item.orderNum)
+                                    ?.items.map((orderItem) => orderItem.bookId?.title)
+                                    .join(', ')
+                                    .slice(0, 25)) ||
+                                '제목 없음'
+                              }...`}
+                            </TableCell>
+                            <TableCell>{item.totalPrice}</TableCell>
+                            <TableCell>{item.request.requestType}</TableCell>
+                            <TableCell>{item.request.status}</TableCell>
+                            <TableCell>
+                              <Button variant="contained" color="secondary" fullWidth sx={{ ml: 1, width: '10ch', height: '20px', borderRadius: '5px' }} onClick={()=>handleGoToBuyTheBook(item.items.bookId)}>
+                                <Typography variant="subtitle2" color="white">
+                                  이동
+                                </Typography>
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={5} style={{ textAlign: 'center' }}>
+                          주문이 존재하지 않습니다.
+                        </TableCell>
+                      </TableRow>
+                    )}
                   </TableBody>
                 </Table>
               </Box>
