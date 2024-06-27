@@ -46,7 +46,7 @@ const RegisterPage = () => {
     setUserExistsError(false);
 
     // Validation
-    const userNameRegex = /^[a-zA-Z]+$/;
+    const userNameRegex = /^[a-zA-Z가-힣\s-]+$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!userNameRegex.test(userName)) {
@@ -127,7 +127,7 @@ const RegisterPage = () => {
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
                 error={userNameError}
-                helperText={userNameError ? 'User name must contain only letters.' : ''}
+                helperText={userNameError ? 'User name must contain only letters, spaces, and hyphens.' : ''}
                 InputLabelProps={{
                   shrink: true,
                 }}
