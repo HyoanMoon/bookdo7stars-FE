@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Container, Grid, Button, Box, IconButton } from '@mui/material';
+import { Container, Grid, Box, IconButton } from '@mui/material';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import BookImage from '../components/BookDetailPage/Book.image';
 import BookBasicInfo from '../components/BookDetailPage/BookBasicInfo';
@@ -43,8 +43,8 @@ const BookDetailPage = () => {
   }
 
   return (
-    <Box sx={{ mt: { xs: 10, md: 20 } }}>
-      <Container>
+    <Box sx={{ mt: { xs: 8, md: 16 } }}>
+      <Container sx={{ mb: 4 }}>
         <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           <Grid item xs={12} md={4} sx={{ textAlign: 'center' }}>
             {selectedBook.cover && <BookImage cover={selectedBook.cover} />}
@@ -58,7 +58,7 @@ const BookDetailPage = () => {
               deliveryInfo={deliveryInfo}
               deliveryAddress={address}
             />
-            <Box mt={4}>
+            <Box mt={3}>
               <Box display="flex" alignItems="center" sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5', padding: '8px', borderRadius: '4px' }}>
                 <div style={{ marginRight: '14px' }}>배송 정보</div>
                 <h6 style={{ margin: 0, marginRight: '13px' }}>{address}</h6>
@@ -74,8 +74,8 @@ const BookDetailPage = () => {
         <Box
           sx={{
             position: 'fixed',
-            bottom: 50,
-            right: 50,
+            bottom: 40,
+            right: 40,
             zIndex: 1000,
           }}>
           <IconButton
@@ -87,6 +87,10 @@ const BookDetailPage = () => {
               borderRadius: '50%',
               width: 56,
               height: 56,
+              '@media (max-width:600px)': {
+                width: 40, // Smaller width for mobile
+                height: 40, // Smaller height for mobile
+              },
             }}>
             <ArrowUpwardIcon />
           </IconButton>
