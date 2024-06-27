@@ -8,10 +8,14 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import IconButton from '@mui/material/IconButton';
 import { pink } from '@mui/material/colors';
 import { favoriteActions } from '../action/favoriteActions';
+import { cartActions } from '../action/cartActions';
+import { commonUiActions } from '../action/commonUiAction';
 
 const BookCard = ({ book, favorite, sx }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+  console.log(user);
 
   const clickBookCard = (book) => {
     dispatch({ type: types.SET_SELECTED_BOOK, payload: book });
@@ -19,7 +23,11 @@ const BookCard = ({ book, favorite, sx }) => {
   };
 
   const handleFavoriteClick = () => {
-    dispatch(favoriteActions.addFavorite(book._id));
+    if (user) {
+      dispatch(favoriteActions.addFavorite(book._id));
+    } else {
+      dispatch(commonUiActions.showToastMessage('로그인이 필요합니다!', 'error'));
+    }
   };
 
   const deleteFavoriteClick = () => {
@@ -27,7 +35,11 @@ const BookCard = ({ book, favorite, sx }) => {
   };
 
   const handleCartClick = () => {
-    // Your cart click handling logic
+    if (user) {
+      dispatch(cartActions.addToCart(book, 1, '')); // 배송 정보 추가
+    } else {
+      dispatch(commonUiActions.showToastMessage('로그인이 필요합니다!', 'error'));
+    }
   };
 
   return (
