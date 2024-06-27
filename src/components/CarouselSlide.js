@@ -1,6 +1,7 @@
 import React from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import './CarouselSlide.css'; // Import the CSS file
 import { useNavigate } from 'react-router-dom';
 
 const CarouselSlide = () => {
@@ -12,16 +13,16 @@ const CarouselSlide = () => {
   };
 
   return (
-    <div style={{ overflow: 'hidden' }}>
+    <div className="carousel-container">
       <Carousel showArrows={false} infiniteLoop={true} showThumbs={false} showStatus={false} autoPlay={true} interval={3000}>
         <div>
-          <img src="/carousel/cr1.png" alt="Slide 1" style={{ width: '100vw' }} />
+          <img src="/carousel/cr1.png" alt="Slide 1" className="carousel-image" />
         </div>
         <div>
-          <img src="/carousel/cr2.png" alt="Slide 2" style={{ width: '100vw' }} />
+          <img src="/carousel/cr2.png" alt="Slide 2" className="carousel-image" />
         </div>
         <div>
-          <img src="/carousel/cr3.png" alt="Slide 3" style={{ width: '100vw' }} />
+          <img src="/carousel/cr3.png" alt="Slide 3" className="carousel-image" />
         </div>
       </Carousel>
     </div>
@@ -29,4 +30,3 @@ const CarouselSlide = () => {
 };
 
 export default CarouselSlide;
-// onClick={(e) => handleImageClick('6674551e57dd26116151c617', e)}

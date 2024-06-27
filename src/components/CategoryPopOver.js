@@ -62,11 +62,16 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
               maxHeight: '500px',
               overflowY: 'auto',
               padding: '10px',
-              border: '1px solid',
-              borderColor: 'primary.main',
-              borderRadius: '4px',
-              minWidth: '200px', // 최소 너비 설정
-              minHeight: '200px', // 최소 높이 설정
+              boxShadow: 3, // Apply shadow for better visuals
+              borderRadius: '8px', // Rounded corners
+              minWidth: '200px', // Minimum width
+              minHeight: '200px', // Minimum height
+              backgroundColor: 'background.paper', // Use theme background color
+              '@media (max-width: 600px)': {
+                // Mobile responsiveness
+                maxWidth: '90%',
+                padding: '5px',
+              },
             }}
             {...TransitionProps}>
             <ClickAwayListener onClickAway={() => handlePopperClose()}>
@@ -82,7 +87,7 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
                         cursor: 'pointer',
                         display: 'inline-block',
                         '&:hover': {
-                          backgroundColor: 'primary.light', // 원하는 배경색으로 변경하세요.
+                          color: 'primary.main', // Change text color on hover
                         },
                       }}>
                       <strong>{firstCategory}</strong>
@@ -104,7 +109,7 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
                               cursor: 'pointer',
                               display: 'inline-block',
                               '&:hover': {
-                                backgroundColor: 'primary.light', // 원하는 배경색으로 변경하세요.
+                                color: 'primary.main', // Change text color on hover
                               },
                             }}>
                             <strong>{secondCategory}</strong>
@@ -119,7 +124,7 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
                                     cursor: 'pointer',
                                     display: 'inline-block',
                                     '&:hover': {
-                                      backgroundColor: 'primary.light', // 원하는 배경색으로 변경하세요.
+                                      color: 'primary.main', // Change text color on hover
                                     },
                                   }}>
                                   {thirdCategory}

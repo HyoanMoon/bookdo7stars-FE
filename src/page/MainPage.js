@@ -32,7 +32,9 @@ const MainPage = () => {
   const bestSellerCategories = getCategories(bestSeller);
 
   return (
-    <>
+    <Box sx={{ marginBottom: '20px' }}>
+      {' '}
+      {/* Add margin bottom to the main wrapper */}
       <Box>
         <CarouselSlide />
       </Box>
@@ -82,7 +84,7 @@ const MainPage = () => {
           )}
         </Box>
       </Container>
-    </>
+    </Box>
   );
 };
 

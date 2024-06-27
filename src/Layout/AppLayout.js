@@ -1,29 +1,32 @@
 import React, { useEffect } from 'react';
 import NavBar from '../components/Navbar';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router'; // useLocation import 추가
+import { useLocation } from 'react-router';
 import ToastMessage from '../components/ToastMessage';
 import { userActions } from '../action/userActions';
 import { bookActions } from '../action/bookActions';
 import { cartActions } from '../action/cartActions';
-import Sidebar from '../components/Sidebar'; // Sidebar import 추가
+import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer/Footer';
 import CategoryBar from '../components/CategoryBar';
+import { Box, Typography, useMediaQuery } from '@mui/material';
 
 const AppLayout = ({ children }) => {
   const dispatch = useDispatch();
-  const location = useLocation(); // useLocation 사용
+  const location = useLocation();
   const { user } = useSelector((state) => state.user);
+
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   useEffect(() => {
     dispatch(userActions.loginWithToken());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (user) {
       dispatch(cartActions.getCartQty());
     }
-  }, [user]);
+  }, [user, dispatch]);
 
   const { bookList, bookGroup } = useSelector((state) => state.book);
 
@@ -33,42 +36,46 @@ const AppLayout = ({ children }) => {
     } else {
       dispatch(bookActions.getBookList({}));
     }
-  }, [bookGroup]);
+  }, [bookGroup, dispatch]);
 
   return (
-    <div>
+    <Box>
       <ToastMessage />
-      {location.pathname.includes('member') ? (
-        ''
-      ) : (
-        <div
-          style={{
+      {!location.pathname.includes('member') && (
+        <Box
+          sx={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#3d643d',
             height: '60px',
+            p: 1,
+            textAlign: 'center',
           }}>
-          <h2 style={{ margin: 0, color: '#fff', textAlign: 'center' }}>10만원 이상 주문 시 모든 주문 무료 배송 (Standard Shipping)</h2>
-        </div>
+          <Typography sx={{ margin: 0, color: '#fff', fontSize: isMobile ? '0.875rem' : '1rem' }}>
+            10만원 이상 주문 시 모든 주문 무료 배송 (Standard Shipping)
+          </Typography>
+        </Box>
       )}
-      {location.pathname.includes('admin') ? ( // 관리자 페이지 여부에 따라 조건부 렌더링
-        <div style={{ display: 'flex' }}>
+      {location.pathname.includes('admin') ? (
+        <Box sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row' }}>
           <Sidebar />
-          <main style={{ flexGrow: 1, padding: '20px' }}>{children}</main>
-        </div>
+          <Box component="main" sx={{ flexGrow: 1, p: 2 }}>
+            {children}
+          </Box>
+        </Box>
       ) : location.pathname.includes('member') ? (
-        <div style={{ marginTop: '20px' }}>{children}</div>
+        <Box sx={{ mt: 2 }}>{children}</Box>
       ) : (
-        <div>
+        <Box>
           <NavBar user={user} />
           <CategoryBar bookList={bookList} />
-          <div style={{ marginTop: '20px' }}>{children}</div>
-        </div>
+          <Box sx={{ mt: 2 }}>{children}</Box>
+        </Box>
       )}
-      {location.pathname.includes('member') ? '' : <Footer />}
-    </div>
+      {!location.pathname.includes('member') && <Footer />}
+    </Box>
   );
 };
 
