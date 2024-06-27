@@ -55,11 +55,8 @@ const MainPage = () => {
             maxWidth: '1800px',
           },
           display: 'flex',
-          justifyContent: 'center',
           flexDirection: 'column',
           borderRadius: 2,
-          padding: 0,
-          margin: 'auto',
         }}>
         <Box sx={{ paddingTop: '20px' }}>
           <BooksCarousel bookList={newSpecialBooks.slice(0, 10)} title={'화제의 신작'} isMobile={isMobile} />

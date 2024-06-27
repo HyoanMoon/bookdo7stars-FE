@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Container, Grid, Drawer, IconButton, useMediaQuery } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { bookActions } from '../../action/bookActions';
@@ -14,7 +13,7 @@ const BooksGroupPage = () => {
   const { bookList, groupBooks } = useSelector((state) => state.book);
   const [category, setCategory] = useState('국내도서');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false); // 드로어 열림 상태
-  const [displayCount, setDisplayCount] = useState(3); // 모바일에서 보이는 책의 개수
+  const [selectedPath, setSelectedPath] = useState([]); // 선택된 카테고리 경로 상태
   const isMobile = useMediaQuery('(max-width: 600px)'); // 모바일 여부 확인
 
   const bookGroup = useParams();
@@ -26,7 +25,7 @@ const BooksGroupPage = () => {
     if (bookGroup) {
       dispatch(bookActions.getBookListByGroup(bookGroup.bookGroup));
     }
-  }, [bookGroup]);
+  }, [bookGroup, dispatch]);
 
   if (!bookList) return null;
   if (!groupBooks || !bookGroup) return null;
@@ -44,16 +43,7 @@ const BooksGroupPage = () => {
     setIsDrawerOpen(open);
   };
 
-  let groupBooksByCategory = [];
-  groupBooks.map((book) => {
-    if (book.categoryName.includes(category)) {
-      groupBooksByCategory.push(book);
-    }
-  });
-
-  const handleLoadMore = () => {
-    setDisplayCount((prevCount) => prevCount + 3);
-  };
+  const groupBooksByCategory = groupBooks.filter((book) => book.categoryName.includes(category));
 
   return (
     <Container
@@ -85,28 +75,45 @@ const BooksGroupPage = () => {
         {!isMobile && (
           <Grid item xs={2}>
             <Box>
-              <CategoryList totalCategories={totalCategories} onCategoryClick={onCategoryClick} groupName={groupNameInKorean} />
+              <CategoryList
+                totalCategories={totalCategories}
+                onCategoryClick={onCategoryClick}
+                groupName={groupNameInKorean}
+                setSelectedPath={setSelectedPath}
+              />
             </Box>
           </Grid>
         )}
         {isMobile && (
-          <IconButton onClick={toggleDrawer(true)} color="primary" aria-label="filter" sx={{ marginLeft: '10px' }}>
-            <MenuIcon />
-          </IconButton>
+          <>
+            <Box sx={{ marginLeft: '10px', fontSize: '12px', display: 'flex', alignItems: 'center' }}>
+              <IconButton onClick={toggleDrawer(true)} color="primary" aria-label="filter">
+                <MenuIcon />
+              </IconButton>
+              <Box sx={{ overflowX: 'auto', whiteSpace: 'nowrap', marginLeft: '10px' }}>
+                {selectedPath.map((pathItem, index) => (
+                  <span key={index}>
+                    <span style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setSelectedPath(selectedPath.slice(0, index + 1))}>
+                      {pathItem}
+                    </span>
+                    {index < selectedPath.length - 1 && ' > '}
+                  </span>
+                ))}
+              </Box>
+            </Box>
+            <Drawer anchor="left" open={isDrawerOpen} onClose={toggleDrawer(false)}>
+              <CategoryList
+                totalCategories={totalCategories}
+                onCategoryClick={onCategoryClick}
+                groupName={groupNameInKorean}
+                setSelectedPath={setSelectedPath}
+              />
+            </Drawer>
+          </>
         )}
-        <Drawer anchor="left" open={isDrawerOpen} onClose={toggleDrawer(false)}>
-          <CategoryList totalCategories={totalCategories} onCategoryClick={onCategoryClick} groupName={groupNameInKorean} />
-        </Drawer>
         <Grid item xs={12} sm={10}>
           <Box>
-            <BooksGroupContainer bookList={groupBooksByCategory.slice(0, displayCount)} title={groupNameInKorean} />
-            {groupBooksByCategory.length > displayCount && (
-              <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
-                <IconButton onClick={handleLoadMore} color="primary">
-                  <AddIcon />
-                </IconButton>
-              </Box>
-            )}
+            <BooksGroupContainer bookList={groupBooksByCategory} title={groupNameInKorean} />
           </Box>
         </Grid>
       </Grid>

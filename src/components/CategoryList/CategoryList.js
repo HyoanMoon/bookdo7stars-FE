@@ -1,20 +1,16 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Typography, Grid, Collapse, IconButton, List, ListItemText, ListItem } from '@mui/material';
+import { Typography, Collapse, IconButton, List, ListItemText, ListItem } from '@mui/material';
 import { ExpandMore as ExpandMoreIcon, ChevronRight as ChevronRightIcon } from '@mui/icons-material';
 import { getCategoryHierarchy } from '../../_helper/getCategoryHierarchy';
-import { useNavigate, useParams } from 'react-router-dom';
 
-const CategoryList = ({ totalCategories, onCategoryClick, groupName }) => {
+const CategoryList = ({ totalCategories, onCategoryClick, groupName, setSelectedPath }) => {
   const [open, setOpen] = useState({}); // 각 카테고리의 열림 여부를 저장하는 상태
   const [selectedCategory, setSelectedCategory] = useState(''); // 선택된 카테고리
-  const [selectedPath, setSelectedPath] = useState([]); // 선택된 카테고리 경로를 저장하는 상태
-  const navigate = useNavigate();
-
   const categoryHierarchy = useMemo(() => getCategoryHierarchy(totalCategories), [totalCategories]);
 
   useEffect(() => {
     setSelectedPath([]);
-  }, [groupName]);
+  }, [groupName, setSelectedPath]);
 
   useEffect(() => {
     const initialOpenState = {};
@@ -44,7 +40,8 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName }) => {
       setSelectedPath([]);
     } else {
       setSelectedCategory(categoryPath);
-      setSelectedPath(categoryPath.split('>'));
+      const pathArray = categoryPath.split('>');
+      setSelectedPath(pathArray);
       setOpen((prevOpen) => ({ ...prevOpen, [categoryPath]: true }));
 
       if (onCategoryClick) {
@@ -73,7 +70,6 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName }) => {
           <ListItem
             button
             onClick={() => handleItemClick(categoryPath)}
-            selected={selectedCategory === categoryPath}
             sx={{
               backgroundColor: selectedCategory === categoryPath ? 'primary.light' : 'inherit',
               '&:hover': {
@@ -117,18 +113,6 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName }) => {
 
   return (
     <div>
-      {selectedPath.length > 0 && (
-        <div style={{ marginBottom: '10px', fontSize: '12px' }}>
-          {selectedPath.map((pathItem, index) => (
-            <span key={index}>
-              <span style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => handleItemClick(selectedPath.slice(0, index + 1).join('>'))}>
-                {pathItem}
-              </span>
-              {index < selectedPath.length - 1 && ' > '}
-            </span>
-          ))}
-        </div>
-      )}
       <List>{renderCategories(categoryHierarchy)}</List>
     </div>
   );

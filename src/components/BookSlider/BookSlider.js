@@ -11,7 +11,7 @@ import CustomLeftArrow from './CustomLeftArrow';
 import { useDispatch, useSelector } from 'react-redux';
 import { favoriteActions } from '../../action/favoriteActions';
 
-const BookSlider = ({ bookList }) => {
+const BookSlider = ({ bookList, isMobile }) => {
   const dispatch = useDispatch();
   const { favorite } = useSelector((state) => state.favorite);
   const { user } = useSelector((state) => state.user);
@@ -40,7 +40,7 @@ const BookSlider = ({ bookList }) => {
   }, [dispatch, user]);
 
   return (
-    <Box sx={{ height: '380px' }}>
+    <Box sx={{ height: 'auto', backgroundColor: 'blue', justifyContent: 'center' }}>
       <Carousel containerClass="carousel-container" responsive={responsive} customLeftArrow={<CustomLeftArrow />} customRightArrow={<CustomRightArrow />}>
         {bookList.map((book, index) => (
           <Box key={index} sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
