@@ -59,6 +59,10 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName, setSelected
     }
   };
 
+  console.log(categoryHierarchy);
+  let subCategory = {
+    국내도서: categoryHierarchy['국내도서'],
+  };
   const renderCategories = (categories, parentPath = '') => {
     return Object.keys(categories).map((category, index) => {
       const subCategories = categories[category];
@@ -113,7 +117,7 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName, setSelected
 
   return (
     <div>
-      <List>{renderCategories(categoryHierarchy)}</List>
+      <List>{renderCategories(subCategory)}</List>
     </div>
   );
 };
