@@ -11,7 +11,7 @@ const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheck
   const grandTotal = finalTotalPrice + shippingFee;
 
   return (
-    <Paper elevation={3} sx={{ padding: '16px', width: '100%', maxWidth: '600px', marginTop: '20px' }}>
+    <Paper elevation={3} sx={{ padding: '16px', width: '100%', borderRadius: '10px' }}>
       <Typography variant="h6" align="center" sx={{ fontWeight: 'bold', marginBottom: '16px' }}>
         Order Summary
       </Typography>
