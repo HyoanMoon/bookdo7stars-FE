@@ -21,17 +21,17 @@ const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheck
           <Typography variant="body1">총 상품 금액:</Typography>
           <Typography variant="body1">₩{currencyFormat(finalTotalPrice)}</Typography>
         </Box>
-        <Divider />
+
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
           <Typography variant="body1">배송비:</Typography>
           <Typography variant="body1">₩{currencyFormat(shippingFee)}</Typography>
         </Box>
-        <Divider />
+
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
           <Typography variant="body1">적립금:</Typography>
           <Typography variant="body1">₩{currencyFormat(pointsEarned)}</Typography>
         </Box>
-        <Divider />
+
         <Box display="flex" justifyContent="space-between" alignItems="center" mt={2} mb={2}>
           <Typography variant="h6">최종 결제 금액:</Typography>
           <Typography variant="h6">₩{currencyFormat(grandTotal)}</Typography>

@@ -196,7 +196,7 @@ const CartPage = () => {
               </TableContainer>
             )}
           </Box>
-          <Box flex={1} ml={3}>
+          <Box flex={1} ml={3} sx={{ position: 'sticky', top: '20px' }}>
             <OrderReceipt
               cartList={selectedCartList}
               finalTotalPrice={finalTotalPrice}
