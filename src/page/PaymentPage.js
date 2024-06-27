@@ -203,12 +203,24 @@ const PaymentPage = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>상품명</TableCell>
-                  <TableCell align="right">정가</TableCell>
-                  <TableCell align="right">수량</TableCell>
-                  <TableCell align="right">할인금액</TableCell>
-                  <TableCell align="right">합계</TableCell>
-                  <TableCell align="right">배송일</TableCell>
+                  <TableCell>
+                    <Typography variant="body1">상품명</Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Typography variant="body1">정가</Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Typography variant="body1">수량</Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Typography variant="body1">할인금액</Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Typography variant="body1">합계</Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Typography variant="body1">배송일</Typography>
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

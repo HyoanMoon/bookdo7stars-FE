@@ -1,14 +1,18 @@
 import React from 'react';
 import { Box, Typography, Paper, Divider, Button } from '@mui/material';
-import { useNavigate, useLocation } from 'react-router-dom'; // react-router-dom에서 useNavigate 가져오기
+import { useNavigate, useLocation } from 'react-router-dom';
 import { currencyFormat } from '../utils/number';
 
 const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheckout, sticky }) => {
   const location = useLocation();
-  const navigate = useNavigate(); // useNavigate 훅 사용
-  const shippingFee = hasSelectedItems ? (finalTotalPrice > 100000 ? 0 : 2500) : 0; // 선택된 상품이 있으면 100불 이상 무료 배송, 그 외 2500원, 선택된 상품이 없으면 배송비 0
+  const navigate = useNavigate();
+  const shippingFee = hasSelectedItems ? (finalTotalPrice > 100000 ? 0 : 2500) : 0;
   const pointsEarned = finalTotalPrice * 0.05;
   const grandTotal = finalTotalPrice + shippingFee;
+
+  const handlePaymentSuccess = () => {
+    navigate('/payment/success');
+  };
 
   return (
     <Paper
@@ -18,8 +22,8 @@ const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheck
         width: '100%',
         maxWidth: '600px',
         borderRadius: '10px',
-        position: sticky ? 'sticky' : 'static', // Sticky 속성 추가
-        top: sticky ? '20px' : 'auto', // Sticky 속성 추가
+        position: sticky ? 'sticky' : 'static',
+        top: sticky ? '20px' : 'auto',
       }}>
       <Typography variant="h6" align="center" sx={{ fontWeight: 'bold', marginBottom: '16px' }}>
         Order Summary
@@ -47,14 +51,13 @@ const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheck
         </Box>
 
         {location.pathname.includes('/cart') && cartList.length > 0 && (
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 2 }}
-            onClick={handleCheckout} // handleCheckout 함수 실행
-          >
+          <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }} onClick={handleCheckout}>
             주문하기
+          </Button>
+        )}
+        {location.pathname.includes('/payment') && (
+          <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }} onClick={handlePaymentSuccess}>
+            결제하기
           </Button>
         )}
       </Box>
