@@ -2,11 +2,13 @@ import React from 'react';
 import { Container, Grid, Paper, Typography, Avatar, Box, Card, CardContent } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useSelector } from 'react-redux';
+
 // 스타일링된 컴포넌트 정의
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
   marginBottom: theme.spacing(4),
 }));
+
 const StyledBox = styled(Box)(({ theme }) => ({
   width: 180,
   height: 270,
@@ -17,22 +19,26 @@ const StyledBox = styled(Box)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   backgroundColor: theme.palette.primary.main,
 }));
+
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
   marginLeft: 20,
   marginRight: 20,
   width: 160,
   height: 160,
 }));
+
 // 도메인 변수
 const DOMAIN = 'http://localhost:3000';
 // const DOMAIN = 'https://book-do-7-stars.netlify.app/'; //배포용
 
 const EditorPage = () => {
   const { bookList } = useSelector((state) => state.book);
+
   // Query type에 맞는 책 목록을 가져오는 함수
   const getBooksByQueryType = (queryType) => {
     return bookList.filter((book) => book.queryType === queryType);
   };
+
   const editors = [
     {
       name: '에디터 효안',
@@ -83,12 +89,14 @@ const EditorPage = () => {
         '배우고, 새로운 영감을 얻으실 수 있습니다. 강력히 추천드립니다.',
     },
   ];
+
   const defaultDescriptions = [
     '이 책은 삶의 새로운 관점을 열어줍니다. 강력 추천합니다!',
     '깊이 있는 내용과 감동적인 이야기로 가득 찬 작품입니다.',
     '흥미진진한 전개와 매력적인 캐릭터들로 눈을 뗄 수 없습니다.',
     '마음에 오래 남을 만큼 인상적인 책입니다. 꼭 읽어보세요!',
   ];
+
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
@@ -101,6 +109,9 @@ const EditorPage = () => {
             <Grid container spacing={2} alignItems="center">
               <Grid item>
                 <StyledAvatar src={editors[index].illustration} />
+                <Typography variant="h6" component="div" align="center">
+                  {editors[index].name}
+                </Typography>
               </Grid>
               <Grid item>
                 <StyledBox>
@@ -114,6 +125,9 @@ const EditorPage = () => {
               <Grid item xs>
                 <Card>
                   <CardContent>
+                    <Typography style={{ fontWeight: 'bold' }} variant="h5" component="div">
+                      {book.title || defaultDescriptions[index % defaultDescriptions.length]}
+                    </Typography>
                     <Typography variant="h6" component="div">
                       {book.description || defaultDescriptions[index % defaultDescriptions.length]}
                     </Typography>
@@ -129,4 +143,5 @@ const EditorPage = () => {
     </Container>
   );
 };
+
 export default EditorPage;
