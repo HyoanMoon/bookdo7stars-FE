@@ -19,8 +19,10 @@ const AppLayout = ({ children }) => {
   const isMobile = useMediaQuery('(max-width:600px)');
 
   useEffect(() => {
-    dispatch(userActions.loginWithToken());
-  }, [dispatch]);
+    if (user) {
+      dispatch(userActions.loginWithToken());
+    }
+  }, [dispatch, user]);
 
   useEffect(() => {
     if (user) {

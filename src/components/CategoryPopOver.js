@@ -1,5 +1,5 @@
 import { ClickAwayListener, Fade, Grid, Paper, Typography } from '@mui/material';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { bookActions } from '../action/bookActions';
 import { categoryActions } from '../action/categoryActions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,48 +11,43 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
   const navigate = useNavigate();
   const { categories } = useSelector((state) => state.category);
   const encodeCategoryPath = (path) => encodeURIComponent(path);
+  const params = useParams();
 
-  const clickSub3Category = (firstCategory, secondCategory, thirdCategory) => {
-    const newPath = [firstCategory, secondCategory, thirdCategory];
-    let categoryPath = newPath.join('>');
-    categoryPath = '국내도서>' + categoryPath;
-    // categories.find((category) => {
-    //   if (category.categoryName === categoryPath) {
-    //     categoryid = category.categoryId;
-    //   }
-    // });
-    const categoryid = encodeCategoryPath(categoryPath);
-    // if (categoryid) {
-    //   dispatch(categoryActions.setSelectedCategoryId(categoryid));
-    //   dispatch(categoryActions.setSelectedCategoryPath(categoryPath));
-    //   dispatch(bookActions.getBookListByCategory(categoryid));
-    // } else {
-    //   dispatch(categoryActions.setSelectedCategoryId(null));
-    //   dispatch(categoryActions.setSelectedCategoryPath(null));
-    //   dispatch(bookActions.resetBookListByCategory([]));
-    // }
-    navigate(`/books/all/category/${categoryid}`);
-    handlePopperClose();
-  };
+  const clickSub3Category = useCallback(
+    (firstCategory, secondCategory, thirdCategory) => {
+      const newPath = [firstCategory, secondCategory, thirdCategory];
+      let categoryPath = newPath.join('>');
+      categoryPath = '국내도서>' + categoryPath;
+      const categoryid = encodeCategoryPath(categoryPath);
+      navigate(`/books/all/category/${categoryid}`);
+      handlePopperClose();
+    },
+    [navigate, handlePopperClose],
+  );
 
-  const clickSub2Category = (firstCategory, secondCategory) => {
-    const newPath = [firstCategory, secondCategory];
-    let categoryPath = newPath.join('>');
-    categoryPath = '국내도서>' + categoryPath;
-    dispatch(categoryActions.setSelectedCategoryPath(categoryPath));
-    const categoryid = encodeCategoryPath(categoryPath);
-    navigate(`/books/all/category/${categoryid}`);
-    handlePopperClose();
-  };
-  const clickSubCategory = (firstCategory) => {
-    const newPath = [firstCategory];
-    let categoryPath = newPath.join('>');
-    categoryPath = '국내도서>' + categoryPath;
-    dispatch(categoryActions.setSelectedCategoryPath(categoryPath));
-    const categoryid = encodeCategoryPath(categoryPath);
-    navigate(`/books/all/category/${categoryid}`);
-    handlePopperClose();
-  };
+  const clickSub2Category = useCallback(
+    (firstCategory, secondCategory) => {
+      const newPath = [firstCategory, secondCategory];
+      let categoryPath = newPath.join('>');
+      categoryPath = '국내도서>' + categoryPath;
+      const categoryid = encodeCategoryPath(categoryPath);
+      navigate(`/books/all/category/${categoryid}`);
+      handlePopperClose();
+    },
+    [navigate, handlePopperClose],
+  );
+
+  const clickSubCategory = useCallback(
+    (firstCategory) => {
+      const newPath = [firstCategory];
+      let categoryPath = newPath.join('>');
+      categoryPath = '국내도서>' + categoryPath;
+      const categoryid = encodeCategoryPath(categoryPath);
+      navigate(`/books/all/category/${categoryid}`);
+      handlePopperClose();
+    },
+    [navigate, handlePopperClose],
+  );
 
   return (
     <Popper id={id} open={open} anchorEl={anchorEl} placement="bottom-start" transition style={{ zIndex: 1500 }}>
@@ -65,13 +60,12 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
               maxHeight: '500px',
               overflowY: 'auto',
               padding: '10px',
-              boxShadow: 3, // Apply shadow for better visuals
-              borderRadius: '8px', // Rounded corners
-              minWidth: '200px', // Minimum width
-              minHeight: '200px', // Minimum height
-              backgroundColor: 'background.paper', // Use theme background color
+              boxShadow: 3,
+              borderRadius: '8px',
+              minWidth: '200px',
+              minHeight: '200px',
+              backgroundColor: 'background.paper',
               '@media (max-width: 600px)': {
-                // Mobile responsiveness
                 maxWidth: '90%',
                 padding: '5px',
               },
@@ -81,7 +75,6 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
               <Grid container spacing={2}>
                 {Object.keys(secondAllSubCategories).map((firstCategory, index) => (
                   <Grid item xs={12} key={index} sx={{ paddingBottom: '5px' }}>
-                    {' '}
                     <Typography
                       variant="h6"
                       gutterBottom
@@ -90,7 +83,7 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
                         cursor: 'pointer',
                         display: 'inline-block',
                         '&:hover': {
-                          color: 'primary.main', // Change text color on hover
+                          color: 'primary.main',
                         },
                       }}>
                       <strong>{firstCategory}</strong>
@@ -112,7 +105,7 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
                               cursor: 'pointer',
                               display: 'inline-block',
                               '&:hover': {
-                                color: 'primary.main', // Change text color on hover
+                                color: 'primary.main',
                               },
                             }}>
                             <strong>{secondCategory}</strong>
@@ -127,7 +120,7 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
                                     cursor: 'pointer',
                                     display: 'inline-block',
                                     '&:hover': {
-                                      color: 'primary.main', // Change text color on hover
+                                      color: 'primary.main',
                                     },
                                   }}>
                                   {thirdCategory}

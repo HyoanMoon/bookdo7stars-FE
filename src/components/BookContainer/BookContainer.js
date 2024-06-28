@@ -28,7 +28,9 @@ const BookContainer = ({ bookList, categories, sx, title }) => {
   };
 
   useEffect(() => {
-    dispatch(favoriteActions.getFavorite());
+    if (user) {
+      dispatch(favoriteActions.getFavorite());
+    }
   }, [dispatch, user]);
 
   return (

@@ -15,7 +15,9 @@ const BooksAllContainer = ({ bookList, title, handleFilterChange, handleShowAllB
   const isMobile = useMediaQuery('(max-width: 600px)'); // 현재 화면이 모바일인지 데스크탑인지 확인
 
   useEffect(() => {
-    dispatch(favoriteActions.getFavorite());
+    if (user) {
+      dispatch(favoriteActions.getFavorite());
+    }
   }, [dispatch, user]);
 
   // 총 페이지 수 계산

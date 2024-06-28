@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { favoriteActions } from '../../action/favoriteActions';
 
-const BooksGroupContainer = ({ bookList, title }) => {
+const BooksGroupContainer = ({ bookList, title, subtitle }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isMobile = useMediaQuery('(max-width: 600px)'); // 모바일 화면인지 확인
@@ -15,7 +15,9 @@ const BooksGroupContainer = ({ bookList, title }) => {
   const { user } = useSelector((state) => state.favorite);
 
   useEffect(() => {
-    dispatch(favoriteActions.getFavorite());
+    if (user) {
+      dispatch(favoriteActions.getFavorite());
+    }
   }, [dispatch, user]);
 
   // "더보기" 기능
@@ -31,10 +33,20 @@ const BooksGroupContainer = ({ bookList, title }) => {
 
   return (
     <Container>
-      <Box sx={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+      <Box sx={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', flexDirection: 'column' }}>
         <Typography variant="h4" component="div" gutterBottom sx={{ fontWeight: 'bold', textAlign: 'center', margin: '0px' }}>
           {title}
+          {!isMobile && subtitle && (
+            <Typography component="span" sx={{ fontSize: '1rem', marginLeft: '8px' }}>
+              {subtitle}, ({bookList.length})
+            </Typography>
+          )}
         </Typography>
+        {isMobile && subtitle && (
+          <Typography variant="body2" sx={{ textAlign: 'center', marginTop: '4px' }}>
+            {subtitle}, ({bookList.length})
+          </Typography>
+        )}
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
         <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

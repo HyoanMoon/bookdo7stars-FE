@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Box, Container, Drawer, Grid, IconButton, useMediaQuery } from '@mui/material';
+import { Box, Container, Drawer, Grid, IconButton, Typography, useMediaQuery } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { bookActions } from '../action/bookActions';
 import CategoryList from './CategoryList/CategoryList';
@@ -10,19 +10,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 const CategoryPage = () => {
   const dispatch = useDispatch();
   const { bookList } = useSelector((state) => state.book);
-  const [category, setCategory] = useState('국내도서');
   const navigate = useNavigate();
-  const encodeCategoryPath = (path) => encodeURIComponent(path);
+  const encodeCategoryPath = (path) => encodeURIComponent(path.join('>'));
   const [selectedPath, setSelectedPath] = useState([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const totalCategories = [];
+  const [totalCategories, setTotalCategories] = useState([]);
   const isMobile = useMediaQuery('(max-width: 600px)');
-
   const params = useParams();
-
-  bookList.map((book) => {
-    return totalCategories.push(book.categoryName);
-  });
+  const [openCategories, setOpenCategories] = useState({ ['국내도서']: true });
 
   useEffect(() => {
     if (/^\d+$/.test(params.categoryid)) {
@@ -30,10 +25,23 @@ const CategoryPage = () => {
     }
   }, [params.categoryid, dispatch]);
 
+  useEffect(() => {
+    const categories = [...new Set(bookList.map((book) => book.categoryName))];
+    setTotalCategories(categories);
+  }, [bookList]);
+
   const onCategoryClick = useCallback(
     (categoryPath) => {
-      setCategory(categoryPath);
-      const categoryid = encodeCategoryPath(categoryPath);
+      // 카테고리를 '>'로 분리하여 배열로 변환
+      const splitPath = categoryPath.split('>');
+
+      // selectedPath 업데이트
+      setSelectedPath(splitPath);
+      setOpenCategories((prevOpen) => ({
+        ...prevOpen,
+        [categoryPath]: true,
+      }));
+      const categoryid = encodeCategoryPath(splitPath);
       navigate(`/books/all/category/${categoryid}`);
       if (isMobile) {
         setIsDrawerOpen(false);
@@ -41,6 +49,20 @@ const CategoryPage = () => {
     },
     [navigate, isMobile],
   );
+
+  useEffect(() => {
+    if (selectedPath.length > 0) {
+      const categoryid = encodeCategoryPath(selectedPath);
+      navigate(`/books/all/category/${categoryid}`);
+    }
+  }, [selectedPath, navigate]);
+
+  const handlePathClick = (index) => {
+    const newPath = selectedPath.slice(0, index + 1);
+    setSelectedPath(newPath);
+    const categoryid = encodeCategoryPath(newPath);
+    navigate(`/books/all/category/${categoryid}`);
+  };
 
   const booksByCategory = bookList.filter((book) => book.categoryName.includes(params.categoryid));
   const title = params.categoryid + ` (${booksByCategory.length})`;
@@ -83,7 +105,23 @@ const CategoryPage = () => {
         {!isMobile && (
           <Grid item xs={2}>
             <Box>
-              <CategoryList totalCategories={totalCategories} onCategoryClick={onCategoryClick} setSelectedPath={setSelectedPath} />
+              <Box sx={{ overflowX: 'auto', marginLeft: '10px', marginTop: '10px', fontSize: '12px' }}>
+                {selectedPath.map((pathItem, index) => (
+                  <span key={index}>
+                    <span style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => handlePathClick(index)}>
+                      {pathItem}
+                    </span>
+                    {index < selectedPath.length - 1 && ' > '}
+                  </span>
+                ))}
+              </Box>
+              <CategoryList
+                totalCategories={totalCategories}
+                onCategoryClick={onCategoryClick}
+                selectedPath={selectedPath} // setSelectedPath 전달
+                openCategories={openCategories}
+                setOpenCategories={setOpenCategories}
+              />
             </Box>
           </Grid>
         )}
@@ -96,7 +134,7 @@ const CategoryPage = () => {
               <Box sx={{ overflowX: 'auto', whiteSpace: 'nowrap', marginLeft: '10px' }}>
                 {selectedPath.map((pathItem, index) => (
                   <span key={index}>
-                    <span style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setSelectedPath(selectedPath.slice(0, index + 1))}>
+                    <span style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => handlePathClick(index)}>
                       {pathItem}
                     </span>
                     {index < selectedPath.length - 1 && ' > '}
@@ -105,7 +143,13 @@ const CategoryPage = () => {
               </Box>
             </Box>
             <Drawer anchor="left" open={isDrawerOpen} onClose={toggleDrawer(false)}>
-              <CategoryList totalCategories={totalCategories} onCategoryClick={onCategoryClick} setSelectedPath={setSelectedPath} />
+              <CategoryList
+                totalCategories={totalCategories}
+                onCategoryClick={onCategoryClick}
+                selectedPath={selectedPath} // setSelectedPath 전달
+                openCategories={openCategories}
+                setOpenCategories={setOpenCategories}
+              />
             </Drawer>
           </>
         )}

@@ -1,60 +1,16 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Collapse, IconButton, List, ListItemText, ListItem } from '@mui/material';
 import { ExpandMore as ExpandMoreIcon, ChevronRight as ChevronRightIcon } from '@mui/icons-material';
 import { getCategoryHierarchy } from '../../_helper/getCategoryHierarchy';
 
-const CategoryList = ({ totalCategories, onCategoryClick, groupName, setSelectedPath }) => {
-  const [open, setOpen] = useState({}); // 각 카테고리의 열림 여부를 저장하는 상태
-  const [selectedCategory, setSelectedCategory] = useState(''); // 선택된 카테고리
+const CategoryList = ({ totalCategories, onCategoryClick, selectedPath, openCategories, setOpenCategories }) => {
   const categoryHierarchy = useMemo(() => getCategoryHierarchy(totalCategories), [totalCategories]);
 
-  useEffect(() => {
-    if (categoryHierarchy) {
-      const initialOpenState = {};
-      const topCategories = Object.keys(categoryHierarchy);
-      topCategories.forEach((category) => {
-        initialOpenState[category] = true;
-      });
-      setOpen(initialOpenState);
-    }
-  }, [categoryHierarchy]);
-
-  useEffect(() => {
-    if (selectedCategory) {
-      const paths = selectedCategory.split('>');
-      const openState = {};
-      let currentPath = '';
-      paths.forEach((path) => {
-        currentPath = currentPath ? `${currentPath}>${path}` : path;
-        openState[currentPath] = true;
-      });
-      setOpen((prevOpen) => ({ ...prevOpen, ...openState }));
-    }
-  }, [selectedCategory]);
-
-  const handleItemClick = (categoryPath) => {
-    if (selectedCategory === categoryPath) {
-      setSelectedCategory('');
-      setSelectedPath([]);
-    } else {
-      setSelectedCategory(categoryPath);
-      const pathArray = categoryPath.split('>');
-      setSelectedPath(pathArray);
-      setOpen((prevOpen) => ({ ...prevOpen, [categoryPath]: true }));
-
-      if (onCategoryClick) {
-        onCategoryClick(categoryPath);
-      }
-    }
-  };
-
   const handleClick = (categoryPath, hasSubCategories) => {
-    if (hasSubCategories) {
-      setOpen((prevOpen) => ({
-        ...prevOpen,
-        [categoryPath]: !prevOpen[categoryPath],
-      }));
-    }
+    setOpenCategories((prevOpen) => ({
+      ...prevOpen,
+      [categoryPath]: !prevOpen[categoryPath],
+    }));
   };
 
   if (!categoryHierarchy) return null;
@@ -69,9 +25,9 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName, setSelected
         <div key={index}>
           <ListItem
             button
-            onClick={() => handleItemClick(categoryPath)}
+            onClick={() => onCategoryClick(categoryPath)}
             sx={{
-              backgroundColor: selectedCategory === categoryPath ? 'primary.light' : 'inherit',
+              backgroundColor: selectedPath.join('>') === categoryPath ? 'primary.light' : 'inherit',
               '&:hover': {
                 backgroundColor: 'primary.light',
               },
@@ -95,12 +51,12 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName, setSelected
                   e.stopPropagation();
                   handleClick(categoryPath, hasSubCategories);
                 }}>
-                {open[categoryPath] ? <ExpandMoreIcon fontSize="small" /> : <ChevronRightIcon fontSize="small" />}
+                {openCategories[categoryPath] ? <ExpandMoreIcon fontSize="small" /> : <ChevronRightIcon fontSize="small" />}
               </IconButton>
             )}
           </ListItem>
           {hasSubCategories && (
-            <Collapse in={open[categoryPath]} timeout="auto" unmountOnExit>
+            <Collapse in={openCategories[categoryPath]} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 {renderCategories(subCategories, categoryPath)}
               </List>

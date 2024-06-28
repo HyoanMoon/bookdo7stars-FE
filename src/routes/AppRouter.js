@@ -39,7 +39,7 @@ const AppRouter = () => {
         <Route path="/book/:bookid" element={<BookDetailPage />} />
         <Route path="/search" element={<SearchedBooksPage />} />
         <Route path="/books/all" element={<BooksAllPage />} />
-        <Route path="/books/group/:bookGroup" element={<BooksGroupPage />} />
+        <Route path="/books/group/:bookGroup/*" element={<BooksGroupPage />} />
         <Route path="/books/editor-recommend" element={<EditorPage />} />
 
         {/* 로그인, 회원가입 */}
