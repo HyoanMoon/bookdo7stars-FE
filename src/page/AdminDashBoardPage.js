@@ -6,8 +6,9 @@ import 'chart.js/auto';
 import '../style/adminDashboardPageStyles.css';
 import AdminDashboardCard from '../components/AdminDashboardCard';
 import { userActions } from '../action/userActions';
-import UserPermissionsModal from '../components/UserPermissionsModal'; // 사용자 권한 모달 임포트
-import AdminPermissionsModal from '../components/AdminPermissionsModal'; // 어드민 권한 모달 임포트
+import { orderActions } from '../action/orderActions'; // 추가된 부분
+import UserPermissionsModal from '../components/UserPermissionsModal';
+import AdminPermissionsModal from '../components/AdminPermissionsModal';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme({
@@ -24,17 +25,18 @@ function AdminDashBoardPage() {
 
   // Redux 상태에서 데이터 가져오기
   const adminData = useSelector((state) => state.user.users);
+  const orderData = useSelector((state) => state.order.orderList); // 추가된 부분
   const [localUserData, setLocalUserData] = useState([]);
   const [localAdminData, setLocalAdminData] = useState([]);
+  const [monthlySales, setMonthlySales] = useState([]); // 월별 매출을 저장할 상태
+  const [orderStatusCounts, setOrderStatusCounts] = useState([0, 0, 0, 0]); // 주문 상태 개수 저장
 
   useEffect(() => {
-    if (openUserModal) {
-      dispatch(userActions.getAllUser());
-    }
-    if (openAdminModal) {
-      dispatch(userActions.adminUser());
-    }
-  }, [openUserModal, openAdminModal, dispatch]);
+    // 페이지가 로드될 때 사용자와 어드민 데이터를 불러옴
+    dispatch(userActions.getAllUser());
+    dispatch(userActions.adminUser());
+    dispatch(orderActions.getOrderList()); // 모든 주문 조회
+  }, [dispatch]);
 
   useEffect(() => {
     if (adminData) {
@@ -43,25 +45,48 @@ function AdminDashBoardPage() {
     }
   }, [adminData]);
 
-  const salesData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-    datasets: [
-      {
-        label: '총 매출',
-        data: [30000, 40000, 50000, 60000, 70000, 80000],
-        borderColor: '#3e95cd',
-        fill: false,
-      },
-    ],
+  // 월별 매출 계산 함수
+  const calculateMonthlySales = (orders) => {
+    const sales = Array(12).fill(0); // 12개월을 0으로 초기화
+    orders.forEach((order) => {
+      const date = new Date(order.createdAt);
+      const month = date.getMonth(); // 0이 1월
+      sales[month] += order.totalPrice;
+    });
+    return sales;
   };
 
-  const orderData = {
-    labels: ['Pending', 'Completed', 'Cancelled'],
+  // 주문 상태 개수 계산 함수
+  const calculateOrderStatusCounts = (orders) => {
+    const statusCounts = { preparing: 0, shipping: 0, delivered: 0, refund: 0 };
+    orders.forEach((order) => {
+      if (statusCounts[order.status] !== undefined) {
+        statusCounts[order.status]++;
+      }
+    });
+    return [statusCounts.preparing, statusCounts.shipping, statusCounts.delivered, statusCounts.refund];
+  };
+
+  // 주문 데이터가 변경될 때 월별 매출과 주문 상태 개수 계산
+  useEffect(() => {
+    if (orderData && orderData.length > 0) {
+      const sales = calculateMonthlySales(orderData);
+      setMonthlySales(sales);
+
+      const statusCounts = calculateOrderStatusCounts(orderData);
+      setOrderStatusCounts(statusCounts);
+    }
+  }, [orderData]);
+
+  console.log(orderData, 'orderData');
+
+  const orderStatusData = {
+    labels: ['Preparing', 'Shipping', 'Delivered', 'Refund'],
     datasets: [
       {
         label: '주문 상태',
-        data: [10, 60, 5],
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+        data: orderStatusCounts, // 계산된 주문 상태 개수를 사용
+        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#f44336'],
       },
     ],
   };
@@ -77,7 +102,6 @@ function AdminDashBoardPage() {
     ],
   };
 
-  // 각 달의 가입자 수 계산
   const getMonthlySignups = (year, month) => {
     return localUserData.filter((user) => {
       const date = new Date(user.createdAt);
@@ -86,7 +110,7 @@ function AdminDashBoardPage() {
   };
 
   const today = new Date();
-  const currentMonth = today.getMonth(); // 현재 월 (0이 1월이므로 0부터 시작)
+  const currentMonth = today.getMonth();
   const currentYear = today.getFullYear();
 
   const lastMonth = (currentMonth - 1 + 12) % 12;
@@ -103,7 +127,6 @@ function AdminDashBoardPage() {
   const twoMonthsAgoSignups = getMonthlySignups(twoMonthsAgoYear, twoMonthsAgo);
   const threeMonthsAgoSignups = getMonthlySignups(threeMonthsAgoYear, threeMonthsAgo);
 
-  // 월 이름 배열
   const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
 
   const signupData = {
@@ -113,7 +136,19 @@ function AdminDashBoardPage() {
         label: `${currentYear}년 가입자 수`,
         data: [threeMonthsAgoSignups, twoMonthsAgoSignups, lastMonthSignups, currentMonthSignups],
         backgroundColor: ['#ff9800', '#4caf50', '#2196f3', '#f44336'],
-        barThickness: 15, // 막대 너비 설정
+        barThickness: 15,
+      },
+    ],
+  };
+
+  const salesData = {
+    labels: monthNames,
+    datasets: [
+      {
+        label: '총 매출',
+        data: monthlySales, // 월별 매출 데이터를 사용
+        borderColor: '#3e95cd',
+        fill: false,
       },
     ],
   };
@@ -149,7 +184,6 @@ function AdminDashBoardPage() {
     setNewAdmin({ userName: '', email: '', password: '', role: 'admin' });
   };
 
-  // Edit 버튼을 클릭했을 때 dispatch
   const handleEdit = (id) => {
     const user = localUserData.find((user) => user._id === id);
     if (user) {
@@ -157,7 +191,6 @@ function AdminDashBoardPage() {
     }
   };
 
-  // 관리자 카드의 내용을 동적으로 생성
   const adminCardContent = localAdminData.length > 0 ? `${localAdminData[0].userName} 외 ${localAdminData.length - 1}명` : 'No admins';
   const userCardContent = localUserData.length > 0 ? `Total: ${localUserData.length}명` : 'No users';
 
@@ -170,18 +203,16 @@ function AdminDashBoardPage() {
               <AdminDashboardCard title="총 매출" content={<Line data={salesData} />} />
             </Grid>
             <Grid item xs={12} md={4}>
-              <AdminDashboardCard title="주문 상태" content={<Pie data={orderData} />} />
+              <AdminDashboardCard title="주문 상태" content={<Pie data={orderStatusData} />} />
             </Grid>
             <Grid item xs={12} md={4}>
-              <AdminDashboardCard title="총 주문 수" content="150" />
+              <AdminDashboardCard title="총 주문 수" content={orderData.length} />
             </Grid>
 
-            {/* 주문 관리 */}
             <Grid item xs={12}>
               <AdminDashboardCard title="최근 주문" content="최근 주문 내역을 여기에 표시합니다." />
             </Grid>
 
-            {/* 고객 관리 */}
             <Grid item xs={12} md={6}>
               <AdminDashboardCard title="신규 가입 고객" content={<Bar data={signupData} />} />
             </Grid>
@@ -189,7 +220,6 @@ function AdminDashBoardPage() {
               <AdminDashboardCard title="고객 문의" content={<Bar data={inquiryData} />} />
             </Grid>
 
-            {/* 권한 관리 */}
             <Grid item xs={12} md={6}>
               <AdminDashboardCard title="사용자 권한 관리" content={userCardContent} onClick={handleClickOpenUserModal} />
             </Grid>
@@ -197,17 +227,15 @@ function AdminDashBoardPage() {
               <AdminDashboardCard title="어드민 권한 관리" content={adminCardContent} onClick={handleClickOpenAdminModal} />
             </Grid>
 
-            {/* 사용자 권한 모달 컴포넌트 */}
             <UserPermissionsModal
               open={openUserModal}
               handleClose={handleCloseUserModal}
               userData={localUserData}
               handleLevelChange={handleUserChange}
               handleDelete={handleDelete}
-              handleEdit={handleEdit} // handleEdit 함수 전달
+              handleEdit={handleEdit}
             />
 
-            {/* 어드민 권한 모달 컴포넌트 */}
             <AdminPermissionsModal
               open={openAdminModal}
               handleClose={handleCloseAdminModal}
@@ -221,8 +249,6 @@ function AdminDashBoardPage() {
               handleAddAdmin={handleAddAdmin}
               setNewAdmin={setNewAdmin}
             />
-
-            {/* 기타 섹션들 */}
           </Grid>
         </Container>
       </div>

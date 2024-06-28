@@ -2,11 +2,11 @@ import Box from '@mui/material/Box';
 import { bookActions } from '../../action/bookActions';
 import { categoryActions } from '../../action/categoryActions';
 import SearchBook from '../SearchBook';
-import { IconButton, Menu, useMediaQuery, useTheme } from '@mui/material';
+import { IconButton, Menu, useMediaQuery, useTheme, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material'; // 추가된 부분
 import PersonIcon from '@mui/icons-material/Person';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Toolbar from '@mui/material/Toolbar';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import { userActions } from '../../action/userActions';
@@ -29,6 +29,8 @@ const NavToolbar = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
   const { cartItemCount } = useSelector((state) => state.cart);
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // 추가된 부분
 
   const handleLogout = () => {
     dispatch(userActions.logout());
@@ -68,6 +70,18 @@ const NavToolbar = () => {
 
   const resetSearch = () => {
     setSearchQuery({});
+  };
+
+  const handleCartClick = () => {
+    if (!user) {
+      setIsDialogOpen(true);
+    } else {
+      navigate('/cart');
+    }
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
   };
 
   const renderButtons = () => (
@@ -136,7 +150,9 @@ const NavToolbar = () => {
           width: isMobile ? '90px' : isTablet ? '110px' : '130px',
           minWidth: '130px',
         }}
-        onClick={() => navigate('/cart')}>
+        onClick={handleCartClick}>
+        {' '}
+        {/* 변경된 부분 */}
         {cart} ({cartItemCount || 0})
       </Button>
       {user && user.role === 'admin' && (
@@ -214,55 +230,77 @@ const NavToolbar = () => {
   );
 
   return (
-    <Toolbar
-      sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: '100%',
-        flex: '0 1 auto',
-      }}>
-      <Box
-        onClick={() => {
-          navigate('/');
-          setSearchQuery({});
-          dispatch(bookActions.getBookList({}));
-          dispatch(categoryActions.setSelectedCategory(null));
-        }}
-        sx={{ cursor: 'pointer', padding: 1 }}>
-        <img src="/logo.png" alt="로고 이미지" style={{ color: '#d3ddbd', borderRadius: '3px', height: isMobile ? '4rem' : isTablet ? '5rem' : '7rem' }} />
-      </Box>
-      <Box sx={{ width: isMobile ? '90%' : isTablet ? '70%' : '60%', marginY: isMobile ? 2 : isTablet ? 1 : 0 }}>
-        <SearchBook
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          fields={fields}
-          resetSearch={resetSearch}
-          handleSearch={handleSearch}
-          isMobile={isMobile}
-        />
-      </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        {isMobile || isTablet ? (
-          <PopupState variant="popover" popupId="mobile-menu">
-            {(popupState) => (
-              <>
-                <IconButton color="primary" {...bindTrigger(popupState)}>
-                  <PersonIcon />
-                </IconButton>
-                <IconButton color="primary" onClick={() => navigate('/cart')}>
-                  <ShoppingCartIcon />
-                </IconButton>
-                {renderMobileMenu(popupState)}
-              </>
-            )}
-          </PopupState>
-        ) : (
-          renderButtons()
-        )}
-      </Box>
-    </Toolbar>
+    <>
+      <Toolbar
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '100%',
+          flex: '0 1 auto',
+        }}>
+        <Box
+          onClick={() => {
+            navigate('/');
+            setSearchQuery({});
+            dispatch(bookActions.getBookList({}));
+            dispatch(categoryActions.setSelectedCategory(null));
+          }}
+          sx={{ cursor: 'pointer', padding: 1 }}>
+          <img src="/logo.png" alt="로고 이미지" style={{ color: '#d3ddbd', borderRadius: '3px', height: isMobile ? '4rem' : isTablet ? '5rem' : '7rem' }} />
+        </Box>
+        <Box sx={{ width: isMobile ? '90%' : isTablet ? '70%' : '60%', marginY: isMobile ? 2 : isTablet ? 1 : 0 }}>
+          <SearchBook
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            fields={fields}
+            resetSearch={resetSearch}
+            handleSearch={handleSearch}
+            isMobile={isMobile}
+          />
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          {isMobile || isTablet ? (
+            <PopupState variant="popover" popupId="mobile-menu">
+              {(popupState) => (
+                <>
+                  <IconButton color="primary" {...bindTrigger(popupState)}>
+                    <PersonIcon />
+                  </IconButton>
+                  <IconButton color="primary" onClick={() => navigate('/cart')}>
+                    <ShoppingCartIcon />
+                  </IconButton>
+                  {renderMobileMenu(popupState)}
+                </>
+              )}
+            </PopupState>
+          ) : (
+            renderButtons()
+          )}
+        </Box>
+      </Toolbar>
+
+      <Dialog open={isDialogOpen} onClose={handleDialogClose}>
+        <DialogTitle>로그인이 필요합니다</DialogTitle>
+        <DialogContent>
+          <DialogContentText>장바구니로 이동하려면 로그인이 필요합니다. 로그인을 진행해 주세요.</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              handleDialogClose(); // 모달을 닫는 함수 호출
+              navigate('/login'); // 로그인 페이지로 이동
+            }}
+            color="primary">
+            로그인으로 이동하기
+          </Button>
+          <Button onClick={handleDialogClose} color="primary">
+            닫기
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 

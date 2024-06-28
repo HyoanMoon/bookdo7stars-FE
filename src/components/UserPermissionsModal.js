@@ -64,12 +64,9 @@ const UserPermissionsModal = ({ open, handleClose, userData, handleLevelChange, 
                   </TableCell>
                   <TableCell>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <IconButton color="primary" onClick={() => handleEdit(user._id)}>
-                        <EditIcon className="edit-icon" />
-                      </IconButton>
-                      <IconButton onClick={() => handleDelete(user._id)} color="secondary">
-                        <DeleteIcon className="deleteIcon" />
-                      </IconButton>
+                      <Button color="primary" onClick={() => handleEdit(user._id)}>
+                        변경
+                      </Button>
                     </div>
                   </TableCell>
                 </TableRow>
