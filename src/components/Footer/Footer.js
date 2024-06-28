@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Link, Grid } from '@mui/material';
+import { Box, Typography, Link } from '@mui/material';
 
 const Footer = () => {
   return (
@@ -23,7 +23,7 @@ const Footer = () => {
         <Box
           sx={{
             display: 'flex',
-            flexDirection: { xs: 'row', sm: 'column', md: '' },
+            flexDirection: { xs: 'column', sm: 'row' },
             justifyContent: 'space-between',
             alignItems: 'center',
             textAlign: 'center',
@@ -32,6 +32,7 @@ const Footer = () => {
             sx={{
               order: { xs: 1, sm: 1 }, // Company section order
               p: { xs: 1, sm: 2 },
+              flex: 1,
             }}>
             <Typography
               variant="h6"
@@ -58,6 +59,7 @@ const Footer = () => {
             sx={{
               order: { xs: 2, sm: 2 }, // Contact section order
               p: { xs: 1, sm: 2 },
+              flex: 1,
             }}>
             <Typography
               variant="h6"
@@ -82,40 +84,40 @@ const Footer = () => {
               </Link>
             </Typography>
           </Box>
-        </Box>
-        <Box
-          sx={{
-            display: { xs: 'none', sm: 'block' }, // Hide Follow Us section on mobile
-            textAlign: 'center',
-            p: 2,
-          }}>
-          <Typography
-            variant="h6"
+          <Box
             sx={{
-              mb: 3,
-              fontWeight: 'bold',
-              fontSize: { xs: '1rem', sm: '1.25rem' }, // Reduce font size for mobile
+              order: { xs: 3, sm: 3 }, // Follow Us section order
+              p: { xs: 1, sm: 2 },
+              flex: 1,
+              display: { xs: 'none', sm: 'block' }, // Hide Follow Us section on mobile
             }}>
-            Follow Us
-          </Typography>
-          <Typography
-            variant="body2"
-            sx={{
-              mb: 3,
-              fontSize: { xs: '0.875rem', sm: '1rem' }, // Reduce font size for mobile
-            }}>
-            <Link href="https://github.com/7CodeCrew" color="inherit" underline="none">
-              Github
-            </Link>
-            <br />
-            <Link href="https://github.com/7CodeCrew" color="inherit" underline="none">
-              Twitter
-            </Link>
-            <br />
-            <Link href="/contact2" color="inherit" underline="none">
-              Instagram
-            </Link>
-          </Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                mb: 3,
+                fontWeight: 'bold',
+                fontSize: { xs: '1rem', sm: '1.25rem' }, // Reduce font size for mobile
+              }}>
+              Follow Us
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                fontSize: { xs: '0.875rem', sm: '1rem' }, // Reduce font size for mobile
+              }}>
+              <Link href="https://github.com/7CodeCrew" color="inherit" underline="none">
+                Github
+              </Link>
+              <br />
+              <Link href="https://github.com/7CodeCrew" color="inherit" underline="none">
+                Twitter
+              </Link>
+              <br />
+              <Link href="/contact2" color="inherit" underline="none">
+                Instagram
+              </Link>
+            </Typography>
+          </Box>
         </Box>
         <Box textAlign="center" mt={10}>
           <Typography variant="body2">&copy; 2024 북두칠성. All rights reserved.</Typography>
