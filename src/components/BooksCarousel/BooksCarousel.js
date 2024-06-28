@@ -16,7 +16,11 @@ const BooksCarousel = ({ bookList, title, categories, sx }) => {
   const filteredBooks = selectedCategory === '전체' ? bookList : bookList.filter((book) => book.categoryName.includes(selectedCategory));
   const bookGroup = bookList[0]?.queryType;
   const onClickMore = (bookGroup) => {
-    navigate(`/books/group/${bookGroup}`);
+    if (title === '에디터 추천') {
+      navigate(`/books/editor-recommend`);
+    } else {
+      navigate(`/books/group/${bookGroup}`);
+    }
   };
 
   return (
@@ -27,12 +31,12 @@ const BooksCarousel = ({ bookList, title, categories, sx }) => {
         display: 'flex',
         flexDirection: 'column',
         borderRadius: 2,
-        position: 'relative', // Add position relative to ensure proper stacking context
-        zIndex: 1, // Ensure zIndex is set properly
+        position: 'relative',
+        zIndex: 1,
       }}>
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Typography
-          variant={isMobile ? 'h4' : 'h3'}
+          variant={isMobile ? 'h5' : 'h4'}
           component="div"
           gutterBottom
           sx={{ fontWeight: 'bold', display: 'flex', justifyContent: 'left', flexGrow: 1, padding: '5px' }}>
@@ -46,9 +50,7 @@ const BooksCarousel = ({ bookList, title, categories, sx }) => {
           더보기
         </Button>
       </Box>
-      {!categories ? (
-        <BookSlider bookList={bookList} isMobile={isMobile} />
-      ) : (
+      {categories ? (
         <>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs
@@ -77,8 +79,10 @@ const BooksCarousel = ({ bookList, title, categories, sx }) => {
               ))}
             </Tabs>
           </Box>
-          <BookSlider bookList={filteredBooks} />
+          <BookSlider bookList={filteredBooks} isMobile={isMobile} />
         </>
+      ) : (
+        <BookSlider bookList={bookList} isMobile={isMobile} />
       )}
     </Container>
   );
