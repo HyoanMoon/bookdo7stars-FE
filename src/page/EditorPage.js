@@ -3,7 +3,7 @@ import { Container, Grid, Paper, Typography, Avatar, Box, Card, CardContent } fr
 import { styled } from '@mui/material/styles';
 import { useSelector } from 'react-redux';
 
-// 스타일링된 컴포넌트 정의
+// Styled components
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
   marginBottom: theme.spacing(4),
@@ -18,6 +18,9 @@ const StyledBox = styled(Box)(({ theme }) => ({
   marginRight: theme.spacing(2),
   borderRadius: theme.shape.borderRadius,
   backgroundColor: theme.palette.primary.main,
+  [theme.breakpoints.down('sm')]: {
+    margin: 'auto',
+  },
 }));
 
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
@@ -25,16 +28,24 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
   marginRight: 20,
   width: 160,
   height: 160,
+  [theme.breakpoints.down('sm')]: {
+    margin: 'auto',
+  },
 }));
 
-// 도메인 변수
+const CenteredGridItem = styled(Grid)(({ theme }) => ({
+  textAlign: 'center',
+  [theme.breakpoints.down('sm')]: {
+    textAlign: 'center',
+  },
+}));
+
 const DOMAIN = 'http://localhost:3000';
-// const DOMAIN = 'https://book-do-7-stars.netlify.app/'; //배포용
+// const DOMAIN = 'https://book-do-7-stars.netlify.app/'; // For deployment
 
 const EditorPage = () => {
   const { bookList } = useSelector((state) => state.book);
 
-  // Query type에 맞는 책 목록을 가져오는 함수
   const getBooksByQueryType = (queryType) => {
     return bookList.filter((book) => book.queryType === queryType);
   };
@@ -106,14 +117,14 @@ const EditorPage = () => {
         .slice(0, editors.length)
         .map((book, index) => (
           <StyledPaper key={index} elevation={3}>
-            <Grid container spacing={2} alignItems="center">
-              <Grid item>
+            <Grid container spacing={2} alignItems="center" justifyContent="center">
+              <CenteredGridItem item xs={12} sm={3} md={2}>
                 <StyledAvatar src={editors[index].illustration} />
                 <Typography variant="h6" component="div" align="center">
                   {editors[index].name}
                 </Typography>
-              </Grid>
-              <Grid item>
+              </CenteredGridItem>
+              <CenteredGridItem item xs={12} sm={3} md={2}>
                 <StyledBox>
                   <img
                     src={book.cover}
@@ -121,8 +132,8 @@ const EditorPage = () => {
                     style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 'inherit' }}
                   />
                 </StyledBox>
-              </Grid>
-              <Grid item xs>
+              </CenteredGridItem>
+              <CenteredGridItem item xs={12} sm={6} md={8}>
                 <Card>
                   <CardContent>
                     <Typography style={{ fontWeight: 'bold' }} variant="h5" component="div">
@@ -136,7 +147,7 @@ const EditorPage = () => {
                     </Typography>
                   </CardContent>
                 </Card>
-              </Grid>
+              </CenteredGridItem>
             </Grid>
           </StyledPaper>
         ))}
