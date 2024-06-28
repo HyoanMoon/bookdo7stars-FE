@@ -41,6 +41,7 @@ const PaymentPage = () => {
   const { user, cartList, deliveryAddress } = useSelector((state) => state.cart);
   const { orderList } = useSelector((state) => state.order);
   const dispatch = useDispatch();
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     console.log('user:', user);
@@ -72,6 +73,11 @@ const PaymentPage = () => {
       ...prevInfo,
       [name]: value,
     }));
+    // 입력 시 해당 필드의 오류를 지움
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: '',
+    }));
   };
 
   const handleCardInfoChange = (e) => {
@@ -82,11 +88,21 @@ const PaymentPage = () => {
         ...prevInfo,
         [name]: newValue,
       }));
+      // 입력 시 해당 필드의 오류를 지움
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: '',
+      }));
       return;
     }
     setCardInfo((prevInfo) => ({
       ...prevInfo,
       [name]: value,
+    }));
+    // 입력 시 해당 필드의 오류를 지움
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: '',
     }));
   };
 
@@ -109,6 +125,11 @@ const PaymentPage = () => {
             zipCode: data.zonecode,
             address1: data.address,
           }));
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            zipCode: '',
+            address1: '',
+          }));
         },
       }).open();
     };
@@ -127,6 +148,7 @@ const PaymentPage = () => {
         phone: '',
         email: '',
       });
+      setErrors({});
     }
   };
 
@@ -139,6 +161,7 @@ const PaymentPage = () => {
       phone: user.phone,
       email: user.email,
     });
+    setErrors({});
   };
 
   const handleStoredAddress = () => {
@@ -150,6 +173,7 @@ const PaymentPage = () => {
       phone: '',
       email: '',
     });
+    setErrors({});
   };
 
   return (
@@ -173,22 +197,22 @@ const PaymentPage = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>
+                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
                     <Typography variant="body1">상품명</Typography>
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
                     <Typography variant="body1">정가</Typography>
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
                     <Typography variant="body1">수량</Typography>
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
                     <Typography variant="body1">할인금액</Typography>
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
                     <Typography variant="body1">합계</Typography>
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
                     <Typography variant="body1">배송일</Typography>
                   </TableCell>
                 </TableRow>
@@ -208,10 +232,18 @@ const PaymentPage = () => {
                           </Typography>
                         </Box>
                       </TableCell>
-                      <TableCell align="right">₩ {currencyFormat(item.bookId.priceSales)}</TableCell>
-                      <TableCell align="right">{item.qty}</TableCell>
-                      <TableCell align="right">₩ {currencyFormat(discountAmount)}</TableCell>
-                      <TableCell align="right">₩ {currencyFormat(discountedPrice)}</TableCell>
+                      <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
+                        ₩ {currencyFormat(item.bookId.priceSales)}
+                      </TableCell>
+                      <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
+                        {item.qty}
+                      </TableCell>
+                      <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
+                        ₩ {currencyFormat(discountAmount)}
+                      </TableCell>
+                      <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
+                        ₩ {currencyFormat(discountedPrice)}
+                      </TableCell>
                       <TableCell align="right">
                         <DeliveryEstimate address={deliveryAddress} />
                       </TableCell>
@@ -269,17 +301,61 @@ const PaymentPage = () => {
               <FormControlLabel value="storedInfo" control={<Radio />} label="위 주소와 동일" onClick={handleStoredAddress} />
             </RadioGroup>
 
-            <TextField fullWidth label="이름" name="name" value={shippingInfo.name} onChange={handleShippingInfoChange} margin="normal" />
+            <TextField
+              fullWidth
+              label="이름"
+              name="name"
+              value={shippingInfo.name}
+              onChange={handleShippingInfoChange}
+              margin="normal"
+              error={!!errors.name}
+              helperText={errors.name}
+            />
             <Box display="flex" alignItems="center">
-              <TextField label="우편번호" name="zipCode" value={shippingInfo.zipCode} onChange={handleShippingInfoChange} margin="normal" />
+              <TextField
+                label="우편번호"
+                name="zipCode"
+                value={shippingInfo.zipCode}
+                onChange={handleShippingInfoChange}
+                margin="normal"
+                error={!!errors.zipCode}
+                helperText={errors.zipCode}
+              />
               <Button variant="contained" color="primary" onClick={handlePostcode} sx={{ height: '56px', ml: 2 }}>
                 주소찾기
               </Button>
             </Box>
-            <TextField fullWidth label="주소" name="address1" value={shippingInfo.address1} onChange={handleShippingInfoChange} margin="normal" />
+            <TextField
+              fullWidth
+              label="주소"
+              name="address1"
+              value={shippingInfo.address1}
+              onChange={handleShippingInfoChange}
+              margin="normal"
+              error={!!errors.address1}
+              helperText={errors.address1}
+            />
             <TextField fullWidth label="상세 주소" name="address2" value={shippingInfo.address2} onChange={handleShippingInfoChange} margin="normal" />
-            <TextField fullWidth label="전화번호" name="phone" value={shippingInfo.phone} onChange={handleShippingInfoChange} margin="normal" />
-            <TextField fullWidth label="이메일" name="email" value={shippingInfo.email} onChange={handleShippingInfoChange} margin="normal" />
+            <TextField
+              fullWidth
+              label="전화번호"
+              name="phone"
+              value={shippingInfo.phone}
+              onChange={handleShippingInfoChange}
+              margin="normal"
+              error={!!errors.phone}
+              helperText={errors.phone}
+            />
+            <TextField
+              fullWidth
+              label="이메일"
+              name="email"
+              value={shippingInfo.email}
+              onChange={handleShippingInfoChange}
+              margin="normal"
+              error={!!errors.email}
+              helperText={errors.email}
+            />
           </Box>
           <Box mt={4}>
             <Typography variant="h5" gutterBottom>
@@ -297,15 +373,42 @@ const PaymentPage = () => {
               <Box>
                 <FormControl fullWidth margin="normal">
                   <InputLabel>카드사 선택</InputLabel>
-                  <Select name="cardType" value={cardInfo.cardType} onChange={handleCardInfoChange}>
+                  <Select name="cardType" value={cardInfo.cardType} onChange={handleCardInfoChange} error={!!errors.cardType} helperText={errors.cardType}>
                     <MenuItem value="visa">Visa</MenuItem>
                     <MenuItem value="mastercard">MasterCard</MenuItem>
                     <MenuItem value="amex">American Express</MenuItem>
                   </Select>
                 </FormControl>
-                <TextField fullWidth label="카드 번호" name="cardNumber" value={cardInfo.cardNumber} onChange={handleCardInfoChange} margin="normal" />
-                <TextField fullWidth label="유효 기간 (MM/YY)" name="expiryDate" value={cardInfo.expiryDate} onChange={handleCardInfoChange} margin="normal" />
-                <TextField fullWidth label="CVC" name="cvc" value={cardInfo.cvc} onChange={handleCardInfoChange} margin="normal" />
+                <TextField
+                  fullWidth
+                  label="카드 번호"
+                  name="cardNumber"
+                  value={cardInfo.cardNumber}
+                  onChange={handleCardInfoChange}
+                  margin="normal"
+                  error={!!errors.cardNumber}
+                  helperText={errors.cardNumber}
+                />
+                <TextField
+                  fullWidth
+                  label="유효 기간 (MM/YY)"
+                  name="expiryDate"
+                  value={cardInfo.expiryDate}
+                  onChange={handleCardInfoChange}
+                  margin="normal"
+                  error={!!errors.expiryDate}
+                  helperText={errors.expiryDate}
+                />
+                <TextField
+                  fullWidth
+                  label="CVC"
+                  name="cvc"
+                  value={cardInfo.cvc}
+                  onChange={handleCardInfoChange}
+                  margin="normal"
+                  error={!!errors.cvc}
+                  helperText={errors.cvc}
+                />
               </Box>
             )}
           </Box>
@@ -319,6 +422,8 @@ const PaymentPage = () => {
             shippingInfo={shippingInfo} // shippingInfo를 props로 전달
             cardInfo={cardInfo} // cardInfo를 props로 전달
             sticky={true}
+            errors={errors} // errors를 props로 전달
+            setErrors={setErrors} // setErrors를 props로 전달
           />
         </Box>
       </Box>

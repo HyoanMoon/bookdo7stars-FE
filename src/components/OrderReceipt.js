@@ -6,33 +6,38 @@ import { useDispatch } from 'react-redux';
 import { orderActions } from '../action/orderActions';
 import { cartActions } from '../action/cartActions';
 
-const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheckout, sticky, shippingInfo, cardInfo }) => {
+const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheckout, sticky, shippingInfo = {}, cardInfo = {}, errors, setErrors }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false); // 모달 상태 추가
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
   const shippingFee = hasSelectedItems ? (finalTotalPrice > 100000 ? 0 : 2500) : 0;
   const pointsEarned = finalTotalPrice * 0.05;
   const grandTotal = finalTotalPrice + shippingFee;
 
   const handlePaymentSuccess = async () => {
-    if (
-      !shippingInfo.name ||
-      !shippingInfo.zipCode ||
-      !shippingInfo.address1 ||
-      !shippingInfo.phone ||
-      !shippingInfo.email ||
-      !cardInfo.cardType ||
-      !cardInfo.cardNumber ||
-      !cardInfo.expiryDate ||
-      !cardInfo.cvc
-    ) {
-      setIsDialogOpen(true); // 입력되지 않은 정보가 있으면 모달 열기
-      return;
+    const newErrors = {};
+    if (!shippingInfo.name) newErrors.name = '이름를 입력해 주세요';
+    if (!shippingInfo.zipCode) newErrors.zipCode = '우편번호를 입력해 주세요';
+    if (!shippingInfo.address1) newErrors.address1 = '주소를 입력해 주세요';
+    if (!shippingInfo.phone) newErrors.phone = '전화번호를 입력해 주세요';
+    if (!shippingInfo.email) newErrors.email = '이메일를 입력해 주세요';
+    if (location.pathname.includes('/payment')) {
+      if (!cardInfo.cardType) newErrors.cardType = '정보를 입력해 주세요';
+      if (!cardInfo.cardNumber) newErrors.cardNumber = '정보를 입력해 주세요';
+      if (!cardInfo.expiryDate) newErrors.expiryDate = '정보를 입력해 주세요';
+      if (!cardInfo.cvc) newErrors.cvc = '정보를 입력해 주세요';
     }
 
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+    setIsDialogOpen(true);
+  };
+
+  const handleConfirmOrder = async () => {
     const { name, zipCode, address1, address2, phone, email } = shippingInfo;
     const data = {
       totalPrice: grandTotal,
@@ -54,7 +59,7 @@ const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheck
         state: {
           shippingInfo,
           grandTotal,
-          paymentMethod: cardInfo.cardType, // 결제 방식으로 설정
+          paymentMethod: cardInfo.cardType,
         },
       });
     } catch (error) {
@@ -115,15 +120,31 @@ const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheck
           )}
         </Box>
       </Paper>
-
       {/* 모달 컴포넌트 추가 */}
       <Dialog open={isDialogOpen} onClose={handleDialogClose}>
-        <DialogTitle>입력 필요</DialogTitle>
+        <DialogTitle>정보 확인</DialogTitle>
         <DialogContent>
-          <DialogContentText>주문을 완료하려면 모든 정보를 입력해 주세요.</DialogContentText>
+          <DialogContentText>주문을 완료하려면 다음 정보를 확인해 주세요.</DialogContentText>
+          <Typography>이름: {shippingInfo.name}</Typography>
+          <Typography>
+            주소: {shippingInfo.zipCode} {shippingInfo.address1}
+          </Typography>
+          <Typography>전화번호: {shippingInfo.phone}</Typography>
+          <Typography>이메일: {shippingInfo.email}</Typography>
+          {location.pathname.includes('/payment') && (
+            <>
+              <Typography>카드 종류: {cardInfo.cardType}</Typography>
+              <Typography>카드 번호: {cardInfo.cardNumber}</Typography>
+              <Typography>유효 기간: {cardInfo.expiryDate}</Typography>
+              <Typography>CVC: {cardInfo.cvc}</Typography>
+            </>
+          )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDialogClose} color="primary">
+          <Button onClick={handleDialogClose} color="secondary">
+            수정
+          </Button>
+          <Button onClick={handleConfirmOrder} color="primary">
             확인
           </Button>
         </DialogActions>
