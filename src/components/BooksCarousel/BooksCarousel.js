@@ -7,7 +7,7 @@ import BookSlider from '../BookSlider/BookSlider';
 const BooksCarousel = ({ bookList, title, categories, sx }) => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('전체');
-  const isMobile = useMediaQuery('(max-width: 600px)'); // 모바일 화면 크기 확인
+  const isMobile = useMediaQuery('(max-width: 600px)');
 
   const handleCategoryChange = (event, newValue) => {
     setSelectedCategory(newValue);
@@ -20,63 +20,36 @@ const BooksCarousel = ({ bookList, title, categories, sx }) => {
   };
 
   return (
-    <>
+    <Container
+      sx={{
+        ...sx,
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: 2,
+        position: 'relative', // Add position relative to ensure proper stacking context
+        zIndex: 1, // Ensure zIndex is set properly
+      }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Typography
+          variant={isMobile ? 'h4' : 'h3'}
+          component="div"
+          gutterBottom
+          sx={{ fontWeight: 'bold', display: 'flex', justifyContent: 'left', flexGrow: 1, padding: '5px' }}>
+          {title}
+        </Typography>
+        <Button
+          size="large"
+          endIcon={<AddCircleOutline />}
+          onClick={() => onClickMore(bookGroup)}
+          sx={{ justifyContent: 'flex-end', marginLeft: isMobile ? 0 : 'auto' }}>
+          더보기
+        </Button>
+      </Box>
       {!categories ? (
-        <Container
-          sx={{
-            ...sx,
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            borderRadius: 2,
-          }}>
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Typography
-              variant={isMobile ? 'h4' : 'h3'}
-              component="div"
-              gutterBottom
-              sx={{ fontWeight: 'bold', display: 'flex', justifyContent: 'left', flexGrow: 1, padding: '5px' }}>
-              {title}
-            </Typography>
-            <Button
-              size="large"
-              endIcon={<AddCircleOutline />}
-              onClick={() => onClickMore(bookGroup)}
-              sx={{ justifyContent: 'flex-end', marginLeft: isMobile ? 0 : 'auto' }}>
-              더보기
-            </Button>
-          </Box>
-          <BookSlider bookList={bookList} isMobile={isMobile} />
-        </Container>
+        <BookSlider bookList={bookList} isMobile={isMobile} />
       ) : (
-        <Container
-          sx={{
-            ...sx,
-            width: '100%',
-            height: '60vh',
-            display: 'flex',
-            flexDirection: 'column',
-            borderRadius: 2,
-          }}>
-          <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Box sx={{ display: 'flex', justifyContent: isMobile ? 'center' : 'left', flexGrow: 1 }}>
-              <Typography
-                variant={isMobile ? 'h4' : 'h3'}
-                component="div"
-                gutterBottom
-                sx={{ fontWeight: 'bold', display: 'flex', margin: 0, justifyContent: 'left', flexGrow: 1, padding: '5px' }}>
-                {title}
-              </Typography>
-            </Box>
-            <Button
-              size="large"
-              endIcon={<AddCircleOutline />}
-              onClick={() => onClickMore(bookGroup)}
-              sx={{ justifyContent: 'flex-end', marginLeft: isMobile ? 0 : 'auto' }}>
-              더보기
-            </Button>
-          </Box>
-
+        <>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs
               value={selectedCategory}
@@ -105,9 +78,9 @@ const BooksCarousel = ({ bookList, title, categories, sx }) => {
             </Tabs>
           </Box>
           <BookSlider bookList={filteredBooks} />
-        </Container>
+        </>
       )}
-    </>
+    </Container>
   );
 };
 

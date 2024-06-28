@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Container, useMediaQuery } from '@mui/material';
+import { Box, Container, Grid, useMediaQuery } from '@mui/material';
 import { useSelector } from 'react-redux';
 
 import BooksCarousel from '../components/BooksCarousel/BooksCarousel';
@@ -9,31 +9,23 @@ import { getCategories } from '../_helper/getCategories';
 
 const MainPage = () => {
   const { bookList } = useSelector((state) => state.book);
-  const isMobile = useMediaQuery('(max-width: 600px)'); // Check if screen width is less than or equal to 600px (iPhone 14 Pro width)
+  const isMobile = useMediaQuery('(max-width: 600px)');
 
   if (!bookList) {
     return null;
   }
 
-  // BlogBestBooks
   const blogBestBooks = bookList.filter((book) => book.queryType === 'BlogBest');
-
-  // bestSeller
   const bestSeller = bookList.filter((book) => book.queryType === 'BestSeller');
-
-  // newSpecialBooks
   const newSpecialBooks = bookList.filter((book) => book.queryType === 'ItemNewSpecial');
-
-  // newAllBooks
   const newAllBooks = bookList.filter((book) => book.queryType === 'ItemNewAll');
 
-  // category object for category-slide-bar
   const newAllBooksCategories = getCategories(newAllBooks);
   const bestSellerCategories = getCategories(bestSeller);
 
   return (
-    <Box sx={{ paddingBottom: 15 }}>
-      <Box>
+    <Box sx={{ paddingBottom: 15, position: 'relative', zIndex: 0 }}>
+      <Box sx={{ position: 'relative', zIndex: 1 }}>
         <CarouselSlide />
       </Box>
       <Container
@@ -57,27 +49,32 @@ const MainPage = () => {
           display: 'flex',
           flexDirection: 'column',
           borderRadius: 2,
+          padding: '20px',
+          position: 'relative',
+          zIndex: 1,
         }}>
-        <Box sx={{ paddingTop: '20px' }}>
-          <BooksCarousel bookList={newSpecialBooks.slice(0, 10)} title={'화제의 신작'} isMobile={isMobile} />
-        </Box>
-        <Box sx={{ paddingTop: '20px' }}>
-          {isMobile ? (
-            <BooksCarousel bookList={bestSeller.slice(0, 12)} categories={bestSellerCategories} title={'베스트 셀러'} isMobile={isMobile} />
-          ) : (
-            <BookContainer bookList={bestSeller.slice(0, 12)} categories={bestSellerCategories} title={'베스트 셀러'} />
-          )}
-        </Box>
-        <Box sx={{ paddingTop: '20px' }}>
-          <BooksCarousel bookList={newAllBooks.slice(0, 100)} categories={newAllBooksCategories} title={'신간 도서'} isMobile={isMobile} />
-        </Box>
-        <Box sx={{ paddingTop: '20px' }}>
-          {isMobile ? (
-            <BooksCarousel bookList={blogBestBooks.slice(0, 4)} title={'에디터 추천'} isMobile={isMobile} />
-          ) : (
-            <BookContainer bookList={blogBestBooks.slice(0, 4)} title={'에디터 추천'} />
-          )}
-        </Box>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sx={{ marginTop: '30px', position: 'relative', zIndex: 1 }}>
+            <BooksCarousel bookList={newSpecialBooks.slice(0, 10)} title={'화제의 신작'} isMobile={isMobile} />
+          </Grid>
+          <Grid item xs={12} sx={{ marginTop: '30px', position: 'relative', zIndex: 2 }}>
+            {isMobile ? (
+              <BooksCarousel bookList={bestSeller.slice(0, 12)} categories={bestSellerCategories} title={'베스트 셀러'} isMobile={isMobile} />
+            ) : (
+              <BookContainer bookList={bestSeller.slice(0, 12)} categories={bestSellerCategories} title={'베스트 셀러'} />
+            )}
+          </Grid>
+          <Grid item xs={12} sx={{ marginTop: '30px', position: 'relative', zIndex: 3 }}>
+            <BooksCarousel bookList={newAllBooks.slice(0, 100)} categories={newAllBooksCategories} title={'신간 도서'} isMobile={isMobile} />
+          </Grid>
+          <Grid item xs={12} sx={{ marginTop: '30px', position: 'relative', zIndex: 4 }}>
+            {isMobile ? (
+              <BooksCarousel bookList={blogBestBooks.slice(0, 4)} title={'에디터 추천'} isMobile={isMobile} />
+            ) : (
+              <BookContainer bookList={blogBestBooks.slice(0, 4)} title={'에디터 추천'} />
+            )}
+          </Grid>
+        </Grid>
       </Container>
     </Box>
   );
