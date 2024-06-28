@@ -19,7 +19,7 @@ export const UPDATE_ORDER_SUCCESS = 'UPDATE_ORDER_SUCCESS';
 export const UPDATE_ORDER_FAIL = 'UPDATE_ORDER_FAIL';
 
 // 주문 상태.
-export const ORDER_STATUS = ['preparing', 'shipping', 'delivered', 'refund'];
+export const ORDER_STATUS = ['준비 중', '배송 중', '배송완료', '환불'];
 
 // 도서 수정할 때 주문 id값 불러오기.
 export const SET_SELECTED_ORDER = 'SET_SELECTED_ORDER';
@@ -42,6 +42,17 @@ export const GET_REQUEST_LIST_FAIL = 'GET_REQUEST_LIST_FAIL';
 export const GET_REQUEST_REQUEST = 'GET_REQUEST_REQUEST';
 export const GET_REQUEST_SUCCESS = 'GET_REQUEST_SUCCESS';
 export const GET_REQUEST_FAIL = 'GET_REQUEST_FAIL';
+
+// 주문 문의 수정할 때 주문 id값 불러오기.
+export const SET_SELECTED_REQUEST = 'SET_SELECTED_REQUEST';
+
+// 주문 문의 상태 업데이트.
+export const UPDATE_REQUEST_REQUEST = 'UPDATE_REQUEST_REQUEST';
+export const UPDATE_REQUEST_SUCCESS = 'UPDATE_REQUEST_SUCCESS';
+export const UPDATE_REQUEST_FAIL = 'UPDATE_REQUEST_FAIL';
+
+// 주문 상태.
+export const REQUEST_STATUS = ['대기 중', '승인', '거부'];
 
 export const badgeBg = {
   // 아래 항목을 채워주세요.

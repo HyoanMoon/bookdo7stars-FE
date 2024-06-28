@@ -22,7 +22,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const AdminPageClaimTable = ({ claimTableHead, requestList }) => {
+const AdminPageClaimTable = ({ claimTableHead, requestList, handleOpenRequestDialog }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -30,13 +30,12 @@ const AdminPageClaimTable = ({ claimTableHead, requestList }) => {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
 
-  console.log('requestList', requestList);
+  // console.log('requestList', requestList);
 
   return (
     <>
@@ -54,14 +53,14 @@ const AdminPageClaimTable = ({ claimTableHead, requestList }) => {
 
           <TableBody>
             {requestList.length > 0 ? (
-              requestList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => (
-                <StyledTableRow key={order?._id} onClick={() => handleOpenOrderDialog(order)}>
+              requestList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((request, index) => (
+                <StyledTableRow key={request?._id} onClick={() => handleOpenRequestDialog(request)}>
                   <StyledTableCell>{index + 1}</StyledTableCell>
-                  <StyledTableCell>{order?.orderNum}</StyledTableCell>
-                  <StyledTableCell>{order?.createdAt.slice(0, 10)}</StyledTableCell>
-                  <StyledTableCell>{order?.contact?.name}</StyledTableCell>
-                  <StyledTableCell>{order?.request?.requestType}</StyledTableCell>
-                  <StyledTableCell>{order?.request?.status}</StyledTableCell>
+                  <StyledTableCell>{request?.orderNum}</StyledTableCell>
+                  <StyledTableCell>{request?.createdAt.slice(0, 10)}</StyledTableCell>
+                  <StyledTableCell>{request?.contact?.name}</StyledTableCell>
+                  <StyledTableCell>{request?.request?.requestType}</StyledTableCell>
+                  <StyledTableCell>{request?.request?.status}</StyledTableCell>
                 </StyledTableRow>
               ))
             ) : (

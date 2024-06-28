@@ -4,6 +4,7 @@ import AdminPageOrderSearchBox from '../components/AdminPageOrderSearchBox';
 import AdminPageOrderTable from '../components/AdminPageOrderTable';
 import AdminPageOrderDialog from '../components/AdminPageOrderDialog';
 import AdminPageClaimTable from '../components/AdminPageClaimTable';
+import AdminPageClaimDialog from '../components/AdminPageClaimDialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { orderActions } from '../action/orderActions';
@@ -13,6 +14,7 @@ const AdminOrderPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [openDialog, setOpenDialog] = useState(false);
+  const [openRequestDialog, setOpenRequestDialog] = useState(false);
   const orderTableHead = ['', '주문번호', '주문일자', '구매자', '도서명', '주소', '총주문액', '주문상태'];
   const claimTableHead = ['', '주문번호', '주문일자', '구매자', '요청사항', '처리상태'];
   const orderDialogTableHead = ['ID', '도서명', '권당 가격', '수량', '전체 가격'];
@@ -47,8 +49,6 @@ const AdminOrderPage = () => {
     dispatch(orderActions.getRequestList({ ...searchQuery }));
   }, [searchQuery]);
 
-  console.log('getRequestList', requestList);
-
   // 검색한 값을 리셋하기.
   const resetSearch = () => {
     setSearchQuery({});
@@ -58,23 +58,30 @@ const AdminOrderPage = () => {
   }, []);
 
   // 상세 검색 쿼리 필터.
-  const filteredOrders = orderList.filter((order) => {
-    const orderDate = new Date(order.createdAt);
-    const startDate = searchQuery.startDate ? new Date(searchQuery.startDate) : null;
-    const endDate = searchQuery.endDate ? new Date(searchQuery.endDate) : null;
-    const withinDateRange = (!startDate || orderDate >= startDate) && (!endDate || orderDate <= endDate);
-    return withinDateRange && orderList;
-  });
+  // const filteredOrders = orderList.filter((order) => {
+  //   const orderDate = new Date(order.createdAt);
+  //   const startDate = searchQuery.startDate ? new Date(searchQuery.startDate) : null;
+  //   const endDate = searchQuery.endDate ? new Date(searchQuery.endDate) : null;
+  //   const withinDateRange = (!startDate || orderDate >= startDate) && (!endDate || orderDate <= endDate);
+  //   return withinDateRange && orderList;
+  // });
 
   // 주문 수정 다이얼로그 열기.
   const handleOpenOrderDialog = (order) => {
     setOpenDialog(true);
     dispatch({ type: types.SET_SELECTED_ORDER, payload: order });
   };
+  const handleOpenRequestDialog = (request) => {
+    setOpenRequestDialog(true);
+    dispatch({ type: types.SET_SELECTED_REQUEST, payload: request });
+  };
 
   // 주문 다이얼로그 닫기.
   const handleCloseOrderDialog = () => {
     setOpenDialog(false);
+  };
+  const handleCloseRequestDialog = () => {
+    setOpenRequestDialog(false);
   };
 
   return (
@@ -91,14 +98,17 @@ const AdminOrderPage = () => {
               </Tabs>
             </Paper>
             <Box mt={3}>
-              {tabIndex === 0 && (
-                <AdminPageOrderTable orderTableHead={orderTableHead} orderList={filteredOrders} handleOpenOrderDialog={handleOpenOrderDialog} />
+              {tabIndex === 0 && <AdminPageOrderTable orderTableHead={orderTableHead} orderList={orderList} handleOpenOrderDialog={handleOpenOrderDialog} />}
+              {tabIndex === 1 && (
+                <AdminPageClaimTable claimTableHead={claimTableHead} requestList={requestList} handleOpenRequestDialog={handleOpenRequestDialog} />
               )}
-              {tabIndex === 1 && <AdminPageClaimTable claimTableHead={claimTableHead} requestList={requestList} />}
             </Box>
           </Box>
 
           {openDialog && <AdminPageOrderDialog open={openDialog} handleClose={handleCloseOrderDialog} orderDialogTableHead={orderDialogTableHead} />}
+          {openRequestDialog && (
+            <AdminPageClaimDialog open={openRequestDialog} handleClose={handleCloseRequestDialog} orderDialogTableHead={orderDialogTableHead} />
+          )}
         </Grid>
       </Grid>
     </Container>

@@ -1,7 +1,9 @@
 import React from 'react';
 import { Box, Typography, Link, Grid, Button } from '@mui/material';
 
+
 const MyPageCategory = () => {
+  const navigate = useNavigate()
   const userLevel = ['브론즈', '실버', '골드', '플래텸'];
   const myShoppingList = [
     { list: '주문내역/배송조회', link: '/mypage/order-list' },
@@ -75,10 +77,19 @@ const MyPageCategory = () => {
               </Box>
             ))}
           </Box>
-          <Button variant="outlined" color="primary" fullWidth sx={{ width: '20ch', height: '30px', borderRadius: '10px' }}>
-            <Typography variant="subtitle2">1:1 문의</Typography>
-          </Button>
-        </Box>
+          <Button
+  variant="outlined"
+  color="primary"
+  fullWidth
+  sx={{ width: '20ch', height: '30px', borderRadius: '10px' }}
+  onClick={() => navigate("/contact")}  // 이 부분을 수정
+>
+  <Typography variant="subtitle2">
+    <Link href="/contact" color="primary">
+      1:1 문의
+    </Link>
+  </Typography>
+</Button>        </Box>
       </Grid>
     </>
   );

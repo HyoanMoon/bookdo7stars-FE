@@ -113,7 +113,7 @@ const PasswordConfirmPage = () => {
 
               <Typography sx={{ mt: 2, width: '60ch', textAlign: 'left' }} variant="subtitle2">
                 외부 연동 계정을 통해 북두칠성에 회원가입하신 경우,
-                <Link href="#" color="primary">
+                <Link href="/contact" color="primary">
                   1:1 문의
                 </Link>
                 를 통해 비밀번호를 확인 후 이용해주시기 바랍니다.

@@ -98,7 +98,9 @@ const MyShoppingPage = () => {
             {/* <Box mt={4} p={2} border={1} borderRadius={4} borderColor="grey.400"> */}
             <Box>
               <Typography variant="h6" mt={5} borderBottom={1} borderColor="grey.400">
-                나의 1:1 문의
+                <Link href="/contact" color="primary">
+                  나의 1:1 문의
+                </Link>
               </Typography>
               {userContacts.length === 0 ? (
                 <Typography mt={1} variant="subtitle1">

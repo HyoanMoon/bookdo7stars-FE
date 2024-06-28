@@ -1,5 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Link, Container, Grid, Button } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Link,
+  Container,
+  Grid,
+  Button,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+} from '@mui/material';
 import MyPageCategory from '../components/MyPageCategory';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,6 +26,9 @@ const MyPageOrderClaimList = () => {
   const { user } = useSelector((state) => state.user);
   const { myRequestList } = useSelector((state) => state.order);
   const { myOrderList } = useSelector((state) => state.order);
+  const [recentChecked, setRecentChecked] = useState(false);
+  const [oldChecked, setOldChecked] = useState(false);
+  const [sortOrder, setSortOrder] = useState('recent');
 
   // console.log('myOrderList', myOrderList);
   // console.log('myRequestList', myRequestList);
@@ -24,6 +42,24 @@ const MyPageOrderClaimList = () => {
   const handleClaim = () => {
     navigate('/mypage/order-request');
   };
+
+  const handleRecentChange = (event) => {
+    setRecentChecked(event.target.checked);
+    setOldChecked(!event.target.value);
+    setSortOrder('recent');
+  };
+  const handleOldChange = (event) => {
+    setOldChecked(event.target.checked);
+    setRecentChecked(!event.target.value);
+    setSortOrder('old');
+  };
+  const sortedMyOrderList = [...myRequestList].sort((a, b) => {
+    if (sortOrder === 'recent') {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    } else {
+      return new Date(a.createdAt) - new Date(b.createdAt);
+    }
+  });
 
   return (
     <Container>
@@ -70,6 +106,18 @@ const MyPageOrderClaimList = () => {
                 </Button>
               </Grid>
 
+              {/* 정렬기준 */}
+              <FormGroup style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+                <FormControlLabel
+                  control={<Checkbox checked={recentChecked} onChange={handleRecentChange} />}
+                  label={<Typography variant="body2">최근순</Typography>}
+                />
+                <FormControlLabel
+                  control={<Checkbox checked={oldChecked} onChange={handleOldChange} />}
+                  label={<Typography variant="body2">오래된순</Typography>}
+                />
+              </FormGroup>
+
               {/* 주문 내역 테이블 */}
               <Typography variant="h6">반품/교환 신청내역</Typography>
               <Box>
@@ -85,8 +133,8 @@ const MyPageOrderClaimList = () => {
 
                   {/* 테이블 바디 */}
                   <TableBody>
-                    {myRequestList?.length > 0 ? (
-                      myRequestList
+                    {sortedMyOrderList?.length > 0 ? (
+                      sortedMyOrderList
                         .filter((item) => item.request.requestType !== '취소')
                         .map((item, index) => (
                           <TableRow key={index}>

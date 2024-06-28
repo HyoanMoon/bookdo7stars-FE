@@ -18,6 +18,7 @@ import {
 import MyPageCategory from '../components/MyPageCategory';
 import { useDispatch, useSelector } from 'react-redux';
 import { orderActions } from '../action/orderActions';
+import { useNavigate } from 'react-router';
 
 const MyPageOrderCancelList = () => {
   const dispatch = useDispatch();
@@ -27,25 +28,37 @@ const MyPageOrderCancelList = () => {
   const { myOrderList } = useSelector((state) => state.order);
   const [recentChecked, setRecentChecked] = useState(false);
   const [oldChecked, setOldChecked] = useState(false);
+  const [sortOrder, setSortOrder] = useState('recent');
+
+  // console.log('myOrderList', myOrderList);
+  // console.log('myRequestList', myRequestList);
 
   useEffect(() => {
     dispatch(orderActions.getMyRequest());
     dispatch(orderActions.getMyOrder());
   }, [user, dispatch]);
 
-  const handleGoToBuyTheBook = (orderNum) => {
-    navigate(`/order-detail/${orderNum}`);
+  const handleGoToBuyTheBook = (id) => {
+    navigate(`/book/${id}`);
   };
 
-const handleRecentChange = (event) => {
+  const handleRecentChange = (event) => {
     setRecentChecked(event.target.checked);
-    // 최근순 ~~
+    setOldChecked(!event.target.value);
+    setSortOrder('recent');
   };
-
   const handleOldChange = (event) => {
     setOldChecked(event.target.checked);
-    // 오래된순~~
+    setRecentChecked(!event.target.value);
+    setSortOrder('old');
   };
+  const sortedMyOrderList = [...myRequestList].sort((a, b) => {
+    if (sortOrder === 'recent') {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    } else {
+      return new Date(a.createdAt) - new Date(b.createdAt);
+    }
+  });
 
   return (
     <Container>
@@ -96,7 +109,6 @@ const handleRecentChange = (event) => {
               </Grid>
 
               {/* 정렬기준 */}
-              {/* 데이터 바인딩 해보고 기준 하나 삭제하기 */}
               <FormGroup style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
                 <FormControlLabel
                   control={<Checkbox checked={recentChecked} onChange={handleRecentChange} />}
@@ -124,8 +136,8 @@ const handleRecentChange = (event) => {
 
                   {/* 테이블 바디 */}
                   <TableBody>
-                    {myRequestList?.length > 0 ? (
-                      myRequestList
+                    {sortedMyOrderList?.length > 0 ? (
+                      sortedMyOrderList
                         .filter((item) => item.request.requestType !== ('반품' || '교환'))
                         .map((item, index) => (
                           <TableRow key={index}>
@@ -145,7 +157,12 @@ const handleRecentChange = (event) => {
                             <TableCell>{item.request.requestType}</TableCell>
                             <TableCell>{item.request.status}</TableCell>
                             <TableCell>
-                              <Button variant="contained" color="secondary" fullWidth sx={{ ml: 1, width: '10ch', height: '20px', borderRadius: '5px' }} onClick={()=>handleGoToBuyTheBook(item.items.bookId)}>
+                              <Button
+                                variant="contained"
+                                color="secondary"
+                                fullWidth
+                                sx={{ ml: 1, width: '10ch', height: '20px', borderRadius: '5px' }}
+                                onClick={() => handleGoToBuyTheBook(item.items[0].bookId)}>
                                 <Typography variant="subtitle2" color="white">
                                   이동
                                 </Typography>

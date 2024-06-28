@@ -195,7 +195,7 @@ const UserInfoPage = () => {
                         <Grid item xs={3}>
                           <Typography variant="subtitle2">
                             * 이름을 변경하시려면 북두칠성으로
-                            <Link href="#" color="primary">
+                            <Link href="/contact" color="primary">
                               1:1 문의
                             </Link>
                             를 주시기 바랍니다.

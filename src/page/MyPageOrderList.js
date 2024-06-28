@@ -23,28 +23,51 @@ import { format, isValid, startOfDay, endOfDay } from 'date-fns';
 import DateFilter from '../components/DateFilter';
 import { useDispatch, useSelector } from 'react-redux';
 import { orderActions } from '../action/orderActions';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const MyPageOrderList = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
   const { myOrderList } = useSelector((state) => state.order);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [query, setQuery] = useSearchParams();
   const [selectedOption, setSelectedOption] = useState('orderAll');
-
   const [searchQuery, setSearchQuery] = useState({});
-
   const [recentChecked, setRecentChecked] = useState(false);
   const [oldChecked, setOldChecked] = useState(false);
   const [sortOrder, setSortOrder] = useState('recent');
+  const fields = ['orderAll', 'orderNum', 'orderBookTitle'];
 
-  console.log('myOrderList', myOrderList);
+  // console.log('myOrderList', myOrderList);
   // console.log('user', user);
 
   useEffect(() => {
     dispatch(orderActions.getMyOrder());
   }, [user, dispatch]);
 
+  const totalField = fields.reduce((total, option) => {
+    total[option] = query.get(option) || '';
+    return total;
+  }, {});
+
+  useEffect(() => {
+    if (searchQuery.orderAll === '') delete searchQuery.orderAll;
+    if (searchQuery.orderNum === '') delete searchQuery.orderNum;
+    if (searchQuery.orderBookTitle === '') delete searchQuery.userName;
+    const params = new URLSearchParams();
+    Object.keys(searchQuery).forEach((key) => {
+      const value = searchQuery[key];
+      if (value !== undefined && value !== '') {
+        params.append(key, value);
+      }
+    });
+    navigate('?' + params.toString());
+    dispatch(orderActions.getRequestList({ ...searchQuery }));
+  }, [searchQuery]);
+
+  // 날짜 검색.
   const handleSearch = (event) => {
     event.preventDefault();
     if (startDate && endDate && isValid(new Date(startDate)) && isValid(new Date(endDate))) {
@@ -61,6 +84,15 @@ const MyPageOrderList = () => {
     }
   };
 
+  // 검색 리셋.
+  const resetSearch = () => {
+    setSearchQuery({});
+  };
+  useEffect(() => {
+    resetSearch();
+  }, []);
+
+  // 최근순, 오래된순.
   const handleRecentChange = (event) => {
     setRecentChecked(event.target.checked);
     setOldChecked(!event.target.value);
@@ -122,14 +154,14 @@ const MyPageOrderList = () => {
                 <Grid container spacing={2} mt={1}>
                   <Grid item xs={12} md={2}>
                     <Select value={selectedOption} onChange={(event) => setSelectedOption(event.target.value)} fullWidth sx={{ height: '40px' }}>
-                      <MenuItem value="orderAll">주문 전체</MenuItem>
-                      <MenuItem value="orderNum">주문 번호</MenuItem>
+                      <MenuItem value="orderAll">주문전체</MenuItem>
+                      <MenuItem value="orderNum">주문번호</MenuItem>
                       <MenuItem value="orderBookTitle">도서명</MenuItem>
                     </Select>
                   </Grid>
                   <Grid item xs={12} md={2}>
                     <TextField
-                      label={selectedOption}
+                      label={selectedOption === 'orderAll' ? '주문전체' : '주문번호' ? '주문번호' : '도서명'}
                       variant="outlined"
                       fullWidth
                       value={searchQuery[selectedOption] || ''}
@@ -143,16 +175,15 @@ const MyPageOrderList = () => {
 
                   {/* 검색 버튼 */}
                   <Grid item xs={12} md={8}>
-                    <Button variant="contained" color="primary" fullWidth sx={{ ml: 3, width: '10ch', height: '40px' }} onCLick={handleSearch}>
+                    <Button variant="contained" color="primary" fullWidth sx={{ ml: 3, width: '10ch', height: '40px' }} onClick={handleSearch}>
                       조회
                     </Button>
-                    <Button variant="contained" color="primary" fullWidth sx={{ ml: 1, width: '10ch', height: '40px' }}>
+                    <Button variant="contained" color="primary" fullWidth sx={{ ml: 1, width: '10ch', height: '40px' }} onClick={resetSearch}>
                       초기화
                     </Button>
                   </Grid>
                 </Grid>
               </Grid>
-              {/* <Typography mt={2} mb={2} borderBottom={1} borderColor="grey.400" /> */}
 
               {/* 광고 짧은 배너 */}
               <Typography style={{ backgroundColor: '#A6BB76', color: 'white' }} mt={2} p={1} border={1} borderRadius={4} align="center">
@@ -183,6 +214,7 @@ const MyPageOrderList = () => {
                     <TableCell>총주문액</TableCell>
                     <TableCell>주문상태</TableCell>
                   </TableHead>
+
                   {/* 테이블 바디 */}
                   <TableBody>
                     {sortedMyOrderList?.length > 0 &&
@@ -190,7 +222,6 @@ const MyPageOrderList = () => {
                         <TableRow key={item._id}>
                           <TableCell>{item.orderNum}</TableCell>
                           <TableCell>{item.createdAt.slice(0, 10)}</TableCell>
-                          {/* <TableCell>{item.items[0].bookId.title}</TableCell> */}
                           <TableCell>
                             {`${item?.items
                               ?.map((item) => item.bookId?.title)

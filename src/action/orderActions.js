@@ -46,7 +46,7 @@ const updateOrder = (id, status) => async (dispatch) => {
     dispatch({ type: types.UPDATE_ORDER_REQUEST });
     const response = await api.put(`/order/${id}`, { status });
     dispatch({ type: types.UPDATE_ORDER_SUCCESS });
-    dispatch(commonUiActions.showToastMessage('주문 상태를 수정했습니다.', 'success'));
+    dispatch(commonUiActions.showToastMessage('주문상태를 수정했습니다.', 'success'));
     dispatch(getOrderList());
   } catch (err) {
     dispatch({ type: types.UPDATE_ORDER_FAIL, payload: err.error });
@@ -60,7 +60,7 @@ const requestOrder = (orderNum, requestType, reason, navigate) => async (dispatc
     dispatch({ type: types.REQUEST_ORDER_REQUEST });
     const response = await api.post('/order/request', { orderNum, requestType, reason });
     dispatch({ type: types.REQUEST_ORDER_SUCCESS, payload: response.data });
-    dispatch(commonUiActions.showToastMessage('상품 문의를 완료했습니다.', 'success'));
+    dispatch(commonUiActions.showToastMessage('상품문의를 완료했습니다.', 'success'));
     navigate('/mypage/order-claim-list');
   } catch (err) {
     dispatch({ type: types.REQUEST_ORDER_FAIL, payload: err.error });
@@ -84,11 +84,25 @@ const getRequestList = (query) => async (dispatch) => {
 const getMyRequest = () => async (dispatch) => {
   try {
     dispatch({ type: types.GET_REQUEST_REQUEST });
-    const response = await api.get('order/request/me');
+    const response = await api.get('/order/request/me');
     dispatch({ type: types.GET_REQUEST_SUCCESS, payload: response.data });
-    console.log('getMyRequest', response);
   } catch (err) {
     dispatch({ type: types.GET_REQUEST_FAIL, payload: err.error });
+    dispatch(commonUiActions.showToastMessage(err.error, 'error'));
+  }
+};
+
+// 주문 문의 업데이트.
+const updateRequest = (id, status) => async (dispatch) => {
+  try {
+    dispatch({ type: types.UPDATE_REQUEST_REQUEST });
+    const response = await api.put(`/order/request/${id}`, { status });
+    dispatch({ type: types.UPDATE_REQUEST_SUCCESS });
+    dispatch(commonUiActions.showToastMessage('처리상태를 수정했습니다.', 'success'));
+    console.log('updateRequest', response);
+    dispatch(getRequestList());
+  } catch (err) {
+    dispatch({ type: types.UPDATE_REQUEST_FAIL, payload: err.error });
     dispatch(commonUiActions.showToastMessage(err.error, 'error'));
   }
 };
@@ -101,4 +115,5 @@ export const orderActions = {
   requestOrder,
   getRequestList,
   getMyRequest,
+  updateRequest,
 };
