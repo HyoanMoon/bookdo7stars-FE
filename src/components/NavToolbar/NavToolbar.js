@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import { bookActions } from '../../action/bookActions';
 import { categoryActions } from '../../action/categoryActions';
 import SearchBook from '../SearchBook';
-import { IconButton, Menu, useMediaQuery, useTheme } from '@mui/material';
+import { IconButton, Menu, useMediaQuery, useTheme, Badge } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Toolbar from '@mui/material/Toolbar';
@@ -252,7 +252,9 @@ const NavToolbar = () => {
                   <PersonIcon />
                 </IconButton>
                 <IconButton color="primary" onClick={() => navigate('/cart')}>
-                  <ShoppingCartIcon />
+                  <Badge badgeContent={cartItemCount || 0} color="secondary">
+                    <ShoppingCartIcon />
+                  </Badge>
                 </IconButton>
                 {renderMobileMenu(popupState)}
               </>
