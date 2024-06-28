@@ -20,29 +20,32 @@ const Footer = () => {
           },
           overflow: 'auto', // Allow scrolling if content overflows
         }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={4}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'row', sm: 'column', md: '' },
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            textAlign: 'center',
+          }}>
+          <Box
+            sx={{
+              order: { xs: 1, sm: 1 }, // Company section order
+              p: { xs: 1, sm: 2 },
+            }}>
             <Typography
               variant="h6"
               sx={{
                 mb: 3,
-                ml: 5,
                 fontWeight: 'bold',
-                '@media (max-width:600px)': {
-                  ml: 0,
-                  fontSize: '1rem', // Reduce font size for mobile
-                },
+                fontSize: { xs: '1rem', sm: '1.25rem' }, // Reduce font size for mobile
               }}>
               Company
             </Typography>
             <Typography
               variant="body2"
               sx={{
-                ml: 5,
-                '@media (max-width:600px)': {
-                  ml: 0,
-                  fontSize: '0.875rem', // Reduce font size for mobile
-                },
+                fontSize: { xs: '0.875rem', sm: '1rem' }, // Reduce font size for mobile
               }}>
               About Us
               <br />
@@ -50,25 +53,25 @@ const Footer = () => {
               <br />
               Blog
             </Typography>
-          </Grid>
-          <Grid item xs={12} sm={4}>
+          </Box>
+          <Box
+            sx={{
+              order: { xs: 2, sm: 2 }, // Contact section order
+              p: { xs: 1, sm: 2 },
+            }}>
             <Typography
               variant="h6"
               sx={{
                 mb: 3,
                 fontWeight: 'bold',
-                '@media (max-width:600px)': {
-                  fontSize: '1rem', // Reduce font size for mobile
-                },
+                fontSize: { xs: '1rem', sm: '1.25rem' }, // Reduce font size for mobile
               }}>
               Contact
             </Typography>
             <Typography
               variant="body2"
               sx={{
-                '@media (max-width:600px)': {
-                  fontSize: '0.875rem', // Reduce font size for mobile
-                },
+                fontSize: { xs: '0.875rem', sm: '1rem' }, // Reduce font size for mobile
               }}>
               Email: bookdo7stars@book.com
               <br />
@@ -78,47 +81,43 @@ const Footer = () => {
                 Contact Us
               </Link>
             </Typography>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Typography
-              variant="h6"
-              sx={{
-                mb: 3,
-                mr: 5,
-                fontWeight: 'bold',
-                '@media (max-width:600px)': {
-                  mr: 0,
-                  fontSize: '1rem', // Reduce font size for mobile
-                },
-              }}>
-              Follow Us
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{
-                mb: 3,
-                mr: 5,
-                '@media (max-width:600px)': {
-                  mb: 1,
-                  mr: 0,
-                  fontSize: '0.875rem', // Reduce font size for mobile
-                },
-              }}>
-              <Link href="https://github.com/7CodeCrew" color="inherit" underline="none">
-                Github
-              </Link>
-              <br />
-              <Link href="https://github.com/7CodeCrew" color="inherit" underline="none">
-                Twitter
-              </Link>
-              <br />
-              <Link href="/contact2" color="inherit" underline="none">
-                Instagram
-              </Link>
-            </Typography>
-          </Grid>
-        </Grid>
-        <Box textAlign="center" mt={2}>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: { xs: 'none', sm: 'block' }, // Hide Follow Us section on mobile
+            textAlign: 'center',
+            p: 2,
+          }}>
+          <Typography
+            variant="h6"
+            sx={{
+              mb: 3,
+              fontWeight: 'bold',
+              fontSize: { xs: '1rem', sm: '1.25rem' }, // Reduce font size for mobile
+            }}>
+            Follow Us
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              mb: 3,
+              fontSize: { xs: '0.875rem', sm: '1rem' }, // Reduce font size for mobile
+            }}>
+            <Link href="https://github.com/7CodeCrew" color="inherit" underline="none">
+              Github
+            </Link>
+            <br />
+            <Link href="https://github.com/7CodeCrew" color="inherit" underline="none">
+              Twitter
+            </Link>
+            <br />
+            <Link href="/contact2" color="inherit" underline="none">
+              Instagram
+            </Link>
+          </Typography>
+        </Box>
+        <Box textAlign="center" mt={10}>
           <Typography variant="body2">&copy; 2024 북두칠성. All rights reserved.</Typography>
         </Box>
       </Box>

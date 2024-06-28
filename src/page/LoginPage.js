@@ -66,7 +66,7 @@ const LoginPage = () => {
   }, [user, navigate]);
 
   return (
-    <Container maxWidth="md" sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <Container maxWidth="md" sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
       <Box
         sx={{
           width: '100%',
@@ -80,7 +80,7 @@ const LoginPage = () => {
         }}>
         <Typography variant="h6">북두칠성 서점에 오신 것을 환영합니다.</Typography>
       </Box>
-      <Grid container spacing={1}>
+      <Grid container spacing={1} sx={{ flexGrow: 1 }}>
         <Grid item xs={12} md={6} sx={{ order: { xs: 1, md: 2 }, display: { xs: 'none', md: 'flex' }, alignItems: 'center', justifyContent: 'center', p: 2 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: { md: 5, xs: 0 }, marginTop: 0 }}>
             <img style={{ width: '100%', maxHeight: '100%', objectFit: 'contain' }} src="/image/login.png" alt="Login Illustration" />
