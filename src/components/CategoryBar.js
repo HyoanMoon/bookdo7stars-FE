@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AppBar, Toolbar, Typography, MenuItem, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, MenuItem, Box, IconButton, useTheme, useMediaQuery } from '@mui/material';
 import { categoryActions } from '../action/categoryActions';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -8,14 +8,17 @@ import { getCategoryHierarchy } from '../_helper/getCategoryHierarchy';
 import { getSubCategories } from '../_helper/getSubCategories';
 import { getKeyByValue } from '../_helper/getKeyByValue';
 import { getBookGroupArray } from '../_helper/getBookGroupArray';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const CategoryBar = ({ bookList }) => {
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   useEffect(() => {
     dispatch(categoryActions.getCategoryList());
-  }, []);
+  }, [dispatch]);
 
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -24,6 +27,7 @@ const CategoryBar = ({ bookList }) => {
     setAnchorEl(event.currentTarget);
     setOpen((previousOpen) => !previousOpen);
   };
+
   const handlePopperClose = () => {
     setOpen(false);
   };
@@ -35,6 +39,7 @@ const CategoryBar = ({ bookList }) => {
   bookList.map((book) => {
     return totalCategories.push(book.categoryName);
   });
+
   const categoryHierarchy = getCategoryHierarchy(totalCategories);
   const firstSubCategories = getSubCategories(categoryHierarchy, '국내도서');
   const secondAllSubCategories = {};
@@ -57,8 +62,9 @@ const CategoryBar = ({ bookList }) => {
     BestSeller: '베스트 셀러',
     BlogBest: '블로그 베스트',
   };
+
   const groups = getBookGroupArray(queryTypes, bookGroups);
-  groups.push('전체 도서');
+  groups.push('전체 도서', '에디터 추천');
   const index = groups.indexOf('전체 도서');
 
   if (index > -1) {
@@ -69,6 +75,8 @@ const CategoryBar = ({ bookList }) => {
   const goToAllBooksOfGroup = (group) => {
     if (group === '전체 도서') {
       navigate('/books/all');
+    } else if (group === '에디터 추천') {
+      navigate('books/editor-recommend');
     } else {
       const queryType = getKeyByValue(bookGroups, group);
       navigate(`/books/group/${queryType}`);
@@ -76,8 +84,8 @@ const CategoryBar = ({ bookList }) => {
   };
 
   return (
-    <AppBar position="static">
-      <Toolbar>
+    <AppBar position="static" sx={{ backgroundColor: '#fff', borderBottom: '2px solid #6b8e23', borderTop: '2px solid #6b8e23' }}>
+      <Toolbar sx={{ padding: { xs: '0 8px', sm: '0 16px' } }}>
         <Box>
           <CategoryPopOver
             anchorEl={anchorEl}
@@ -89,25 +97,45 @@ const CategoryBar = ({ bookList }) => {
           />
         </Box>
 
-        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', width: '100%' }}>
-          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', width: '80%' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%',
+            paddingLeft: '20px',
+            paddingRight: '20px',
+          }}>
+          <Box
+            sx={{
+              display: isMobile ? 'grid' : 'flex',
+              gridTemplateColumns: isMobile ? 'repeat(3, 1fr)' : 'none',
+              gap: 1,
+              flexWrap: isMobile ? 'none' : 'wrap',
+              width: '100%',
+            }}>
             {groups.map((group, index) => (
               <MenuItem key={index} onClick={() => goToAllBooksOfGroup(group)}>
-                <Typography variant="body1" component="div" sx={{ fontSize: { xs: '0.8rem', sm: '1rem' }, cursor: 'pointer' }}>
+                <Typography variant="body1" component="div" sx={{ fontSize: { xs: '0.7rem', sm: '0.9rem' }, cursor: 'pointer', color: '#6b8e23' }}>
                   {group}
                 </Typography>
               </MenuItem>
             ))}
           </Box>
-          <Box sx={{ display: 'flex' }}>
-            <Typography
-              variant="h7"
-              component="div"
-              aria-describedby={id}
+          <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
+            <IconButton
               onClick={handlePopperClick}
-              sx={{ cursor: 'pointer', fontSize: { xs: '0.8rem', sm: '1rem' } }}>
-              전체 카테고리
-            </Typography>
+              sx={{
+                color: 'primary.main',
+                width: { xs: 40, sm: 50 },
+                height: { xs: 40, sm: 50 },
+                '&:hover': {
+                  backgroundColor: 'primary.light',
+                },
+              }}>
+              <MenuIcon />
+            </IconButton>
           </Box>
         </Box>
       </Toolbar>

@@ -92,7 +92,7 @@ const InquiryForm = () => {
           control={<Checkbox name="privacyAgreement" checked={form.privacyAgreement} onChange={handleChange} />}
           label="(필수)개인정보 수집 및 이용 동의"
         />
-        {privacyAgreementError && <span className="error-message"> 체크박스를 체크해주세요. </span>}
+        {privacyAgreementError && <Typography sx={{ color: 'red' }}>체크박스를 체크해주세요.</Typography>}
         <Typography variant="body2">북두칠성에서는 무사히 답변을 드리기 위해 개인정보를 수집 및 이용합니다.</Typography>
       </Box>
       <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>

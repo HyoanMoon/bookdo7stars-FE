@@ -1,19 +1,16 @@
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import * as React from 'react';
-import { Box, InputAdornment } from '@mui/material';
+import { Box, InputAdornment, useMediaQuery } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
-import MenuItem from '@mui/material/MenuItem';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom';
 
-const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch, isMobile }) => {
+const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch }) => {
   const [selectedField, setSelectedField] = useState(fields[0]);
-  const [inputValue, setInputValue] = useState('');
 
   const navigate = useNavigate();
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   const handleChange = (event) => {
     setSelectedField(event.target.value);
@@ -39,15 +36,9 @@ const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch, isMobile
     }
   };
 
-  const handleReset = () => {
-    setInputValue('');
-    resetSearch();
-    navigate('/');
-  };
-
   return (
-    <Box>
-      <FormControl sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: '1 1 auto', mb: isMobile ? 2 : 0 }}>
+    <Box sx={{ width: '100%', p: isMobile ? 1 : 2 }}>
+      <FormControl sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
         <TextField
           variant="filled"
           placeholder="찾으시는 상품을 검색하세요."
@@ -56,18 +47,16 @@ const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch, isMobile
           value={searchQuery[selectedField] || ''}
           onChange={(event) => setSearchQuery({ ...searchQuery, [selectedField]: event.target.value })}
           onKeyPress={handleKeyPress}
-          sx={{ backgroundColor: '#fff', flex: '1 1 auto' }}
+          sx={{ backgroundColor: '#fff', flexGrow: 1, mr: isMobile ? 1 : 2 }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
                 <SearchIcon />
               </InputAdornment>
             ),
+            style: isMobile ? { fontSize: '0.75rem' } : {},
           }}
         />
-        <IconButton type="button" aria-label="reset" onClick={handleReset}>
-          <RefreshIcon />
-        </IconButton>
       </FormControl>
     </Box>
   );

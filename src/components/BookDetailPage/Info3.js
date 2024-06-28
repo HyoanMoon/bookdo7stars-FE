@@ -94,7 +94,7 @@ const Info3 = ({ selectedBook, otherBooksByAuthor }) => {
         centered
         indicatorColor="primary"
         textColor="primary"
-        sx={{ backgroundColor: '#DADFCE', opacity: '90%', position: 'sticky', top: '0', ml: '0', width: '100%', zIndex: 1500 }}>
+        sx={{ backgroundColor: '#DADFCE', opacity: '90%', position: 'sticky', top: '0', ml: '0', width: '100%', zIndex: 1000 }}>
         <Tab label="도서소개" value="bookDescription" />
         <Tab label="도서정보" value="bookInfo" />
         <Tab label="저자의 다른 책" value="author" />

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Container, Grid } from '@mui/material';
-import Box from '@mui/material/Box';
+import { Container, Grid, Box, IconButton } from '@mui/material';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import BookImage from '../components/BookDetailPage/Book.image';
 import BookBasicInfo from '../components/BookDetailPage/BookBasicInfo';
 import BookToCart from '../components/BookDetailPage/BookToCart';
@@ -25,7 +25,9 @@ const BookDetailPage = () => {
   const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
-    dispatch(favoriteActions.getFavorite());
+    if (user) {
+      dispatch(favoriteActions.getFavorite());
+    }
   }, [dispatch, user]);
 
   useEffect(() => {
@@ -34,42 +36,67 @@ const BookDetailPage = () => {
     }
   }, [bookid]);
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   if (getBooksLoading || !selectedBook) {
     return <div className="loading"></div>;
   }
 
   return (
-    <Box sx={{ mt: 20 }}>
-      <Container>
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-          <Grid item xs={10} sm={12} md={4}>
+    <Box sx={{ mt: { xs: 8, md: 16 } }}>
+      <Container sx={{ mb: 4 }}>
+        <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          <Grid item xs={12} md={4} sx={{ textAlign: 'center' }}>
             {selectedBook.cover && <BookImage cover={selectedBook.cover} />}
           </Grid>
-          <Grid item xs={6} sm={12} md={8}>
+          <Grid item xs={12} md={8}>
             <BookBasicInfo title={selectedBook.title} author={selectedBook.author} publisher={selectedBook.publisher} price={selectedBook.priceStandard} />
             <BookToCart
               favorite={favorite?.some((favorite) => favorite._id === selectedBook._id)}
               selectedBook={selectedBook}
               fullAddress={fullAddress}
               deliveryInfo={deliveryInfo}
-              deliveryAddress={address} // 전달할 주소 추가
+              deliveryAddress={address}
             />
-            <Grid item mt={4}>
-              {/* <BookDetailInfo pubDate={selectedBook.pubDate} isbn={selectedBook.isbn} /> */}
-              {/* 여기에 다음 API */}
-              <div style={{ fontWeight: 'bold' }}> 배송 정보 </div>
-              <h6>{address}</h6>
-              <AddressChange setAddress={setAddress} />
+            <Box mt={3}>
+              <Box display="flex" alignItems="center" sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5', padding: '8px', borderRadius: '4px' }}>
+                <div style={{ marginRight: '14px' }}>배송 정보</div>
+                <h6 style={{ margin: 0, marginRight: '13px' }}>{address}</h6>
+                <AddressChange setAddress={setAddress} />
+              </Box>
               <DeliveryEstimate address={address} />
-            </Grid>
+            </Box>
           </Grid>
-          {/* <Grid item xs={12} sm={12} md={12}>
-            <BookDescription description={selectedBook.description} />
-          </Grid> */}
-          <Grid item xs={12} sm={12} md={12}>
+          <Grid item xs={12}>
             <Info3 selectedBook={selectedBook} otherBooksByAuthor={otherBooksByAuthor} />
           </Grid>
         </Grid>
+        <Box
+          sx={{
+            position: 'fixed',
+            bottom: 40,
+            right: 40,
+            zIndex: 1000,
+          }}>
+          <IconButton
+            onClick={scrollToTop}
+            sx={{
+              backgroundColor: '#608020',
+              color: '#fff',
+              '&:hover': { backgroundColor: '#d3ddbd' },
+              borderRadius: '50%',
+              width: 56,
+              height: 56,
+              '@media (max-width:600px)': {
+                width: 40, // Smaller width for mobile
+                height: 40, // Smaller height for mobile
+              },
+            }}>
+            <ArrowUpwardIcon />
+          </IconButton>
+        </Box>
       </Container>
     </Box>
   );

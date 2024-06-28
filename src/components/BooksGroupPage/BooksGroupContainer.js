@@ -1,45 +1,52 @@
-import { Box, Container, Grid, Typography, Tab, Tabs, Button, IconButton } from '@mui/material';
-import BookSlider from '../BookSlider/BookSlider';
-import React, { useEffect, useState } from 'react';
+import { Box, Container, Grid, Typography, Button, IconButton, useMediaQuery } from '@mui/material';
 import BookCard from '../BookCard';
-import { AddCircleOutline, ArrowBack } from '@mui/icons-material';
+import React, { useEffect, useState } from 'react';
+import { AddCircleOutline, Add } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { bookActions } from '../../action/bookActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { favoriteActions } from '../../action/favoriteActions';
-const BooksGroupContainer = ({ bookList, title }) => {
+
+const BooksGroupContainer = ({ bookList, title, subtitle }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [selectedCategory, setSelectedCategory] = useState('전체');
-  const [displayCount, setDisplayCount] = useState(16); // 처음에 표시할 책의 수
+  const isMobile = useMediaQuery('(max-width: 600px)'); // 모바일 화면인지 확인
+  const [displayCount, setDisplayCount] = useState(isMobile ? 3 : 12); // 초기 표시할 책의 수
   const { favorite } = useSelector((state) => state.favorite);
   const { user } = useSelector((state) => state.favorite);
 
   useEffect(() => {
-    dispatch(favoriteActions.getFavorite());
+    if (user) {
+      dispatch(favoriteActions.getFavorite());
+    }
   }, [dispatch, user]);
 
   // "더보기" 기능
   const handleLoadMore = () => {
-    setDisplayCount((prevCount) => prevCount + 16);
+    setDisplayCount((prevCount) => prevCount + (isMobile ? 3 : 12));
   };
 
   useEffect(() => {
-    setDisplayCount(16);
-  }, [title]);
+    setDisplayCount(isMobile ? 3 : 12);
+  }, [title, isMobile]);
 
-  const handleCategoryChange = (event, newValue) => {
-    setSelectedCategory(newValue);
-  };
-
-  const filteredBooks = selectedCategory === '전체' ? bookList : bookList.filter((book) => book.categoryName.includes(selectedCategory));
+  const filteredBooks = bookList; // 선택된 카테고리와 무관하게 필터링된 책 리스트
 
   return (
     <Container>
-      <Box sx={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+      <Box sx={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', flexDirection: 'column' }}>
         <Typography variant="h4" component="div" gutterBottom sx={{ fontWeight: 'bold', textAlign: 'center', margin: '0px' }}>
           {title}
+          {!isMobile && subtitle && (
+            <Typography component="span" sx={{ fontSize: '1rem', marginLeft: '8px' }}>
+              {subtitle}, ({bookList.length})
+            </Typography>
+          )}
         </Typography>
+        {isMobile && subtitle && (
+          <Typography variant="body2" sx={{ textAlign: 'center', marginTop: '4px' }}>
+            {subtitle}, ({bookList.length})
+          </Typography>
+        )}
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
         <Grid container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -56,9 +63,9 @@ const BooksGroupContainer = ({ bookList, title }) => {
             </Grid>
           ))}
         </Grid>
-        <Box sx={{ width: '100%' }}>
+        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: '2rem', marginBottom: '2rem' }}>
           {filteredBooks.length > displayCount && (
-            <Button onClick={handleLoadMore} variant="outlined" fullWidth endIcon={<AddCircleOutline />} sx={{ marginTop: '2rem', marginBottom: '2rem' }}>
+            <Button onClick={handleLoadMore} variant="outlined" endIcon={<AddCircleOutline />}>
               더보기
             </Button>
           )}

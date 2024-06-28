@@ -46,10 +46,21 @@ const ServicesSection = () => {
       <Grid container spacing={2}>
         {services.map((service, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
-            <Box display="flex" alignItems="center" p={2} border={1} borderColor="grey.300">
-              <Box mr={2}>{service.icon}</Box>
+            <Box
+              display="flex"
+              flexDirection="column"
+              justifyContent="space-between"
+              alignItems="center"
+              p={2}
+              border={1}
+              borderColor="grey.300"
+              minHeight="200px" // Set a minimum height to align all boxes
+              textAlign="center">
+              <Box mb={2}>{service.icon}</Box>
               <Box>
-                <Typography variant="h6">{service.title}</Typography>
+                <Typography variant="h6" gutterBottom>
+                  {service.title}
+                </Typography>
                 <Typography>{service.description}</Typography>
               </Box>
             </Box>

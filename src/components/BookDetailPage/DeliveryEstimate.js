@@ -24,7 +24,7 @@ const DeliveryEstimate = ({ address }) => {
           backgroundColor: 'white',
           padding: '10px',
           marginTop: '10px',
-          fontSize: 'x-small',
+          fontSize: 'small',
         }}>
         {deliveryText}
       </p>

@@ -1,7 +1,22 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { orderActions } from '../../action/orderActions';
-import { SET_FULL_ADDRESS } from '../../constants/order.constants';
 import { useDispatch } from 'react-redux';
+import { SET_FULL_ADDRESS } from '../../constants/order.constants';
+// eslint-disable-next-line import/no-named-as-default
+import styled from 'styled-components';
+
+// Styled component for the dropdown container
+const DropdownContainer = styled.div`
+  position: relative;
+  z-index: 1501;
+`;
+
+const PostcodeWidget = styled.div`
+  &.open {
+    position: absolute;
+    z-index: 1502;
+    background: white;
+  }
+`;
 
 const AddressChange = ({ setAddress }) => {
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
@@ -47,15 +62,15 @@ const AddressChange = ({ setAddress }) => {
   }, [isPostcodeOpen, setAddress, togglePostcode, dispatch]);
 
   return (
-    <div style={{ position: 'relative' }}>
+    <DropdownContainer>
       <div className="address-change-container">
         <button className="change-button" onClick={togglePostcode}>
           지역 선택 {'▾'}
         </button>
-        <div>수도권과 부산은 하루배송 가능 지역입니다.</div>
+        <div style={{ color: 'red' }}>수도권과 부산은 하루배송 가능 지역입니다.</div>
       </div>
-      <div className={`postcode-widget ${isPostcodeOpen ? 'open' : ''}`} ref={elementRef}></div>
-    </div>
+      <PostcodeWidget className={`postcode-widget ${isPostcodeOpen ? 'open' : ''}`} ref={elementRef}></PostcodeWidget>
+    </DropdownContainer>
   );
 };
 

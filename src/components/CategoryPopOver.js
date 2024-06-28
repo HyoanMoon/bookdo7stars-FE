@@ -1,5 +1,5 @@
 import { ClickAwayListener, Fade, Grid, Paper, Typography } from '@mui/material';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { bookActions } from '../action/bookActions';
 import { categoryActions } from '../action/categoryActions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,46 +10,44 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { categories } = useSelector((state) => state.category);
+  const encodeCategoryPath = (path) => encodeURIComponent(path);
+  const params = useParams();
 
-  const clickSub3Category = (firstCategory, secondCategory, thirdCategory) => {
-    const newPath = [firstCategory, secondCategory, thirdCategory];
-    let categoryPath = newPath.join('>');
-    categoryPath = '국내도서>' + categoryPath;
-    let categoryid;
-    categories.find((category) => {
-      if (category.categoryName === categoryPath) {
-        categoryid = category.categoryId;
-      }
-    });
-    if (categoryid) {
-      dispatch(categoryActions.setSelectedCategoryId(categoryid));
-      dispatch(categoryActions.setSelectedCategoryPath(categoryPath));
-      dispatch(bookActions.getBookListByCategory(categoryid));
-    } else {
-      dispatch(categoryActions.setSelectedCategoryId(null));
-      dispatch(categoryActions.setSelectedCategoryPath(null));
-      dispatch(bookActions.resetBookListByCategory([]));
-    }
-    navigate(`/books/all/category`);
-    handlePopperClose();
-  };
+  const clickSub3Category = useCallback(
+    (firstCategory, secondCategory, thirdCategory) => {
+      const newPath = [firstCategory, secondCategory, thirdCategory];
+      let categoryPath = newPath.join('>');
+      categoryPath = '국내도서>' + categoryPath;
+      const categoryid = encodeCategoryPath(categoryPath);
+      navigate(`/books/all/category/${categoryid}`);
+      handlePopperClose();
+    },
+    [navigate, handlePopperClose],
+  );
 
-  const clickSub2Category = (firstCategory, secondCategory) => {
-    const newPath = [firstCategory, secondCategory];
-    let categoryPath = newPath.join('>');
-    categoryPath = '국내도서>' + categoryPath;
-    dispatch(categoryActions.setSelectedCategoryPath(categoryPath));
-    navigate(`/books/all/category`);
-    handlePopperClose();
-  };
-  const clickSubCategory = (firstCategory) => {
-    const newPath = [firstCategory];
-    let categoryPath = newPath.join('>');
-    categoryPath = '국내도서>' + categoryPath;
-    dispatch(categoryActions.setSelectedCategoryPath(categoryPath));
-    navigate(`/books/all/category`);
-    handlePopperClose();
-  };
+  const clickSub2Category = useCallback(
+    (firstCategory, secondCategory) => {
+      const newPath = [firstCategory, secondCategory];
+      let categoryPath = newPath.join('>');
+      categoryPath = '국내도서>' + categoryPath;
+      const categoryid = encodeCategoryPath(categoryPath);
+      navigate(`/books/all/category/${categoryid}`);
+      handlePopperClose();
+    },
+    [navigate, handlePopperClose],
+  );
+
+  const clickSubCategory = useCallback(
+    (firstCategory) => {
+      const newPath = [firstCategory];
+      let categoryPath = newPath.join('>');
+      categoryPath = '국내도서>' + categoryPath;
+      const categoryid = encodeCategoryPath(categoryPath);
+      navigate(`/books/all/category/${categoryid}`);
+      handlePopperClose();
+    },
+    [navigate, handlePopperClose],
+  );
 
   return (
     <Popper id={id} open={open} anchorEl={anchorEl} placement="bottom-start" transition style={{ zIndex: 1500 }}>
@@ -62,18 +60,21 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
               maxHeight: '500px',
               overflowY: 'auto',
               padding: '10px',
-              border: '1px solid',
-              borderColor: 'primary.main',
-              borderRadius: '4px',
-              minWidth: '200px', // 최소 너비 설정
-              minHeight: '200px', // 최소 높이 설정
+              boxShadow: 3,
+              borderRadius: '8px',
+              minWidth: '200px',
+              minHeight: '200px',
+              backgroundColor: 'background.paper',
+              '@media (max-width: 600px)': {
+                maxWidth: '90%',
+                padding: '5px',
+              },
             }}
             {...TransitionProps}>
             <ClickAwayListener onClickAway={() => handlePopperClose()}>
               <Grid container spacing={2}>
                 {Object.keys(secondAllSubCategories).map((firstCategory, index) => (
                   <Grid item xs={12} key={index} sx={{ paddingBottom: '5px' }}>
-                    {' '}
                     <Typography
                       variant="h6"
                       gutterBottom
@@ -82,7 +83,7 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
                         cursor: 'pointer',
                         display: 'inline-block',
                         '&:hover': {
-                          backgroundColor: 'primary.light', // 원하는 배경색으로 변경하세요.
+                          color: 'primary.main',
                         },
                       }}>
                       <strong>{firstCategory}</strong>
@@ -104,7 +105,7 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
                               cursor: 'pointer',
                               display: 'inline-block',
                               '&:hover': {
-                                backgroundColor: 'primary.light', // 원하는 배경색으로 변경하세요.
+                                color: 'primary.main',
                               },
                             }}>
                             <strong>{secondCategory}</strong>
@@ -119,7 +120,7 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
                                     cursor: 'pointer',
                                     display: 'inline-block',
                                     '&:hover': {
-                                      backgroundColor: 'primary.light', // 원하는 배경색으로 변경하세요.
+                                      color: 'primary.main',
                                     },
                                   }}>
                                   {thirdCategory}

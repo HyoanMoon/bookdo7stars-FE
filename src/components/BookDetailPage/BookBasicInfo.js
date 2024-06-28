@@ -4,7 +4,16 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import { useDispatch } from 'react-redux';
 import * as types from '../../constants/cart.constants';
-// import { types } from './actionTypes';
+// eslint-disable-next-line import/no-named-as-default
+import styled from 'styled-components';
+
+const TaxDeductionLabel = styled.div`
+  border: 1px solid;
+  padding: 0;
+  width: fit-content;
+  font-size: 0.875rem;
+`;
+
 const BookBasicInfo = ({ title, author, publisher, price }) => {
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
@@ -15,17 +24,16 @@ const BookBasicInfo = ({ title, author, publisher, price }) => {
 
   const handleDecrease = () => {
     setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
-    // dispatch({ type: types.SET_QUANTITY, quantity });
   };
 
   const handleIncrease = () => {
     setQuantity((prev) => prev + 1);
-    // dispatch({ type: types.SET_QUANTITY, quantity });
   };
 
   return (
     <Box>
-      <Typography variant="h4" sx={{ flexGrow: 1, mt: 5, mb: 3, fontSize: '1.75rem', fontWeight: 'bold' }}>
+      <TaxDeductionLabel>소득공제</TaxDeductionLabel>
+      <Typography variant="h4" sx={{ flexGrow: 1, mt: 0, mb: 3, fontSize: '1.75rem', fontWeight: 'bold' }}>
         {title}
       </Typography>
       <Typography variant="subtitle1" sx={{ mb: 3, fontSize: '0.875rem', color: 'grey' }}>
@@ -53,11 +61,3 @@ const BookBasicInfo = ({ title, author, publisher, price }) => {
 };
 
 export default BookBasicInfo;
-
-// 28px -> 1.75rem
-// 14px -> 0.875rem
-// 32px = 2rem
-// 16px = 1rem
-// 13px = 0.8125rem
-
-// sx={{ flexGrow: 1 }}

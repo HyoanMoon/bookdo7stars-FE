@@ -20,10 +20,12 @@ const getBookList = (query) => async (dispatch) => {
   }
 };
 
-const getBookListByGroup = (bookGroup) => async (dispatch) => {
+const getBookListByGroup = (bookGroup, query) => async (dispatch) => {
   try {
     dispatch({ type: types.BOOK_GET_BY_GROUP_REQUEST });
-    const response = await api.get(`/book/group/${bookGroup}`);
+    const response = await api.get(`/book/group/${bookGroup}`, {
+      params: { query },
+    });
     dispatch({ type: types.BOOK_GET_BY_GROUP_SUCCESS, payload: response.data });
   } catch (err) {
     dispatch({ type: types.BOOK_GET_BY_GROUP_FAIL, payload: err });
