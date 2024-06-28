@@ -79,7 +79,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <Container maxWidth="md" sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', pb: 4 }}>
       <Box
         sx={{
           width: '100%',
@@ -87,13 +87,11 @@ const RegisterPage = () => {
           marginBottom: '40px',
           bgcolor: 'primary.main',
           color: 'white',
-          p: 2,
           textAlign: 'center',
           borderRadius: '9px',
-        }}>
-        <Typography variant="h6">북두칠성 서점에 오신 것을 환영합니다.</Typography>
-      </Box>
-      <Grid container spacing={1}>
+        }}
+      />
+      <Grid container spacing={1} sx={{ flexGrow: 1 }}>
         <Grid item xs={12} md={6} sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', justifyContent: 'center' }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <img style={{ width: '100%', maxHeight: '400px', objectFit: 'contain' }} src="/image/register.png" alt="Register Illustration" />
@@ -236,12 +234,12 @@ const RegisterPage = () => {
           width: '100%',
           bgcolor: 'primary.main',
           color: 'white',
-          p: 2,
           textAlign: 'center',
           borderRadius: 1,
           mt: 3,
+          p: 2,
         }}>
-        <Typography variant="body1">Need help? Contact us at support@example.com</Typography>
+        <Typography variant="body2">&copy; 2024 북두칠성. All rights reserved.</Typography>
       </Box>
     </Container>
   );
