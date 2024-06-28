@@ -10,27 +10,28 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { categories } = useSelector((state) => state.category);
+  const encodeCategoryPath = (path) => encodeURIComponent(path);
 
   const clickSub3Category = (firstCategory, secondCategory, thirdCategory) => {
     const newPath = [firstCategory, secondCategory, thirdCategory];
     let categoryPath = newPath.join('>');
     categoryPath = '국내도서>' + categoryPath;
-    let categoryid;
-    categories.find((category) => {
-      if (category.categoryName === categoryPath) {
-        categoryid = category.categoryId;
-      }
-    });
-    if (categoryid) {
-      dispatch(categoryActions.setSelectedCategoryId(categoryid));
-      dispatch(categoryActions.setSelectedCategoryPath(categoryPath));
-      dispatch(bookActions.getBookListByCategory(categoryid));
-    } else {
-      dispatch(categoryActions.setSelectedCategoryId(null));
-      dispatch(categoryActions.setSelectedCategoryPath(null));
-      dispatch(bookActions.resetBookListByCategory([]));
-    }
-    navigate(`/books/all/category`);
+    // categories.find((category) => {
+    //   if (category.categoryName === categoryPath) {
+    //     categoryid = category.categoryId;
+    //   }
+    // });
+    const categoryid = encodeCategoryPath(categoryPath);
+    // if (categoryid) {
+    //   dispatch(categoryActions.setSelectedCategoryId(categoryid));
+    //   dispatch(categoryActions.setSelectedCategoryPath(categoryPath));
+    //   dispatch(bookActions.getBookListByCategory(categoryid));
+    // } else {
+    //   dispatch(categoryActions.setSelectedCategoryId(null));
+    //   dispatch(categoryActions.setSelectedCategoryPath(null));
+    //   dispatch(bookActions.resetBookListByCategory([]));
+    // }
+    navigate(`/books/all/category/${categoryid}`);
     handlePopperClose();
   };
 
@@ -39,7 +40,8 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
     let categoryPath = newPath.join('>');
     categoryPath = '국내도서>' + categoryPath;
     dispatch(categoryActions.setSelectedCategoryPath(categoryPath));
-    navigate(`/books/all/category`);
+    const categoryid = encodeCategoryPath(categoryPath);
+    navigate(`/books/all/category/${categoryid}`);
     handlePopperClose();
   };
   const clickSubCategory = (firstCategory) => {
@@ -47,7 +49,8 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
     let categoryPath = newPath.join('>');
     categoryPath = '국내도서>' + categoryPath;
     dispatch(categoryActions.setSelectedCategoryPath(categoryPath));
-    navigate(`/books/all/category`);
+    const categoryid = encodeCategoryPath(categoryPath);
+    navigate(`/books/all/category/${categoryid}`);
     handlePopperClose();
   };
 

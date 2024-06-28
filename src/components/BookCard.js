@@ -15,7 +15,6 @@ const BookCard = ({ book, favorite, sx }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
-  console.log(user);
 
   const clickBookCard = (book) => {
     dispatch({ type: types.SET_SELECTED_BOOK, payload: book });

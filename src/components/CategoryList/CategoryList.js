@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Typography, Collapse, IconButton, List, ListItemText, ListItem } from '@mui/material';
+import { Collapse, IconButton, List, ListItemText, ListItem } from '@mui/material';
 import { ExpandMore as ExpandMoreIcon, ChevronRight as ChevronRightIcon } from '@mui/icons-material';
 import { getCategoryHierarchy } from '../../_helper/getCategoryHierarchy';
 
@@ -9,16 +9,14 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName, setSelected
   const categoryHierarchy = useMemo(() => getCategoryHierarchy(totalCategories), [totalCategories]);
 
   useEffect(() => {
-    setSelectedPath([]);
-  }, [groupName, setSelectedPath]);
-
-  useEffect(() => {
-    const initialOpenState = {};
-    const topCategories = Object.keys(categoryHierarchy);
-    topCategories.forEach((category) => {
-      initialOpenState[category] = true;
-    });
-    setOpen(initialOpenState);
+    if (categoryHierarchy) {
+      const initialOpenState = {};
+      const topCategories = Object.keys(categoryHierarchy);
+      topCategories.forEach((category) => {
+        initialOpenState[category] = true;
+      });
+      setOpen(initialOpenState);
+    }
   }, [categoryHierarchy]);
 
   useEffect(() => {
@@ -59,10 +57,8 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName, setSelected
     }
   };
 
-  console.log(categoryHierarchy);
-  let subCategory = {
-    국내도서: categoryHierarchy['국내도서'],
-  };
+  if (!categoryHierarchy) return null;
+
   const renderCategories = (categories, parentPath = '') => {
     return Object.keys(categories).map((category, index) => {
       const subCategories = categories[category];
@@ -117,7 +113,7 @@ const CategoryList = ({ totalCategories, onCategoryClick, groupName, setSelected
 
   return (
     <div>
-      <List>{renderCategories(subCategory)}</List>
+      <List>{renderCategories(categoryHierarchy)}</List>
     </div>
   );
 };
