@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Typography,
@@ -16,21 +16,62 @@ import {
   Checkbox,
 } from '@mui/material';
 import MyPageCategory from '../components/MyPageCategory';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { orderActions } from '../action/orderActions';
+import { useNavigate } from 'react-router';
+import MyPageCancelDialog from '../components/MyPageCancelDialog';
+import * as types from '../constants/order.constants';
 
 const MyPageOrderCancelList = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
+  const { myRequestList } = useSelector((state) => state.order);
+  const { myOrderList } = useSelector((state) => state.order);
   const [recentChecked, setRecentChecked] = useState(false);
   const [oldChecked, setOldChecked] = useState(false);
+  const [sortOrder, setSortOrder] = useState('recent');
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  // console.log('myOrderList', myOrderList);
+  // console.log('myRequestList', myRequestList);
+
+  useEffect(() => {
+    dispatch(orderActions.getMyRequest());
+    dispatch(orderActions.getMyOrder());
+  }, [user, dispatch]);
+
+  const handleGoToBuyTheBook = (id) => {
+    navigate(`/book/${id}`);
+  };
 
   const handleRecentChange = (event) => {
     setRecentChecked(event.target.checked);
-    // 최근순 ~~
+    setOldChecked(!event.target.value);
+    setSortOrder('recent');
   };
-
   const handleOldChange = (event) => {
     setOldChecked(event.target.checked);
-    // 오래된순~~
+    setRecentChecked(!event.target.value);
+    setSortOrder('old');
+  };
+  const sortedMyOrderList = [...myRequestList].sort((a, b) => {
+    if (sortOrder === 'recent') {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    } else {
+      return new Date(a.createdAt) - new Date(b.createdAt);
+    }
+  });
+
+  // // 주문 상세 다이얼로그 열기
+  const handleOpenDialog = (request) => {
+    setDialogOpen(true);
+    dispatch({ type: types.SET_SELECTED_REQUEST, payload: request });
+  };
+
+  // 주문 상세 다이얼로그 닫기
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
   };
 
   return (
@@ -41,15 +82,17 @@ const MyPageOrderCancelList = () => {
             welcome
           </Link>
           <Typography mr={1} ml={1}>{`>`}</Typography>
-          <Link href="/mypage" underline="hover" color="inherit">
+          <Link href="/mypage" underline="hover" color="primary" fontWeight="medium">
             mypage
           </Link>
         </Grid>
 
         {/* 마이페이지 */}
         <Grid container>
-          <Typography variant="h4" gutterBottom>
-            마이페이지
+          <Typography variant="h4" gutterBottom fontWeight="medium">
+            <Link href="/mypage" color="primary" sx={{ textDecoration: 'none' }}>
+              마이페이지
+            </Link>
           </Typography>
         </Grid>
         <Grid container>
@@ -69,17 +112,19 @@ const MyPageOrderCancelList = () => {
                   {/* <Typography variant="body1" mb={1}>
                     ► 취소 주문 내역
                   </Typography> */}
-                  <Typography variant="subtitle2" pl={1} sx={{ fontWeight: 'bold' }}>
+                  <Typography variant="subtitle2" pl={1} fontWeight="medium">
                     {'취소 주문 재접수 : 해당주문의 <다시 주문> 을 누르신 후, 해당 도서 페이지에서 새로 구매하실 수 있습니다.'}
                   </Typography>
                   <Typography variant="subtitle2" pl={1}>
                     입금확인 이전 취소된 주문인 경우, 고객센터로 결제정보를 알려주셔야만 입금확인 후 환불이 가능합니다.
                   </Typography>
+                  <Typography variant="subtitle2" pl={1} color="red">
+                    취소 신청은 마이페이지 [반품/교환 신청 및 조회] 페이지에서 진행하실 있습니다.
+                  </Typography>
                 </Grid>
               </Grid>
 
               {/* 정렬기준 */}
-              {/* 데이터 바인딩 해보고 기준 하나 삭제하기 */}
               <FormGroup style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
                 <FormControlLabel
                   control={<Checkbox checked={recentChecked} onChange={handleRecentChange} />}
@@ -97,27 +142,63 @@ const MyPageOrderCancelList = () => {
                 <Table>
                   {/* 테이블 헤드 */}
                   <TableHead>
-                    <TableCell>주문 일시</TableCell>
-                    <TableCell>주문 번호</TableCell>
-                    <TableCell>주문 내역</TableCell>
-                    <TableCell>다시 주문</TableCell>
+                    <TableCell>접수일자</TableCell>
+                    <TableCell>주문내역</TableCell>
+                    <TableCell>총주문액</TableCell>
+                    <TableCell>요청사항</TableCell>
+                    <TableCell>처리상태</TableCell>
+                    <TableCell>다시주문</TableCell>
                   </TableHead>
+
                   {/* 테이블 바디 */}
                   <TableBody>
-                    {/* {recentOrderHistory?.map((item) => ( */}
-                    <TableRow>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell>
-                        <Button variant="contained" color="secondary" fullWidth sx={{ ml: 1, width: '10ch', height: '20px', borderRadius: '5px' }}>
-                          <Typography variant="subtitle2" color="white">
-                            이동
-                          </Typography>
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                    {/* ))} */}
+                    {sortedMyOrderList?.length > 0 ? (
+                      sortedMyOrderList
+                        .filter((item) => item.request.requestType !== ('반품' || '교환'))
+                        .map((item, index) => (
+                          <TableRow key={index} onClick={() => handleOpenDialog(item)}>
+                            <TableCell>{item.createdAt.slice(0, 10)}</TableCell>
+                            <TableCell>
+                              {`${
+                                (myOrderList.length > 0 &&
+                                  myOrderList
+                                    .find((order) => order.orderNum === item.orderNum)
+                                    ?.items.map((orderItem) => orderItem.bookId?.title)
+                                    .join(', ')
+                                    .slice(0, 25) +
+                                    (myOrderList
+                                      .find((order) => order.orderNum === item.orderNum)
+                                      ?.items.map((orderItem) => orderItem.bookId?.title)
+                                      .join(', ').length > 25
+                                      ? '...'
+                                      : '')) ||
+                                '제목 없음'
+                              }`}
+                            </TableCell>
+                            <TableCell>{item.totalPrice}</TableCell>
+                            <TableCell>{item.request.requestType}</TableCell>
+                            <TableCell>{item.request.status}</TableCell>
+                            <TableCell>
+                              <Button
+                                variant="contained"
+                                color="secondary"
+                                fullWidth
+                                sx={{ ml: 1, width: '10ch', height: '20px', borderRadius: '5px' }}
+                                onClick={() => handleGoToBuyTheBook(item.items[0].bookId)}>
+                                <Typography variant="subtitle2" color="white">
+                                  이동
+                                </Typography>
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={5} style={{ textAlign: 'center' }}>
+                          주문이 존재하지 않습니다.
+                        </TableCell>
+                      </TableRow>
+                    )}
                   </TableBody>
                 </Table>
               </Box>
@@ -134,6 +215,9 @@ const MyPageOrderCancelList = () => {
           </Grid>
         </Grid>
       </Box>
+
+      {/* 취소 상세 다이얼로그 */}
+      <MyPageCancelDialog open={dialogOpen} handleClose={handleCloseDialog} />
     </Container>
   );
 };
