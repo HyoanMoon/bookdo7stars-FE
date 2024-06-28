@@ -42,6 +42,7 @@ const PaymentPage = () => {
   const { orderList } = useSelector((state) => state.order);
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
+  const [showAllItems, setShowAllItems] = useState(false); // 항목 표시 상태 관리
 
   useEffect(() => {
     console.log('user:', user);
@@ -73,7 +74,6 @@ const PaymentPage = () => {
       ...prevInfo,
       [name]: value,
     }));
-    // 입력 시 해당 필드의 오류를 지움
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: '',
@@ -88,7 +88,6 @@ const PaymentPage = () => {
         ...prevInfo,
         [name]: newValue,
       }));
-      // 입력 시 해당 필드의 오류를 지움
       setErrors((prevErrors) => ({
         ...prevErrors,
         [name]: '',
@@ -99,7 +98,6 @@ const PaymentPage = () => {
       ...prevInfo,
       [name]: value,
     }));
-    // 입력 시 해당 필드의 오류를 지움
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: '',
@@ -176,16 +174,15 @@ const PaymentPage = () => {
     setErrors({});
   };
 
+  const toggleShowAllItems = () => {
+    setShowAllItems(!showAllItems);
+  };
+
+  const itemsToShow = showAllItems ? selectedCartList : selectedCartList.slice(0, 1);
+
   return (
     <Container>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
-        <Typography variant="h4">
-          주문상품 총{' '}
-          <Box component="span" color="#A6BB76" fontWeight="bold">
-            {selectedCartList.length}
-          </Box>
-          개
-        </Typography>
+      <Box display="flex" justifyContent="flex-end" alignItems="center" mb={2} mt={5}>
         <Button variant="contained" color="primary" onClick={handleBackToCart}>
           카트로 가기
         </Button>
@@ -197,28 +194,58 @@ const PaymentPage = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                    <Typography variant="body1">상품명</Typography>
+                  <TableCell colSpan={6} sx={{ whiteSpace: 'nowrap' }}>
+                    <Box display="flex" alignItems="center" justifyContent="space-between">
+                      <Typography variant="h4" sx={{ fontWeight: 500 }}>
+                        주문상품 총{' '}
+                        <Box component="span" color="#608020" fontWeight="bold">
+                          {selectedCartList.length}
+                        </Box>
+                        개
+                      </Typography>
+                      {selectedCartList.length > 1 && (
+                        <Button variant="outlined" onClick={toggleShowAllItems}>
+                          {showAllItems ? '간단히 보기' : '더보기'}
+                        </Button>
+                      )}
+                    </Box>
                   </TableCell>
-                  <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
-                    <Typography variant="body1">정가</Typography>
+                </TableRow>
+                <TableRow>
+                  <TableCell sx={{ whiteSpace: 'nowrap', backgroundColor: '#f5f5f5' }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                      상품명
+                    </Typography>
                   </TableCell>
-                  <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
-                    <Typography variant="body1">수량</Typography>
+                  <TableCell align="right" sx={{ whiteSpace: 'nowrap', backgroundColor: '#f5f5f5' }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                      정가
+                    </Typography>
                   </TableCell>
-                  <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
-                    <Typography variant="body1">할인금액</Typography>
+                  <TableCell align="right" sx={{ whiteSpace: 'nowrap', backgroundColor: '#f5f5f5' }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                      수량
+                    </Typography>
                   </TableCell>
-                  <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
-                    <Typography variant="body1">합계</Typography>
+                  <TableCell align="right" sx={{ whiteSpace: 'nowrap', backgroundColor: '#f5f5f5' }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                      할인금액
+                    </Typography>
                   </TableCell>
-                  <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
-                    <Typography variant="body1">배송일</Typography>
+                  <TableCell align="right" sx={{ whiteSpace: 'nowrap', backgroundColor: '#f5f5f5' }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                      합계
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="right" sx={{ whiteSpace: 'nowrap', backgroundColor: '#f5f5f5' }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                      배송일
+                    </Typography>
                   </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {selectedCartList.map((item) => {
+                {itemsToShow.map((item) => {
                   const originalPrice = item.bookId.priceSales * item.qty;
                   const discountAmount = originalPrice * discountRate;
                   const discountedPrice = originalPrice - discountAmount;
@@ -239,7 +266,9 @@ const PaymentPage = () => {
                         {item.qty}
                       </TableCell>
                       <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
-                        ₩ {currencyFormat(discountAmount)}
+                        <Box component="span" color="#608020" fontWeight="bold">
+                          - ₩ {currencyFormat(discountAmount)}
+                        </Box>
                       </TableCell>
                       <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
                         ₩ {currencyFormat(discountedPrice)}
@@ -256,41 +285,39 @@ const PaymentPage = () => {
 
           <Box mt={4}>
             <TableContainer component={Paper}>
-              <Table>
+              <Table aria-label="a dense table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>배송일</TableCell>
-                    <TableCell>배송 정보</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell component="th" scope="row">
-                      배송지
+                    <TableCell align="center" component="th" rowSpan={2} sx={{ backgroundColor: '#f5f5f5', border: '1px solid #e0e0e0' }}>
+                      배송일
+                    </TableCell>
+                    <TableCell align="center" component="th">
+                      배송지:
                     </TableCell>
                     <TableCell>
-                      <Box display="flex" flexDirection="column">
-                        <Typography variant="body2">{deliveryAddress}</Typography>
+                      <Box>
+                        <Typography>{deliveryAddress}</Typography>
                       </Box>
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell component="th" scope="row">
-                      배송 정보
+                    <TableCell align="center" component="th" rowSpan={2} display="flex">
+                      배송정보:
                     </TableCell>
                     <TableCell>
-                      <Box display="flex" flexDirection="column">
-                        <Typography variant="body2">
-                          {' '}
+                      <Box>
+                        <Typography>
+                          {''}
                           <DeliveryEstimate address={deliveryAddress} />
                         </Typography>
                       </Box>
                     </TableCell>
                   </TableRow>
-                </TableBody>
+                </TableHead>
               </Table>
             </TableContainer>
           </Box>
+
           <Box mt={4}>
             <Typography variant="h5" gutterBottom>
               배송 주소
