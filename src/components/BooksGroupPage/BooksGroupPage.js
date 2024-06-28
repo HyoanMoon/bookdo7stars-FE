@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Box, Container, Grid, Drawer, IconButton, useMediaQuery } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { bookActions } from '../../action/bookActions';
 import BooksGroupContainer from './BooksGroupContainer';
 import CategoryList from '../CategoryList/CategoryList';
@@ -11,25 +11,28 @@ import { getGroupNameInKorean } from '../../_helper/getGroupNameInKorean';
 const BooksGroupPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { bookList, groupBooks } = useSelector((state) => state.book);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false); // 드로어 열림 상태
   const [selectedPath, setSelectedPath] = useState(['국내도서']); // 선택된 카테고리 경로 상태
   const isMobile = useMediaQuery('(max-width: 600px)'); // 모바일 여부 확인
-  const [query, setQuery] = useSearchParams();
+  const [query, setQuery] = useState(new URLSearchParams(location.search)); // 쿼리 파라미터 상태 관리
   const [categoryQuery, setCategoryQuery] = useState('국내도서'); // 초기값 설정
-  const encodeCategoryPath = (path) => encodeURIComponent(path.join('>'));
-  const { bookGroup, categoryPath } = useParams();
+  const { bookGroup } = useParams();
   const totalCategories = bookList.map((book) => book.categoryName); // bookList가 있을 때만 사용
   const [openCategories, setOpenCategories] = useState({ ['국내도서']: true });
-  const [subtitle, setSubtitle] = useState(null);
+  const [subtitle, setSubtitle] = useState(query.get('subtitle') || null);
 
-  // categoryQuery 상태 업데이트
+  // 쿼리 파라미터에서 categoryPath 초기값 설정
   useEffect(() => {
     const path = query.get('categoryPath');
     if (path) {
-      setCategoryQuery(decodeURIComponent(path));
+      const decodedPath = decodeURIComponent(path);
+      setCategoryQuery(decodedPath);
+      setSelectedPath(decodedPath.split('>'));
     } else {
-      setCategoryQuery('국내도서'); // 초기값 설정
+      setCategoryQuery('국내도서');
+      setSelectedPath(['국내도서']);
     }
   }, [query]);
 
@@ -42,11 +45,17 @@ const BooksGroupPage = () => {
 
   // categoryPath가 변경될 때 선택된 경로 업데이트
   useEffect(() => {
-    if (categoryPath) {
-      const decodedCategoryPath = decodeURIComponent(categoryPath); // URL 디코딩
-      setSelectedPath(decodedCategoryPath.split('>')); // 주소에서 카테고리 경로를 가져와서 선택된 경로로 설정
+    if (location.search) {
+      const path = new URLSearchParams(location.search).get('categoryPath');
+      if (path) {
+        setSelectedPath(path.split('>'));
+      }
+      const subtitleQuery = new URLSearchParams(location.search).get('subtitle');
+      if (subtitleQuery) {
+        setSubtitle(decodeURIComponent(subtitleQuery));
+      }
     }
-  }, [categoryPath]);
+  }, [location.search]);
 
   // 데이터가 없을 경우 처리
   if (!bookList || !groupBooks || !bookGroup) return null;
@@ -63,13 +72,17 @@ const BooksGroupPage = () => {
         ...prevOpen,
         [categoryPath]: true,
       }));
-      const categoryId = encodeCategoryPath(splitPath);
-      setQuery(new URLSearchParams({ categoryPath: categoryId }));
+      const categoryId = splitPath.join('>'); // 인코딩하지 않음
+      const newQuery = new URLSearchParams(location.search);
+      newQuery.set('categoryPath', categoryId);
+      newQuery.set('subtitle', encodeURIComponent(categoryPath));
+      setQuery(newQuery);
+      navigate(`/books/group/${bookGroup}?${newQuery.toString()}`, { replace: true });
       if (isMobile) {
         setIsDrawerOpen(false); // 모바일에서는 드로어 닫기
       }
     },
-    [navigate, isMobile, setQuery, bookGroup, encodeCategoryPath],
+    [navigate, isMobile, bookGroup, location.search],
   );
 
   // 드로어 열기/닫기 토글
@@ -80,10 +93,14 @@ const BooksGroupPage = () => {
   // 경로 클릭 시 처리
   const handlePathClick = (index) => {
     const newPath = selectedPath.slice(0, index + 1);
-    setSubtitle(newPath);
+    setSubtitle(newPath.join('>'));
     setSelectedPath(newPath);
-    const categoryId = encodeCategoryPath(newPath);
-    setQuery(new URLSearchParams({ categoryPath: categoryId }));
+    const categoryId = newPath.join('>'); // 인코딩하지 않음
+    const newQuery = new URLSearchParams(location.search);
+    newQuery.set('categoryPath', categoryId);
+    newQuery.set('subtitle', encodeURIComponent(newPath.join('>')));
+    setQuery(newQuery);
+    navigate(`/books/group/${bookGroup}?${newQuery.toString()}`, { replace: true });
   };
 
   return (
@@ -119,7 +136,7 @@ const BooksGroupPage = () => {
               {selectedPath.map((pathItem, index) => (
                 <span key={index}>
                   <span style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => handlePathClick(index)}>
-                    {pathItem}
+                    {decodeURIComponent(pathItem)}
                   </span>
                   {index < selectedPath.length - 1 && ' > '}
                 </span>
@@ -144,7 +161,7 @@ const BooksGroupPage = () => {
                 {selectedPath.map((pathItem, index) => (
                   <span key={index}>
                     <span style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => handlePathClick(index)}>
-                      {pathItem}
+                      {decodeURIComponent(pathItem)}
                     </span>
                     {index < selectedPath.length - 1 && ' > '}
                   </span>

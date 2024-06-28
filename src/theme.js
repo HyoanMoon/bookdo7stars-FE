@@ -6,13 +6,16 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: '#3d643d',
-      light: '#3d643d', // 원하는 색상 코드로 변경
+      main: '#035036',
+      light: '#AFC6AA', // 원하는 색상 코드로 변경
     },
     secondary: {
-      main: '#3d643d',
+      main: '#AFC6AA',
     },
   },
 });
 
 export default theme;
+
+// light : #BBCFB7, #AFC6AA,
+// Pre-Footer color:  #C7D6C3
