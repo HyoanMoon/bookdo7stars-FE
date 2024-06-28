@@ -1,14 +1,74 @@
-import React from 'react';
-import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Link, Container, Grid, Button } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import {
+  Box,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Link,
+  Container,
+  Grid,
+  Button,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+} from '@mui/material';
 import MyPageCategory from '../components/MyPageCategory';
+import MyPageClaimDialog from '../components/MyPageClaimDialog';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { orderActions } from '../action/orderActions';
+import * as types from '../constants/order.constants';
 
 const MyPageOrderClaimList = () => {
-  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.user);
+  const { myRequestList } = useSelector((state) => state.order);
+  const { myOrderList } = useSelector((state) => state.order);
+  const [recentChecked, setRecentChecked] = useState(false);
+  const [oldChecked, setOldChecked] = useState(false);
+  const [sortOrder, setSortOrder] = useState('recent');
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  useEffect(() => {
+    dispatch(orderActions.getMyRequest());
+    dispatch(orderActions.getMyOrder());
+  }, [user, dispatch]);
+
   const handleClaim = () => {
-    navigate('');
+    navigate('/mypage/order-request');
+  };
+
+  const handleRecentChange = (event) => {
+    setRecentChecked(event.target.checked);
+    setOldChecked(!event.target.value);
+    setSortOrder('recent');
+  };
+  const handleOldChange = (event) => {
+    setOldChecked(event.target.checked);
+    setRecentChecked(!event.target.value);
+    setSortOrder('old');
+  };
+  const sortedMyOrderList = [...myRequestList].sort((a, b) => {
+    if (sortOrder === 'recent') {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    } else {
+      return new Date(a.createdAt) - new Date(b.createdAt);
+    }
+  });
+
+  // // 주문 상세 다이얼로그 열기
+  const handleOpenDialog = (request) => {
+    setDialogOpen(true);
+    dispatch({ type: types.SET_SELECTED_REQUEST, payload: request });
+  };
+
+  // 주문 상세 다이얼로그 닫기
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
   };
 
   return (
@@ -19,15 +79,17 @@ const MyPageOrderClaimList = () => {
             welcome
           </Link>
           <Typography mr={1} ml={1}>{`>`}</Typography>
-          <Link href="/mypage" underline="hover" color="inherit">
+          <Link href="/mypage" underline="hover" color="primary" fontWeight="medium">
             mypage
           </Link>
         </Grid>
 
         {/* 마이페이지 */}
         <Grid container>
-          <Typography variant="h4" gutterBottom>
-            마이페이지
+          <Typography variant="h4" gutterBottom fontWeight="medium">
+            <Link href="/mypage" color="primary" sx={{ textDecoration: 'none' }}>
+              마이페이지
+            </Link>
           </Typography>
         </Grid>
         <Grid container>
@@ -51,10 +113,22 @@ const MyPageOrderClaimList = () => {
                   sx={{ ml: 1, width: '25ch', height: '30px', borderRadius: '20px' }}
                   onClick={handleClaim}>
                   <Typography variant="subtitle2" color="white">
-                    반품/교환 신청하기
+                    반품/교환/취소 신청하기
                   </Typography>
                 </Button>
               </Grid>
+
+              {/* 정렬기준 */}
+              <FormGroup style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+                <FormControlLabel
+                  control={<Checkbox checked={recentChecked} onChange={handleRecentChange} />}
+                  label={<Typography variant="body2">최근순</Typography>}
+                />
+                <FormControlLabel
+                  control={<Checkbox checked={oldChecked} onChange={handleOldChange} />}
+                  label={<Typography variant="body2">오래된순</Typography>}
+                />
+              </FormGroup>
 
               {/* 주문 내역 테이블 */}
               <Typography variant="h6">반품/교환 신청내역</Typography>
@@ -62,23 +136,50 @@ const MyPageOrderClaimList = () => {
                 <Table>
                   {/* 테이블 헤드 */}
                   <TableHead>
-                    <TableCell>접수 일자</TableCell>
-                    <TableCell>주문 번호</TableCell>
-                    <TableCell>주문 내역</TableCell>
-                    <TableCell>신청 내용</TableCell>
-                    <TableCell>처리 상태</TableCell>
+                    <TableCell>접수일자</TableCell>
+                    <TableCell>주문내역</TableCell>
+                    <TableCell>총주문액</TableCell>
+                    <TableCell>요청사항</TableCell>
+                    <TableCell>처리상태</TableCell>
                   </TableHead>
+
                   {/* 테이블 바디 */}
                   <TableBody>
-                    {/* {recentOrderHistory?.map((item) => ( */}
-                    <TableRow>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                    </TableRow>
-                    {/* ))} */}
+                    {sortedMyOrderList?.length > 0 ? (
+                      sortedMyOrderList
+                        .filter((item) => item.request.requestType !== '취소')
+                        .map((item, index) => (
+                          <TableRow key={index} onClick={() => handleOpenDialog(item)}>
+                            <TableCell>{item.createdAt.slice(0, 10)}</TableCell>
+                            <TableCell>
+                              {`${
+                                (myOrderList.length > 0 &&
+                                  myOrderList
+                                    .find((order) => order.orderNum === item.orderNum)
+                                    ?.items.map((orderItem) => orderItem.bookId?.title)
+                                    .join(', ')
+                                    .slice(0, 25) +
+                                    (myOrderList
+                                      .find((order) => order.orderNum === item.orderNum)
+                                      ?.items.map((orderItem) => orderItem.bookId?.title)
+                                      .join(', ').length > 25
+                                      ? '...'
+                                      : '')) ||
+                                '제목 없음'
+                              }`}
+                            </TableCell>
+                            <TableCell>{item.totalPrice}</TableCell>
+                            <TableCell>{item.request.requestType}</TableCell>
+                            <TableCell>{item.request.status}</TableCell>
+                          </TableRow>
+                        ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={5} style={{ textAlign: 'center' }}>
+                          주문이 존재하지 않습니다.
+                        </TableCell>
+                      </TableRow>
+                    )}
                   </TableBody>
                 </Table>
               </Box>
@@ -181,6 +282,9 @@ const MyPageOrderClaimList = () => {
           </Grid>
         </Grid>
       </Box>
+
+      {/* 반품/교환 상세 다이얼로그 */}
+      <MyPageClaimDialog open={dialogOpen} handleClose={handleCloseDialog} />
     </Container>
   );
 };

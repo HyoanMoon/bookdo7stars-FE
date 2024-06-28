@@ -47,7 +47,7 @@ const AppLayout = ({ children }) => {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#6b8e23',
+            backgroundColor: '#3d643d',
             height: '60px',
           }}>
           <h2 style={{ margin: 0, color: '#fff', textAlign: 'center' }}>10만원 이상 주문 시 모든 주문 무료 배송 (Standard Shipping)</h2>

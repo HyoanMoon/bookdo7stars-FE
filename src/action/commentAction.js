@@ -39,8 +39,19 @@ const deleteComment = (commentId, bookId) => async (dispatch) => {
   }
 };
 
+const getMyComment = () => async (dispatch) => {
+  try {
+    dispatch({ type: types.GET_MY_COMMENT_REQUEST });
+    const response = await api.get('/comments');
+    dispatch({ type: types.GET_MY_COMMENT_SUCCESS, payload: response.data });
+  } catch (err) {
+    dispatch({ type: types.GET_MY_COMMENT_FAIL, payload: err.error });
+  }
+};
+
 export const commentActions = {
   createComment,
   getCommentsByBook,
   deleteComment,
+  getMyComment,
 };

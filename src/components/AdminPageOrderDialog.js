@@ -28,7 +28,7 @@ const AdminPageOrderDialog = ({ open, handleClose, orderDialogTableHead }) => {
   const { selectedOrder } = useSelector((state) => state.order);
   const [orderStatus, setOrderStatus] = useState(selectedOrder?.status || '');
 
-  console.log('selectedOrder', selectedOrder);
+  // console.log('selectedOrder', selectedOrder);
 
   // 주문 진행 상태 변경 핸들러.
   const handleStatusChange = (event) => {
@@ -44,12 +44,11 @@ const AdminPageOrderDialog = ({ open, handleClose, orderDialogTableHead }) => {
 
   return (
     <Dialog open={open} onClose={handleClose} sx={{ width: '100%' }}>
-      <DialogTitle>주문 정보</DialogTitle>
+      <DialogTitle>주문정보</DialogTitle>
 
       {/* 주문 정보 */}
       <DialogContent>
         <Typography>예약번호: {selectedOrder?.orderNum}</Typography>
-        <Typography>주문날짜: {selectedOrder?.createdAt}</Typography>
         <Typography>주문날짜: {selectedOrder?.createdAt?.slice(0, 10)}</Typography>
         <Typography>이메일: {selectedOrder?.contact?.email}</Typography>
         <Typography>주소: {selectedOrder?.shipTo?.address1 + ' ' + selectedOrder?.shipTo?.address2}</Typography>

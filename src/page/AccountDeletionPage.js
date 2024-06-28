@@ -135,7 +135,11 @@ const AccountDeletionPage = () => {
 
               <Box p={3} mb={4} border={1} borderColor="grey.300" bgcolor="#f8f9fa">
                 <Typography variant="h6" gutterBottom>
-                  본인인증을 위해 탈퇴를 하시려면 1:1 문의를 이용해 주세요.
+                  본인인증을 위해 탈퇴를 하시려면{' '}
+                  <Link href="/contact" color="primary">
+                    1:1 문의
+                  </Link>
+                  를 이용해 주세요.
                 </Typography>
                 <Typography variant="body2" gutterBottom>
                   본인인증 문의 없이 탈퇴할 경우, 30일 이내 재가입(인증)이 불가능합니다.
@@ -198,7 +202,7 @@ const AccountDeletionPage = () => {
                     </Grid>
                     <Grid item xs={12} md={4}>
                       <FormControlLabel value="시스템 오류" control={<Radio />} label="시스템 오류" />
-                      <FormControlLabel value="예스24 이용안함" control={<Radio />} label="예스24 이용안함" />
+                      <FormControlLabel value="북두칠성 이용안함" control={<Radio />} label="예스24 이용안함" />
                       <FormControlLabel value="개인정보 및 보안 우려" control={<Radio />} label="개인정보 및 보안 우려" />
                     </Grid>
                   </Grid>
