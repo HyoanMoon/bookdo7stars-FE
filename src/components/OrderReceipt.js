@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Typography, Paper, Divider, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { currencyFormat } from '../utils/number';
 import { useDispatch } from 'react-redux';
 import { orderActions } from '../action/orderActions';
 import { cartActions } from '../action/cartActions';
-
+import paymentIcon from '../assets/payment_icon_yellow_large.png';
 const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheckout, sticky, shippingInfo = {}, cardInfo = {}, errors, setErrors }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -15,6 +15,15 @@ const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheck
   const shippingFee = hasSelectedItems ? (finalTotalPrice > 100000 ? 0 : 2500) : 0;
   const pointsEarned = finalTotalPrice * 0.05;
   const grandTotal = finalTotalPrice + shippingFee;
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.iamport.kr/v1/iamport.js';
+    document.head.appendChild(script);
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
 
   const handlePaymentSuccess = async () => {
     const newErrors = {};
@@ -66,6 +75,58 @@ const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheck
       console.error('Order creation failed:', error);
     }
   };
+  const handleKakaoPaymentSuccess = () => {
+    const { IMP } = window;
+    IMP.init('imp58548074');
+    IMP.request_pay(
+      {
+        pg: 'kakaopay', // 카카오페이
+        pay_method: 'card',
+        merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
+        name: '주문명: 결제 테스트',
+        amount: grandTotal, // 결제금액
+        buyer_email: shippingInfo.email,
+        buyer_name: shippingInfo.name,
+        buyer_tel: shippingInfo.phone,
+        buyer_addr: `${shippingInfo.address1} ${shippingInfo.address2}`,
+        buyer_postcode: shippingInfo.zipCode,
+      },
+      async (response) => {
+        if (response.success) {
+          // 결제 성공
+          const { name, zipCode, address1, address2, phone, email } = shippingInfo;
+          const data = {
+            totalPrice: grandTotal,
+            shipTo: { zipCode, address1, address2 },
+            contact: { name, phone, email },
+            orderList: cartList.map((item) => {
+              return {
+                bookId: item.bookId,
+                qty: item.qty,
+                price: item.bookId.priceSales,
+              };
+            }),
+          };
+          try {
+            const response = await dispatch(orderActions.createOrder(data));
+            await dispatch(cartActions.getCartQty());
+            navigate('/payment/success', {
+              state: {
+                shippingInfo,
+                grandTotal,
+                paymentMethod: cardInfo.cardType,
+              },
+            });
+          } catch (error) {
+            console.error('Order creation failed:', error);
+          }
+        } else {
+          // 결제 실패
+          console.error('Payment failed:', response.error_msg);
+        }
+      },
+    );
+  };
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
@@ -116,6 +177,15 @@ const OrderReceipt = ({ finalTotalPrice, hasSelectedItems, cartList, handleCheck
           {location.pathname.includes('/payment') && (
             <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }} onClick={handlePaymentSuccess}>
               결제하기
+            </Button>
+          )}
+          {location.pathname.includes('/payment') && (
+            <Button
+              variant="contained"
+              fullWidth
+              sx={{ mt: 2, p: 0, backgroundColor: '#FFEB00', '&:hover': { backgroundColor: '#FFEB00' } }}
+              onClick={handleKakaoPaymentSuccess}>
+              <img src={paymentIcon} alt="Kakao Pay" style={{ width: '30%', height: 'auto' }} />
             </Button>
           )}
         </Box>

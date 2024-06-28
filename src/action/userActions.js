@@ -97,7 +97,7 @@ const registerAdmin =
       const Response = await api.post('/user', { email, userName, password, role });
       if (Response.status !== 200) throw new Error(Response.error);
       dispatch({ type: types.REGISTER_USER_SUCCESS, payload: Response.data });
-      dispatch(commonUiActions.showToastMessage('Registration completed successfully.', 'success'));
+      dispatch(commonUiActions.showToastMessage(`${userName}님을 관리자로 추가했습니다.`, 'success'));
     } catch (error) {
       dispatch({ type: types.REGISTER_USER_FAIL, payload: error.error });
     }
@@ -148,6 +148,7 @@ const updateUserLevel = (id, level) => async (dispatch) => {
     if (response.status !== 200) throw new Error(response.data.message);
 
     dispatch({ type: types.USER_LEVEL_EDIT_SUCCESS, payload: response.data.user });
+    dispatch(commonUiActions.showToastMessage(`${level} 등급 으로 변경 성공!`, 'success'));
   } catch (error) {
     dispatch({ type: types.USER_LEVEL_EDIT_FAIL, payload: error.message });
   }

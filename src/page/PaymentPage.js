@@ -46,7 +46,7 @@ const PaymentPage = () => {
 
   useEffect(() => {
     console.log('user:', user);
-    console.log('orderList', orderList);
+    console.log('orderListtttttt', orderList);
     console.log('selectedCartList', selectedCartList);
   }, [user, orderList, selectedCartList]);
 
