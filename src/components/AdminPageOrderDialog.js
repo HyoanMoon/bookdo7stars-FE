@@ -28,7 +28,7 @@ const AdminPageOrderDialog = ({ open, handleClose, orderDialogTableHead }) => {
   const { selectedOrder } = useSelector((state) => state.order);
   const [orderStatus, setOrderStatus] = useState(selectedOrder?.status || '');
 
-  console.log('selectedOrder', selectedOrder);
+  // console.log('selectedOrder', selectedOrder);
 
   // 주문 진행 상태 변경 핸들러.
   const handleStatusChange = (event) => {

@@ -19,11 +19,13 @@ import {
   Checkbox,
 } from '@mui/material';
 import MyPageCategory from '../components/MyPageCategory';
+import MyPageOrderDialog from '../components/MyPageOrderDialog';
 import { format, isValid, startOfDay, endOfDay } from 'date-fns';
 import DateFilter from '../components/DateFilter';
 import { useDispatch, useSelector } from 'react-redux';
 import { orderActions } from '../action/orderActions';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import * as types from '../constants/order.constants';
 
 const MyPageOrderList = () => {
   const dispatch = useDispatch();
@@ -38,6 +40,7 @@ const MyPageOrderList = () => {
   const [recentChecked, setRecentChecked] = useState(false);
   const [oldChecked, setOldChecked] = useState(false);
   const [sortOrder, setSortOrder] = useState('recent');
+  const [dialogOpen, setDialogOpen] = useState(false);
   const fields = ['orderAll', 'orderNum', 'orderBookTitle'];
 
   // console.log('myOrderList', myOrderList);
@@ -110,6 +113,17 @@ const MyPageOrderList = () => {
       return new Date(a.createdAt) - new Date(b.createdAt);
     }
   });
+
+  // 주문 상세 다이얼로그 열기
+  const handleOpenDialog = (order) => {
+    setDialogOpen(true);
+    dispatch({ type: types.SET_SELECTED_ORDER, payload: order });
+  };
+
+  // 주문 상세 다이얼로그 닫기
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
 
   return (
     <Container>
@@ -221,7 +235,7 @@ const MyPageOrderList = () => {
                   <TableBody>
                     {sortedMyOrderList?.length > 0 &&
                       sortedMyOrderList?.map((item) => (
-                        <TableRow key={item._id}>
+                        <TableRow key={item._id} onClick={() => handleOpenDialog(item)}>
                           <TableCell>{item.orderNum}</TableCell>
                           <TableCell>{item.createdAt.slice(0, 10)}</TableCell>
                           <TableCell>
@@ -247,6 +261,9 @@ const MyPageOrderList = () => {
           </Grid>
         </Grid>
       </Box>
+
+      {/* 주문 상세 다이얼로그 */}
+      <MyPageOrderDialog open={dialogOpen} handleClose={handleCloseDialog} />
     </Container>
   );
 };

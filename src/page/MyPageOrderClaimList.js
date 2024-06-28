@@ -16,9 +16,11 @@ import {
   Checkbox,
 } from '@mui/material';
 import MyPageCategory from '../components/MyPageCategory';
+import MyPageClaimDialog from '../components/MyPageClaimDialog';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { orderActions } from '../action/orderActions';
+import * as types from '../constants/order.constants';
 
 const MyPageOrderClaimList = () => {
   const dispatch = useDispatch();
@@ -29,10 +31,7 @@ const MyPageOrderClaimList = () => {
   const [recentChecked, setRecentChecked] = useState(false);
   const [oldChecked, setOldChecked] = useState(false);
   const [sortOrder, setSortOrder] = useState('recent');
-
-  // console.log('myOrderList', myOrderList);
-  // console.log('myRequestList', myRequestList);
-  // console.log('user', user);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     dispatch(orderActions.getMyRequest());
@@ -60,6 +59,17 @@ const MyPageOrderClaimList = () => {
       return new Date(a.createdAt) - new Date(b.createdAt);
     }
   });
+
+  // // 주문 상세 다이얼로그 열기
+  const handleOpenDialog = (request) => {
+    setDialogOpen(true);
+    dispatch({ type: types.SET_SELECTED_REQUEST, payload: request });
+  };
+
+  // 주문 상세 다이얼로그 닫기
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
 
   return (
     <Container>
@@ -139,7 +149,7 @@ const MyPageOrderClaimList = () => {
                       sortedMyOrderList
                         .filter((item) => item.request.requestType !== '취소')
                         .map((item, index) => (
-                          <TableRow key={index}>
+                          <TableRow key={index} onClick={() => handleOpenDialog(item)}>
                             <TableCell>{item.createdAt.slice(0, 10)}</TableCell>
                             <TableCell>
                               {`${
@@ -272,6 +282,9 @@ const MyPageOrderClaimList = () => {
           </Grid>
         </Grid>
       </Box>
+
+      {/* 반품/교환 상세 다이얼로그 */}
+      <MyPageClaimDialog open={dialogOpen} handleClose={handleCloseDialog} />
     </Container>
   );
 };

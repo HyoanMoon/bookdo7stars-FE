@@ -43,7 +43,7 @@ const MyPageCategory = () => {
                     display="flex"
                     flexDirection="column"
                     alignItems="center"
-                    mr={2}
+                    mr={1.5}
                     sx={{
                       width: 45,
                       height: 45,

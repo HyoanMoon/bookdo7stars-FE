@@ -19,6 +19,8 @@ import MyPageCategory from '../components/MyPageCategory';
 import { useDispatch, useSelector } from 'react-redux';
 import { orderActions } from '../action/orderActions';
 import { useNavigate } from 'react-router';
+import MyPageCancelDialog from '../components/MyPageCancelDialog';
+import * as types from '../constants/order.constants';
 
 const MyPageOrderCancelList = () => {
   const dispatch = useDispatch();
@@ -29,6 +31,7 @@ const MyPageOrderCancelList = () => {
   const [recentChecked, setRecentChecked] = useState(false);
   const [oldChecked, setOldChecked] = useState(false);
   const [sortOrder, setSortOrder] = useState('recent');
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   // console.log('myOrderList', myOrderList);
   // console.log('myRequestList', myRequestList);
@@ -59,6 +62,17 @@ const MyPageOrderCancelList = () => {
       return new Date(a.createdAt) - new Date(b.createdAt);
     }
   });
+
+  // // 주문 상세 다이얼로그 열기
+  const handleOpenDialog = (request) => {
+    setDialogOpen(true);
+    dispatch({ type: types.SET_SELECTED_REQUEST, payload: request });
+  };
+
+  // 주문 상세 다이얼로그 닫기
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
 
   return (
     <Container>
@@ -142,7 +156,7 @@ const MyPageOrderCancelList = () => {
                       sortedMyOrderList
                         .filter((item) => item.request.requestType !== ('반품' || '교환'))
                         .map((item, index) => (
-                          <TableRow key={index}>
+                          <TableRow key={index} onClick={() => handleOpenDialog(item)}>
                             <TableCell>{item.createdAt.slice(0, 10)}</TableCell>
                             <TableCell>
                               {`${
@@ -201,6 +215,9 @@ const MyPageOrderCancelList = () => {
           </Grid>
         </Grid>
       </Box>
+
+      {/* 취소 상세 다이얼로그 */}
+      <MyPageCancelDialog open={dialogOpen} handleClose={handleCloseDialog} />
     </Container>
   );
 };

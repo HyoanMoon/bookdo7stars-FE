@@ -54,7 +54,7 @@ const MyPageMyReviewTable = () => {
           </TableHead>
           <TableBody>
             {uniqueBooks.map((book) => (
-              <Row key={book._id} book={book} comments={comments.filter((c) => c.bookId._id === book._id)} navigate={navigate} />
+              <Row key={book._id} book={book} comments={comments.filter((cmt) => cmt.bookId._id === book._id)} navigate={navigate} />
             ))}
             {comments.length === 0 && (
               <TableRow>
@@ -97,7 +97,7 @@ const Row = ({ book, comments, navigate }) => {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="h6" gutterBottom component="div">
-                리뷰 내역
+                리뷰내역
               </Typography>
               <Table size="small" aria-label="reviews">
                 <TableBody>

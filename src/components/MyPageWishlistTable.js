@@ -28,7 +28,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const MyPageWishlistTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const favoriteTableHead = ['', '도서명', '작가', '출판사', '출간일'];
+  const favoriteTableHead = ['', '도서명', '저자', '출판사', '출간일'];
   const { favorite } = useSelector((state) => state.favorite);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
