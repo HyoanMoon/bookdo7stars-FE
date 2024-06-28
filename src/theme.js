@@ -6,11 +6,11 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: '#608020',
-      light: '#d3ddbd', // 원하는 색상 코드로 변경
+      main: '#3d643d',
+      light: '#3d643d', // 원하는 색상 코드로 변경
     },
     secondary: {
-      main: '#A6BB76',
+      main: '#3d643d',
     },
   },
 });

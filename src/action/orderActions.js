@@ -99,7 +99,6 @@ const updateRequest = (id, status) => async (dispatch) => {
     const response = await api.put(`/order/request/${id}`, { status });
     dispatch({ type: types.UPDATE_REQUEST_SUCCESS });
     dispatch(commonUiActions.showToastMessage('처리상태를 수정했습니다.', 'success'));
-    console.log('updateRequest', response);
     dispatch(getRequestList());
   } catch (err) {
     dispatch({ type: types.UPDATE_REQUEST_FAIL, payload: err.error });

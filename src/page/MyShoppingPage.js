@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { contactActions } from '../action/contactActions';
 import InquiryTable from '../components/InquiryTable';
 import { orderActions } from '../action/orderActions';
+import MyPageWishlistTable from '../components/MyPageWishlistTable';
+import MyPageMyReviewTable from '../components/MyPageMyReviewTable';
 
 const MyShoppingPage = () => {
   const [tabIndex, setTabIndex] = useState(0);
@@ -28,15 +30,17 @@ const MyShoppingPage = () => {
             welcome
           </Link>
           <Typography mr={1} ml={1}>{`>`}</Typography>
-          <Link href="/mypage" underline="hover" color="inherit">
+          <Link href="/mypage" underline="hover" color="primary" fontWeight="medium">
             mypage
           </Link>
         </Grid>
 
         {/* 마이페이지 */}
         <Grid container>
-          <Typography variant="h4" gutterBottom>
-            마이페이지
+          <Typography variant="h4" gutterBottom fontWeight="medium">
+            <Link href="/mypage" color="primary" sx={{ textDecoration: 'none' }}>
+              마이페이지
+            </Link>
           </Typography>
         </Grid>
         <Grid container>
@@ -77,10 +81,11 @@ const MyShoppingPage = () => {
                         <TableCell>{item?.orderNum}</TableCell>
                         <TableCell>{item?.createdAt.slice(0, 10)}</TableCell>
                         <TableCell>
-                          {`${item?.items
+                          {item?.items
                             ?.map((item) => item.bookId?.title)
                             .join(', ')
-                            .slice(0, 20)}...`}
+                            .slice(0, 20)}
+                          {item?.items?.map((item) => item.bookId?.title).join(', ').length > 20 ? '...' : ''}
                         </TableCell>
                         <TableCell>{item?.status}</TableCell>
                         <TableCell>{''}</TableCell>
@@ -90,7 +95,7 @@ const MyShoppingPage = () => {
               </Table>
             </Box>
             {/* 광고 짧은 배너 */}
-            <Typography style={{ backgroundColor: '#89a54f', color: 'white' }} mt={1} p={1} border={1} borderRadius={4} align="center">
+            <Typography sx={{ backgroundColor: 'primary.main', color: 'white' }} mt={2} p={1} border={1} borderRadius={4} align="center">
               구매하신 책, 다 읽으셨다면 정가대비 최대 50% 지급받고 북두칠성에 판매하세요!
             </Typography>
 
@@ -98,9 +103,7 @@ const MyShoppingPage = () => {
             {/* <Box mt={4} p={2} border={1} borderRadius={4} borderColor="grey.400"> */}
             <Box>
               <Typography variant="h6" mt={5} borderBottom={1} borderColor="grey.400">
-                <Link href="/contact" color="primary">
-                  나의 1:1 문의
-                </Link>
+                나의 1:1 문의
               </Typography>
               {userContacts.length === 0 ? (
                 <Typography mt={1} variant="subtitle1">
@@ -119,8 +122,10 @@ const MyShoppingPage = () => {
                 <Tab label="위시리스트" />
                 <Tab label="마이리뷰" />
               </Tabs>
-              {tabIndex === 0 && <Typography mt={1}>찜한 상품이 없습니다.</Typography>}
-              {tabIndex === 1 && <Typography mt={1}>등록한 리뷰가 없습니다.</Typography>}
+              {/* {tabIndex === 0 && <Typography mt={1}>찜한 상품이 없습니다.</Typography>}
+              {tabIndex === 1 && <Typography mt={1}>등록한 리뷰가 없습니다.</Typography>} */}
+              {tabIndex === 0 && <MyPageWishlistTable />}
+              {tabIndex === 1 && <MyPageMyReviewTable />}
             </Box>
           </Grid>
         </Grid>

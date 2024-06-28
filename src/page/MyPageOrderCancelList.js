@@ -68,15 +68,17 @@ const MyPageOrderCancelList = () => {
             welcome
           </Link>
           <Typography mr={1} ml={1}>{`>`}</Typography>
-          <Link href="/mypage" underline="hover" color="inherit">
+          <Link href="/mypage" underline="hover" color="primary" fontWeight="medium">
             mypage
           </Link>
         </Grid>
 
         {/* 마이페이지 */}
         <Grid container>
-          <Typography variant="h4" gutterBottom>
-            마이페이지
+          <Typography variant="h4" gutterBottom fontWeight="medium">
+            <Link href="/mypage" color="primary" sx={{ textDecoration: 'none' }}>
+              마이페이지
+            </Link>
           </Typography>
         </Grid>
         <Grid container>
@@ -96,7 +98,7 @@ const MyPageOrderCancelList = () => {
                   {/* <Typography variant="body1" mb={1}>
                     ► 취소 주문 내역
                   </Typography> */}
-                  <Typography variant="subtitle2" pl={1} sx={{ fontWeight: 'bold' }}>
+                  <Typography variant="subtitle2" pl={1} fontWeight="medium">
                     {'취소 주문 재접수 : 해당주문의 <다시 주문> 을 누르신 후, 해당 도서 페이지에서 새로 구매하실 수 있습니다.'}
                   </Typography>
                   <Typography variant="subtitle2" pl={1}>
@@ -149,9 +151,15 @@ const MyPageOrderCancelList = () => {
                                     .find((order) => order.orderNum === item.orderNum)
                                     ?.items.map((orderItem) => orderItem.bookId?.title)
                                     .join(', ')
-                                    .slice(0, 25)) ||
+                                    .slice(0, 25) +
+                                    (myOrderList
+                                      .find((order) => order.orderNum === item.orderNum)
+                                      ?.items.map((orderItem) => orderItem.bookId?.title)
+                                      .join(', ').length > 25
+                                      ? '...'
+                                      : '')) ||
                                 '제목 없음'
-                              }...`}
+                              }`}
                             </TableCell>
                             <TableCell>{item.totalPrice}</TableCell>
                             <TableCell>{item.request.requestType}</TableCell>

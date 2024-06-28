@@ -6,6 +6,7 @@ const initialState = {
   deleteCommentSuccess: false,
   loading: false,
   error: null,
+  userComment: [],
 };
 
 function commentReducer(state = initialState, action) {
@@ -13,6 +14,7 @@ function commentReducer(state = initialState, action) {
     case types.CREATE_COMMENT_REQUEST:
     case types.GET_COMMENT_LIST_REQUEST:
     case types.DELETE_COMMENT_REQUEST:
+    case types.GET_MY_COMMENT_REQUEST:
       return {
         ...state,
         loading: true,
@@ -36,6 +38,8 @@ function commentReducer(state = initialState, action) {
         ...state,
         loading: false,
       };
+    case types.GET_MY_COMMENT_SUCCESS:
+      return { ...state, loading: false, userComment: action.payload };
     case types.CREATE_COMMENT_FAIL:
     case types.GET_COMMENT_LIST_FAIL:
     case types.DELETE_COMMENT_FAIL:

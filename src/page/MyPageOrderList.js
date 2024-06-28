@@ -119,15 +119,17 @@ const MyPageOrderList = () => {
             welcome
           </Link>
           <Typography mr={1} ml={1}>{`>`}</Typography>
-          <Link href="/mypage" underline="hover" color="inherit">
+          <Link href="/mypage" underline="hover" color="primary" fontWeight="medium">
             mypage
           </Link>
         </Grid>
 
         {/* 마이페이지 */}
         <Grid container>
-          <Typography variant="h4" gutterBottom>
-            마이페이지
+          <Typography variant="h4" gutterBottom fontWeight="medium">
+            <Link href="/mypage" color="primary" sx={{ textDecoration: 'none' }}>
+              마이페이지
+            </Link>
           </Typography>
         </Grid>
         <Grid container>
@@ -145,7 +147,7 @@ const MyPageOrderList = () => {
               <Typography variant="subtitle2" ml={1} mb={1}>
                 최근 5년간 주문내역을 조회하실 수 있습니다.
               </Typography>
-              <Grid container border={4} borderRadius={4} borderColor="#A6BB76" p={3}>
+              <Grid container border={3} borderRadius={4} sx={{ borderColor: 'primary.main', opacity: '70%' }} p={3}>
                 <Grid container>
                   <DateFilter startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} />
                 </Grid>
@@ -186,7 +188,7 @@ const MyPageOrderList = () => {
               </Grid>
 
               {/* 광고 짧은 배너 */}
-              <Typography style={{ backgroundColor: '#A6BB76', color: 'white' }} mt={2} p={1} border={1} borderRadius={4} align="center">
+              <Typography sx={{ backgroundColor: 'primary.main', color: 'white' }} mt={2} p={1} border={1} borderRadius={4} align="center">
                 구매하신 책, 다 읽으셨다면 정가대비 최대 50% 지급받고 북두칠성에 판매하세요!
               </Typography>
 
@@ -223,10 +225,11 @@ const MyPageOrderList = () => {
                           <TableCell>{item.orderNum}</TableCell>
                           <TableCell>{item.createdAt.slice(0, 10)}</TableCell>
                           <TableCell>
-                            {`${item?.items
+                            {item?.items
                               ?.map((item) => item.bookId?.title)
                               .join(', ')
-                              .slice(0, 25)}...`}
+                              .slice(0, 25)}
+                            {item?.items?.map((item) => item.bookId?.title).join(', ').length > 25 ? '...' : ''}
                           </TableCell>
                           <TableCell>{item.totalPrice}</TableCell>
                           <TableCell>{item.status}</TableCell>

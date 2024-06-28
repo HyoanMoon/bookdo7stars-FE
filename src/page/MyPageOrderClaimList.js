@@ -69,15 +69,17 @@ const MyPageOrderClaimList = () => {
             welcome
           </Link>
           <Typography mr={1} ml={1}>{`>`}</Typography>
-          <Link href="/mypage" underline="hover" color="inherit">
+          <Link href="/mypage" underline="hover" color="primary" fontWeight="medium">
             mypage
           </Link>
         </Grid>
 
         {/* 마이페이지 */}
         <Grid container>
-          <Typography variant="h4" gutterBottom>
-            마이페이지
+          <Typography variant="h4" gutterBottom fontWeight="medium">
+            <Link href="/mypage" color="primary" sx={{ textDecoration: 'none' }}>
+              마이페이지
+            </Link>
           </Typography>
         </Grid>
         <Grid container>
@@ -146,9 +148,15 @@ const MyPageOrderClaimList = () => {
                                     .find((order) => order.orderNum === item.orderNum)
                                     ?.items.map((orderItem) => orderItem.bookId?.title)
                                     .join(', ')
-                                    .slice(0, 25)) ||
+                                    .slice(0, 25) +
+                                    (myOrderList
+                                      .find((order) => order.orderNum === item.orderNum)
+                                      ?.items.map((orderItem) => orderItem.bookId?.title)
+                                      .join(', ').length > 25
+                                      ? '...'
+                                      : '')) ||
                                 '제목 없음'
-                              }...`}
+                              }`}
                             </TableCell>
                             <TableCell>{item.totalPrice}</TableCell>
                             <TableCell>{item.request.requestType}</TableCell>
