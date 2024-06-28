@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Container, Typography, Box, Button, Divider, Grid } from '@mui/material';
@@ -14,6 +14,12 @@ const OrderCompletePage = () => {
     paymentMethod: '',
   };
 
+  useEffect(() => {
+    if (!orderNum) {
+      navigate('/');
+    }
+  }, [orderNum, navigate]);
+
   const handleViewOrderDetails = () => {
     navigate('/mypage/order-list');
   };
@@ -21,6 +27,7 @@ const OrderCompletePage = () => {
   const handleContinueShopping = () => {
     navigate('/');
   };
+
   const getDepositDeadline = () => {
     const now = new Date();
     now.setHours(now.getHours() + 12);

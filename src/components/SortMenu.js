@@ -24,10 +24,8 @@ const SortMenu = ({ selectedSortOption, onSelectSortOption }) => {
         onClick={handleClick}
         endIcon={<ArrowDropDownIcon />}
         sx={{
-          backgroundColor: 'transparent',
           color: 'black',
           '&:hover': {
-            backgroundColor: '#d3ddbd',
             color: 'brown',
           },
         }}>
