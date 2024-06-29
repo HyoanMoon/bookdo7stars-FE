@@ -41,16 +41,16 @@ const CategoryBar = ({ bookList }) => {
   });
 
   const categoryHierarchy = getCategoryHierarchy(totalCategories);
-  const firstSubCategories = getSubCategories(categoryHierarchy, '국내도서');
+  const firstSubCategories = getSubCategories(categoryHierarchy, '국내도서').sort();
   const secondAllSubCategories = {};
   const thirdAllSubCategories = {};
 
   firstSubCategories.forEach((firstCategory) => {
-    const secondSubCategories = getSubCategories(categoryHierarchy['국내도서'], firstCategory);
+    const secondSubCategories = getSubCategories(categoryHierarchy['국내도서'], firstCategory).sort();
     secondAllSubCategories[firstCategory] = secondSubCategories;
     thirdAllSubCategories[firstCategory] = {};
     secondSubCategories.forEach((secondCategory) => {
-      const thirdSubCategories = getSubCategories(categoryHierarchy['국내도서'][firstCategory], secondCategory);
+      const thirdSubCategories = getSubCategories(categoryHierarchy['국내도서'][firstCategory], secondCategory).sort();
       thirdAllSubCategories[firstCategory][secondCategory] = thirdSubCategories;
     });
   });
@@ -63,7 +63,7 @@ const CategoryBar = ({ bookList }) => {
     BlogBest: '블로그 베스트',
   };
 
-  const groups = getBookGroupArray(queryTypes, bookGroups);
+  const groups = getBookGroupArray(queryTypes, bookGroups).sort();
   groups.push('전체 도서', '에디터 추천');
   const index = groups.indexOf('전체 도서');
 
