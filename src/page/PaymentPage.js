@@ -179,13 +179,13 @@ const PaymentPage = () => {
       </Box>
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
-          <TableContainer component={Paper} sx={{ maxWidth: isMobile ? '100vw' : 'auto', overflowX: 'auto' }}>
+          <TableContainer component={Paper} sx={{ maxWidth: '100%', overflowX: 'hidden' }}>
             <Table size={isMobile ? 'small' : 'medium'}>
               <TableHead>
                 <TableRow>
-                  <TableCell colSpan={6} sx={{ whiteSpace: 'nowrap' }}>
+                  <TableCell colSpan={6} sx={{ whiteSpace: 'nowrap', padding: isMobile ? '4px' : '16px' }}>
                     <Box display="flex" alignItems="center" justifyContent="space-between">
-                      <Typography variant="h4" sx={{ fontWeight: 500, fontSize: isMobile ? '1rem' : '1.5rem' }}>
+                      <Typography variant="h4" sx={{ fontWeight: 500, fontSize: isMobile ? '0.8rem' : '1.5rem' }}>
                         주문상품 총{' '}
                         <Box component="span" color="#608020" fontWeight="bold">
                           {selectedCartList.length}
@@ -201,36 +201,21 @@ const PaymentPage = () => {
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell sx={{ whiteSpace: 'nowrap', backgroundColor: '#f5f5f5', fontSize: isMobile ? '0.75rem' : 'inherit' }}>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 500, fontSize: isMobile ? '0.75rem' : '1rem' }}>
-                      상품명
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right" sx={{ whiteSpace: 'nowrap', backgroundColor: '#f5f5f5', fontSize: isMobile ? '0.75rem' : 'inherit' }}>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 500, fontSize: isMobile ? '0.75rem' : '1rem' }}>
-                      정가
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right" sx={{ whiteSpace: 'nowrap', backgroundColor: '#f5f5f5', fontSize: isMobile ? '0.75rem' : 'inherit' }}>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 500, fontSize: isMobile ? '0.75rem' : '1rem' }}>
-                      수량
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right" sx={{ whiteSpace: 'nowrap', backgroundColor: '#f5f5f5', fontSize: isMobile ? '0.75rem' : 'inherit' }}>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 500, fontSize: isMobile ? '0.75rem' : '1rem' }}>
-                      할인금액
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right" sx={{ whiteSpace: 'nowrap', backgroundColor: '#f5f5f5', fontSize: isMobile ? '0.75rem' : 'inherit' }}>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 500, fontSize: isMobile ? '0.75rem' : '1rem' }}>
-                      합계
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right" sx={{ whiteSpace: 'nowrap', backgroundColor: '#f5f5f5', fontSize: isMobile ? '0.75rem' : 'inherit' }}>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 500, fontSize: isMobile ? '0.75rem' : '1rem' }}>
-                      배송일
-                    </Typography>
-                  </TableCell>
+                  {['상품명', '정가', '수량', '할인금액', '합계', '배송일'].map((text) => (
+                    <TableCell
+                      key={text}
+                      align="right"
+                      sx={{
+                        whiteSpace: 'nowrap',
+                        backgroundColor: '#f5f5f5',
+                        fontSize: isMobile ? '0.7rem' : 'inherit',
+                        padding: isMobile ? '4px' : '16px',
+                      }}>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 500, fontSize: isMobile ? '0.7rem' : '1rem' }}>
+                        {text}
+                      </Typography>
+                    </TableCell>
+                  ))}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -240,30 +225,30 @@ const PaymentPage = () => {
                   const discountedPrice = originalPrice - discountAmount;
                   return (
                     <TableRow key={item._id}>
-                      <TableCell component="th" scope="row" sx={{ fontSize: isMobile ? '0.75rem' : 'inherit' }}>
-                        <Box display="flex" alignItems="center">
-                          <img src={item.bookId.cover} alt={item.bookId.title} width={50} />
-                          <Typography variant="body2" ml={2}>
+                      <TableCell component="th" scope="row" sx={{ padding: isMobile ? '4px' : '16px' }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                          <img src={item.bookId.cover} alt={item.bookId.title} width={isMobile ? 30 : 50} />
+                          <Typography variant="body2" sx={{ fontSize: isMobile ? '0.7rem' : '1rem' }}>
                             {item.bookId.title}
                           </Typography>
                         </Box>
                       </TableCell>
-                      <TableCell align="right" sx={{ whiteSpace: 'nowrap', fontSize: isMobile ? '0.75rem' : 'inherit' }}>
+                      <TableCell align="right" sx={{ whiteSpace: 'nowrap', fontSize: isMobile ? '0.7rem' : 'inherit', padding: isMobile ? '4px' : '16px' }}>
                         ₩ {currencyFormat(item.bookId.priceSales)}
                       </TableCell>
-                      <TableCell align="right" sx={{ whiteSpace: 'nowrap', fontSize: isMobile ? '0.75rem' : 'inherit' }}>
+                      <TableCell align="right" sx={{ whiteSpace: 'nowrap', fontSize: isMobile ? '0.7rem' : 'inherit', padding: isMobile ? '4px' : '16px' }}>
                         {item.qty}
                       </TableCell>
-                      <TableCell align="right" sx={{ whiteSpace: 'nowrap', fontSize: isMobile ? '0.75rem' : 'inherit' }}>
+                      <TableCell align="right" sx={{ whiteSpace: 'nowrap', fontSize: isMobile ? '0.7rem' : 'inherit', padding: isMobile ? '4px' : '16px' }}>
                         <Box component="span" color="#608020" fontWeight="bold">
                           - ₩ {currencyFormat(discountAmount)}
                         </Box>
                       </TableCell>
-                      <TableCell align="right" sx={{ whiteSpace: 'nowrap', fontSize: isMobile ? '0.75rem' : 'inherit' }}>
+                      <TableCell align="right" sx={{ whiteSpace: 'nowrap', fontSize: isMobile ? '0.7rem' : 'inherit', padding: isMobile ? '4px' : '16px' }}>
                         ₩ {currencyFormat(discountedPrice)}
                       </TableCell>
-                      <TableCell align="right" sx={{ fontSize: isMobile ? '0.75rem' : 'inherit' }}>
-                        <DeliveryEstimate address={deliveryAddress} />
+                      <TableCell align="right" sx={{ fontSize: isMobile ? '0.7rem' : 'inherit', padding: isMobile ? '4px' : '16px' }}>
+                        <DeliveryEstimate address={deliveryAddress} isMobile={isMobile} />
                       </TableCell>
                     </TableRow>
                   );
@@ -271,6 +256,7 @@ const PaymentPage = () => {
               </TableBody>
             </Table>
           </TableContainer>
+
           <Box mt={4}>
             <Typography variant={isMobile ? 'h6' : 'h5'} gutterBottom>
               배송 주소
