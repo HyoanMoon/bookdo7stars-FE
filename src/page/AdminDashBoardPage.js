@@ -28,6 +28,7 @@ function AdminDashBoardPage() {
   const adminData = useSelector((state) => state.user.users);
   const orderData = useSelector((state) => state.order.orderList);
   const contacts = useSelector((state) => state.contact.contacts);
+  const requestList = useSelector((state) => state.order.requestList);
   const [localUserData, setLocalUserData] = useState([]);
   const [localAdminData, setLocalAdminData] = useState([]);
   const [monthlySales, setMonthlySales] = useState([]); // 월별 매출을 저장할 상태
@@ -39,6 +40,7 @@ function AdminDashBoardPage() {
     dispatch(userActions.adminUser());
     dispatch(orderActions.getOrderList());
     dispatch(contactActions.getAllContacts());
+    dispatch(orderActions.getRequestList());
   }, [dispatch]);
 
   useEffect(() => {
@@ -194,9 +196,9 @@ function AdminDashBoardPage() {
   const adminCardContent = localAdminData.length > 0 ? `${localAdminData[0].userName} 외 ${localAdminData.length - 1}명` : 'No admins';
   const userCardContent = localUserData.length > 0 ? `Total: ${localUserData.length}명` : 'No users';
 
-  const pendingContacts = contacts.filter((contact) => contact.status === '대기 중').length;
+  const pendingContacts = requestList.filter((request) => request.request.status === '대기 중').length;
   const refundOrders = orderData.filter((order) => order.status === '환불').length;
-  const newOrders = orderData.filter((order) => order.status === '신규').length;
+  const newOrders = orderData.filter((order) => order.status === '준비 중').length;
   const newSignups = localUserData.filter((user) => {
     const date = new Date(user.createdAt);
     return date.getFullYear() === currentYear && date.getMonth() === currentMonth;
@@ -208,7 +210,7 @@ function AdminDashBoardPage() {
   const taskItems = [
     { title: '신규 주문', count: newOrders },
     { title: '환불 주문', count: refundOrders },
-    { title: '답변 대기 문의', count: pendingContacts },
+    { title: '환불/반품 대기', count: pendingContacts },
     { title: '신규 가입', count: newSignups },
     { title: '문의', count: inquiries },
   ];
@@ -219,8 +221,8 @@ function AdminDashBoardPage() {
         <Container className="containerStyled" maxWidth="lg">
           <Box mb={4}>
             <Paper elevation={3} sx={{ padding: 2 }}>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+              <Box display="flex" alignItems="center" mb={2}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', marginRight: '10px' }}>
                   오늘의 할일
                 </Typography>
                 <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'red' }}>
@@ -247,13 +249,14 @@ function AdminDashBoardPage() {
               <Box>
                 <Grid container spacing={4}>
                   <Grid item xs={12}>
-                    <AdminDashboardCard title={orderData.length} content="총 주문 수" />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <AdminDashboardCard title="최근 주문" content="최근 주문 내역을 여기에 표시합니다." />
+                    <AdminDashboardCard title="신규 가입 고객" content={<Bar data={signupData} />} />
                   </Grid>
                 </Grid>
               </Box>
+            </Grid>
+            {/* 고객 문의 */}
+            <Grid item xs={12}>
+              <AdminDashboardCard title="고객 문의" content={<ContactTable contacts={contacts} />} />
             </Grid>
 
             {/* 주문 상태 및 사용자 관련 */}
@@ -264,9 +267,6 @@ function AdminDashBoardPage() {
               <Box>
                 <Grid container spacing={4}>
                   <Grid item xs={12}>
-                    <AdminDashboardCard title="신규 가입 고객" content={<Bar data={signupData} />} />
-                  </Grid>
-                  <Grid item xs={12}>
                     <AdminDashboardCard title="사용자 권한 관리" content={userCardContent} onClick={handleClickOpenUserModal} />
                   </Grid>
                   <Grid item xs={12}>
@@ -275,12 +275,6 @@ function AdminDashBoardPage() {
                 </Grid>
               </Box>
             </Grid>
-
-            {/* 고객 문의 */}
-            <Grid item xs={12}>
-              <AdminDashboardCard title="고객 문의" content={<ContactTable contacts={contacts} />} />
-            </Grid>
-
             <UserPermissionsModal
               open={openUserModal}
               handleClose={handleCloseUserModal}
@@ -317,6 +311,7 @@ const ContactTable = ({ contacts }) => (
       <TableHead>
         <TableRow>
           <TableCell>고객 이름</TableCell>
+          <TableCell>상품 사진</TableCell>
           <TableCell>문의 내용</TableCell>
           <TableCell>문의 날짜</TableCell>
           <TableCell>답변 상태</TableCell>
@@ -326,6 +321,10 @@ const ContactTable = ({ contacts }) => (
         {contacts.map((contact) => (
           <TableRow key={contact._id}>
             <TableCell>{contact.userId.userName}</TableCell>
+            <TableCell>
+              {' '}
+              <img src={contact.image} alt={contact.inquiryContent} style={{ width: '70px', height: '50px' }} />
+            </TableCell>
             <TableCell>{contact.inquiryContent}</TableCell>
             <TableCell>{contact.createdAt.slice(5, 10)}</TableCell>
             <TableCell>{contact.status}</TableCell>
