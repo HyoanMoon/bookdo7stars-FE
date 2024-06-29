@@ -1,17 +1,11 @@
-import { ClickAwayListener, Fade, Grid, Paper, Typography } from '@mui/material';
+import { ClickAwayListener, Fade, Paper, Typography, Box } from '@mui/material';
 import React, { useCallback } from 'react';
-import { bookActions } from '../action/bookActions';
-import { categoryActions } from '../action/categoryActions';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Popper } from '@mui/base';
 
 const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSubCategories, anchorEl, id, open }) => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { categories } = useSelector((state) => state.category);
   const encodeCategoryPath = (path) => encodeURIComponent(path);
-  const params = useParams();
 
   const clickSub3Category = useCallback(
     (firstCategory, secondCategory, thirdCategory) => {
@@ -55,85 +49,65 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
         <Fade {...TransitionProps} timeout={350}>
           <Paper
             sx={{
-              width: '100%',
-              maxWidth: '1000px',
-              maxHeight: '500px',
+              width: '300px',
+              maxHeight: '600px',
               overflowY: 'auto',
               padding: '10px',
               boxShadow: 3,
               borderRadius: '8px',
-              minWidth: '200px',
-              minHeight: '200px',
               backgroundColor: 'background.paper',
-              '@media (max-width: 600px)': {
-                maxWidth: '90%',
-                padding: '5px',
-              },
             }}
             {...TransitionProps}>
             <ClickAwayListener onClickAway={() => handlePopperClose()}>
-              <Grid container spacing={2}>
+              <Box>
                 {Object.keys(secondAllSubCategories).map((firstCategory, index) => (
-                  <Grid item xs={12} key={index} sx={{ paddingBottom: '5px' }}>
+                  <Box key={index} sx={{ marginBottom: '10px' }}>
                     <Typography
                       variant="h6"
                       gutterBottom
                       onClick={() => clickSubCategory(firstCategory)}
                       sx={{
                         cursor: 'pointer',
-                        display: 'inline-block',
                         '&:hover': {
                           color: 'primary.main',
                         },
                       }}>
                       <strong>{firstCategory}</strong>
                     </Typography>
-                    <Grid container spacing={1}>
-                      {secondAllSubCategories[firstCategory].map((secondCategory, idx) => (
-                        <Grid
-                          item
-                          xs={12}
-                          key={idx}
+                    {secondAllSubCategories[firstCategory].map((secondCategory, idx) => (
+                      <Box key={idx} sx={{ paddingLeft: '10px', marginBottom: '5px' }}>
+                        <Typography
+                          variant="subtitle1"
+                          gutterBottom
+                          onClick={() => clickSub2Category(firstCategory, secondCategory)}
                           sx={{
-                            paddingBottom: '5px',
+                            cursor: 'pointer',
+                            '&:hover': {
+                              color: 'primary.main',
+                            },
                           }}>
+                          {secondCategory}
+                        </Typography>
+                        {thirdAllSubCategories[firstCategory][secondCategory].map((thirdCategory, idx) => (
                           <Typography
-                            variant="subtitle1"
-                            gutterBottom
-                            onClick={() => clickSub2Category(firstCategory, secondCategory)}
+                            key={idx}
+                            variant="body2"
+                            onClick={() => clickSub3Category(firstCategory, secondCategory, thirdCategory)}
                             sx={{
                               cursor: 'pointer',
-                              display: 'inline-block',
+                              paddingLeft: '20px',
                               '&:hover': {
                                 color: 'primary.main',
                               },
                             }}>
-                            <strong>{secondCategory}</strong>
+                            {thirdCategory}
                           </Typography>
-                          <Grid container spacing={1}>
-                            {thirdAllSubCategories[firstCategory][secondCategory].map((thirdCategory, idx) => (
-                              <Grid item xs={6} sm={4} md={3} key={idx}>
-                                <Typography
-                                  variant="body2"
-                                  onClick={() => clickSub3Category(firstCategory, secondCategory, thirdCategory)}
-                                  sx={{
-                                    cursor: 'pointer',
-                                    display: 'inline-block',
-                                    '&:hover': {
-                                      color: 'primary.main',
-                                    },
-                                  }}>
-                                  {thirdCategory}
-                                </Typography>
-                              </Grid>
-                            ))}
-                          </Grid>
-                        </Grid>
-                      ))}
-                    </Grid>
-                  </Grid>
+                        ))}
+                      </Box>
+                    ))}
+                  </Box>
                 ))}
-              </Grid>
+              </Box>
             </ClickAwayListener>
           </Paper>
         </Fade>

@@ -4,7 +4,7 @@ import { AddCircleOutline } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import BookSlider from '../BookSlider/BookSlider';
 
-const BooksCarousel = ({ bookList, title, categories, sx }) => {
+const BooksCarousel = ({ bookList, title, categories, sx, moreButton }) => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('전체');
   const isMobile = useMediaQuery('(max-width: 600px)');
@@ -42,13 +42,15 @@ const BooksCarousel = ({ bookList, title, categories, sx }) => {
           sx={{ fontWeight: 'bold', display: 'flex', justifyContent: 'left', flexGrow: 1, padding: '5px' }}>
           {title}
         </Typography>
-        <Button
-          size="large"
-          endIcon={<AddCircleOutline />}
-          onClick={() => onClickMore(bookGroup)}
-          sx={{ justifyContent: 'flex-end', marginLeft: isMobile ? 0 : 'auto' }}>
-          더보기
-        </Button>
+        {moreButton && (
+          <Button
+            size="large"
+            endIcon={<AddCircleOutline />}
+            onClick={() => onClickMore(bookGroup)}
+            sx={{ justifyContent: 'flex-end', marginLeft: isMobile ? 0 : 'auto' }}>
+            더보기
+          </Button>
+        )}
       </Box>
       {categories ? (
         <>

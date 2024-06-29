@@ -41,16 +41,16 @@ const CategoryBar = ({ bookList }) => {
   });
 
   const categoryHierarchy = getCategoryHierarchy(totalCategories);
-  const firstSubCategories = getSubCategories(categoryHierarchy, '국내도서');
+  const firstSubCategories = getSubCategories(categoryHierarchy, '국내도서').sort();
   const secondAllSubCategories = {};
   const thirdAllSubCategories = {};
 
   firstSubCategories.forEach((firstCategory) => {
-    const secondSubCategories = getSubCategories(categoryHierarchy['국내도서'], firstCategory);
+    const secondSubCategories = getSubCategories(categoryHierarchy['국내도서'], firstCategory).sort();
     secondAllSubCategories[firstCategory] = secondSubCategories;
     thirdAllSubCategories[firstCategory] = {};
     secondSubCategories.forEach((secondCategory) => {
-      const thirdSubCategories = getSubCategories(categoryHierarchy['국내도서'][firstCategory], secondCategory);
+      const thirdSubCategories = getSubCategories(categoryHierarchy['국내도서'][firstCategory], secondCategory).sort();
       thirdAllSubCategories[firstCategory][secondCategory] = thirdSubCategories;
     });
   });
@@ -84,7 +84,7 @@ const CategoryBar = ({ bookList }) => {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#fff', borderBottom: '2px solid #6b8e23', borderTop: '2px solid #6b8e23' }}>
+    <AppBar position="static" sx={{ backgroundColor: '#fff', borderBottom: '2px solid #035036', borderTop: '2px solid #035036' }}>
       <Toolbar sx={{ padding: { xs: '0 8px', sm: '0 16px' } }}>
         <Box>
           <CategoryPopOver
@@ -117,7 +117,10 @@ const CategoryBar = ({ bookList }) => {
             }}>
             {groups.map((group, index) => (
               <MenuItem key={index} onClick={() => goToAllBooksOfGroup(group)}>
-                <Typography variant="body1" component="div" sx={{ fontSize: { xs: '0.7rem', sm: '0.9rem' }, cursor: 'pointer', color: '#6b8e23' }}>
+                <Typography
+                  variant="body1"
+                  component="div"
+                  sx={{ fontSize: { xs: '0.7rem', sm: '0.9rem' }, cursor: 'pointer', color: '#035036', fontWeight: 'bold' }}>
                   {group}
                 </Typography>
               </MenuItem>

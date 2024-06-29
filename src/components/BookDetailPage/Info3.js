@@ -94,6 +94,9 @@ const Info3 = ({ selectedBook, otherBooksByAuthor }) => {
         centered
         indicatorColor="primary"
         textColor="primary"
+        scrollbuttons="auto"
+        variant="scrollable"
+        allowScrollButtonsMobile
         sx={{ backgroundColor: '#DADFCE', opacity: '90%', position: 'sticky', top: '0', ml: '0', width: '100%', zIndex: 1000 }}>
         <Tab label="도서소개" value="bookDescription" />
         <Tab label="도서정보" value="bookInfo" />
