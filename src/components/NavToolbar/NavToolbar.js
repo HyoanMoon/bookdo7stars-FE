@@ -251,7 +251,7 @@ const NavToolbar = () => {
           sx={{ cursor: 'pointer', padding: 1 }}>
           <img src="/logo.png" alt="로고 이미지" style={{ color: '#d3ddbd', borderRadius: '3px', height: isMobile ? '4rem' : isTablet ? '5rem' : '7rem' }} />
         </Box>
-        <Box sx={{ width: isMobile ? '90%' : isTablet ? '70%' : '60%', marginY: isMobile ? 2 : isTablet ? 1 : 0 }}>
+        <Box sx={{ width: isMobile ? '100%' : isTablet ? '80%' : '70%', marginY: isMobile ? 2 : isTablet ? 1 : 0 }}>
           <SearchBook
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}

@@ -35,8 +35,6 @@ const AdminPageClaimTable = ({ claimTableHead, requestList, handleOpenRequestDia
     setPage(0);
   };
 
-  // console.log('requestList', requestList);
-
   return (
     <>
       {/* 문의 테이블 */}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Container, useMediaQuery } from '@mui/material';
+import { Box, Container, IconButton, useMediaQuery } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
 import BooksCarousel from '../components/BooksCarousel/BooksCarousel';
@@ -7,6 +7,7 @@ import BookContainer from '../components/BookContainer/BookContainer';
 import CarouselSlide from '../components/CarouselSlide';
 import { getCategories } from '../_helper/getCategories';
 import { bookActions } from '../action/bookActions';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 const MainPage = () => {
   const { bookList } = useSelector((state) => state.book);
@@ -21,12 +22,13 @@ const MainPage = () => {
   const bestSeller = bookList.filter((book) => book.queryType === 'BestSeller');
   const newSpecialBooks = bookList.filter((book) => book.queryType === 'ItemNewSpecial');
   const newAllBooks = bookList.filter((book) => book.queryType === 'ItemNewSpecial');
-  console.log(bookList.filter((book) => book.queryType === 'BlogBest'));
 
   const newAllBooksCategories = getCategories(newAllBooks);
   const bestSellerCategories = getCategories(bestSeller);
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
-  console.log('블로그베스트', blogBestBooks);
   return (
     <Box sx={{ paddingBottom: 15 }}>
       <Box>
@@ -65,7 +67,7 @@ const MainPage = () => {
           )}
         </Box>
         <Box sx={{ paddingTop: '20px' }}>
-          <BooksCarousel bookList={newAllBooks.slice(0, 100)} categories={newAllBooksCategories} title={'신간 도서'} isMobile={isMobile} />
+          <BooksCarousel bookList={newAllBooks.slice(0, 100)} categories={newAllBooksCategories} title={'신간 도서'} isMobile={isMobile} moreButton={true} />
         </Box>
         <Box sx={{ paddingTop: '20px' }}>
           {isMobile ? (
@@ -73,6 +75,30 @@ const MainPage = () => {
           ) : (
             <BookContainer bookList={blogBestBooks.slice(0, 4)} title={'에디터 추천'} />
           )}
+        </Box>
+        <Box
+          sx={{
+            position: 'fixed',
+            bottom: 40,
+            right: 40,
+            zIndex: 1000,
+          }}>
+          <IconButton
+            onClick={scrollToTop}
+            sx={{
+              backgroundColor: 'primary.main',
+              color: '#fff',
+              '&:hover': { backgroundColor: '#d3ddbd' },
+              borderRadius: '50%',
+              width: 56,
+              height: 56,
+              '@media (max-width:600px)': {
+                width: 40, // Smaller width for mobile
+                height: 40, // Smaller height for mobile
+              },
+            }}>
+            <ArrowUpwardIcon />
+          </IconButton>
         </Box>
       </Container>
     </Box>

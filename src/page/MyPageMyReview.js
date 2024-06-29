@@ -9,8 +9,6 @@ const MyPageMyReview = () => {
   const { user } = useSelector((state) => state.user);
   const { userComment } = useSelector((state) => state.comment);
 
-  // console.log('userComment', userComment);
-
   const comments = userComment?.comment || [];
 
   useEffect(() => {

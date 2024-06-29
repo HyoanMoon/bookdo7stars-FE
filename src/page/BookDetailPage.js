@@ -83,7 +83,7 @@ const BookDetailPage = () => {
           <IconButton
             onClick={scrollToTop}
             sx={{
-              backgroundColor: '#608020',
+              backgroundColor: 'primary.main',
               color: '#fff',
               '&:hover': { backgroundColor: '#d3ddbd' },
               borderRadius: '50%',

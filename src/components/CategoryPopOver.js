@@ -50,7 +50,7 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
           <Paper
             sx={{
               width: '300px',
-              maxHeight: '500px',
+              maxHeight: '600px',
               overflowY: 'auto',
               padding: '10px',
               boxShadow: 3,

@@ -32,9 +32,6 @@ const AdminPageClaimDialog = ({ open, handleClose, orderDialogTableHead }) => {
   const [requestStatus, setRequestStatus] = useState(selectedRequest?.request.status || '');
   const [isTableVisible, setIsTableVisible] = useState(false);
 
-  // console.log('selectedRequest', selectedRequest);
-  // console.log('selectedOrder', selectedOrder);
-
   // 주문 내역 테이블 버튼 클릭 핸들러
   const handleButtonClick = () => {
     setIsTableVisible(!isTableVisible);
