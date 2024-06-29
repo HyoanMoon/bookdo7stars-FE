@@ -47,7 +47,7 @@ const SearchBook = ({ searchQuery, setSearchQuery, fields, resetSearch }) => {
           value={searchQuery[selectedField] || ''}
           onChange={(event) => setSearchQuery({ ...searchQuery, [selectedField]: event.target.value })}
           onKeyPress={handleKeyPress}
-          sx={{ backgroundColor: '#fff', flexGrow: 1, mr: isMobile ? 1 : 2 }}
+          sx={{ flexGrow: 1, mr: isMobile ? 1 : 2, borderRadius: 30 }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
