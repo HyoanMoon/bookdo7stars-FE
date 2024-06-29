@@ -15,7 +15,7 @@
 ### 👥 팀 소개
 |  팀원  |        역할        |                담당 파트                 |                  깃허브 주소                  |
 | :----: | :----------------: | :--------------------------------------: | :-------------------------------------------: |
-| 제인 | 프로젝트 오너  |           발표, 마이페이지           |  [geunseonkim](https://github.com/geunseonkim)  |
+| 근선 | 프로젝트 오너  |           발표, 마이페이지, 어드민 상품관리/주문관리          |  [geunseonkim](https://github.com/geunseonkim)  |
 | 효안 |   스크럼 마스터    | 장바구니,결제,어드민대시보드  |   [HyoanMoon](https://github.com/HyoanMoon)   |
 | 메이 |        팀원        |    메인배너, 푸터, 통합 검색, 검색결과 페이지, 로그인/회원가입, 디테일페이지, 연락처페이지    | [MayHyeyeonKim](https://github.com/MayHyeyeonKim) |
 |  헌준  |        팀원        | 메인, 깃헙, 데이타베이스, 카테고리, 헤더, 네브바, 북카드, 필터, 검색,   |    [hunjoonrhee](https://github.com/hunjoonrhee)    |
