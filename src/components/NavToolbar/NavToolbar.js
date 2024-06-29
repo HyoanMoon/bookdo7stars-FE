@@ -1,19 +1,30 @@
-import Box from '@mui/material/Box';
-import { bookActions } from '../../action/bookActions';
-import { categoryActions } from '../../action/categoryActions';
-import SearchBook from '../SearchBook';
-// eslint-disable-next-line max-len
-import { IconButton, Menu, useMediaQuery, useTheme, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Badge } from '@mui/material'; // 추가된 부분
+import React, { useState } from 'react';
+import {
+  Box,
+  IconButton,
+  Menu,
+  useMediaQuery,
+  useTheme,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Badge,
+  Button,
+  MenuItem,
+  Toolbar,
+} from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import PersonIcon from '@mui/icons-material/Person';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import Toolbar from '@mui/material/Toolbar';
-import React, { useState } from 'react';
-import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
+
+import { bookActions } from '../../action/bookActions';
+import { categoryActions } from '../../action/categoryActions';
 import { userActions } from '../../action/userActions';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import SearchBook from '../SearchBook';
 
 const logIn = '로그인';
 const logOut = '로그아웃';
@@ -31,7 +42,7 @@ const NavToolbar = () => {
   const { user } = useSelector((state) => state.user);
   const { cartItemCount } = useSelector((state) => state.cart);
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false); // 추가된 부분
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleLogout = () => {
     dispatch(userActions.logout());
@@ -152,8 +163,6 @@ const NavToolbar = () => {
           minWidth: '130px',
         }}
         onClick={handleCartClick}>
-        {' '}
-        {/* 변경된 부분 */}
         {cart} ({cartItemCount || 0})
       </Button>
       {user && user.role === 'admin' && (
@@ -269,7 +278,7 @@ const NavToolbar = () => {
                   <IconButton color="primary" {...bindTrigger(popupState)}>
                     <PersonIcon />
                   </IconButton>
-                  <IconButton color="primary" onClick={() => navigate('/cart')}>
+                  <IconButton color="primary" onClick={handleCartClick}>
                     <Badge badgeContent={cartItemCount || 0} color="secondary">
                       <ShoppingCartIcon />
                     </Badge>
@@ -292,8 +301,8 @@ const NavToolbar = () => {
         <DialogActions>
           <Button
             onClick={() => {
-              handleDialogClose(); // 모달을 닫는 함수 호출
-              navigate('/login'); // 로그인 페이지로 이동
+              handleDialogClose();
+              navigate('/login');
             }}
             color="primary">
             로그인으로 이동하기

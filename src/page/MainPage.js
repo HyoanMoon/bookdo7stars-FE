@@ -23,6 +23,7 @@ const MainPage = () => {
   const newAllBooksCategories = getCategories(newAllBooks);
   const bestSellerCategories = getCategories(bestSeller);
 
+  console.log('블로그베스트', blogBestBooks);
   return (
     <Box sx={{ paddingBottom: 15 }}>
       <Box>

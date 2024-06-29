@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import * as types from '../../constants/cart.constants';
 // eslint-disable-next-line import/no-named-as-default
 import styled from 'styled-components';
+import { currencyFormat } from '../../utils/number';
 
 const TaxDeductionLabel = styled.div`
   border: 1px solid;
@@ -43,7 +44,7 @@ const BookBasicInfo = ({ title, author, publisher, price }) => {
         {publisher}
       </Typography>
       <Typography variant="h5" sx={{ mb: 3, fontSize: '2rem', fontWeight: 'bold' }}>
-        ₩{price}
+        ₩ {currencyFormat(price)}
       </Typography>
       <Box display="flex" alignItems="center" border={1} borderRadius={4} width="fit-content" p={1} mb={5}>
         <IconButton onClick={handleDecrease} size="small">
