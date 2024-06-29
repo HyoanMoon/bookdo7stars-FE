@@ -6,13 +6,11 @@ import BooksCarousel from '../components/BooksCarousel/BooksCarousel';
 import BookContainer from '../components/BookContainer/BookContainer';
 import CarouselSlide from '../components/CarouselSlide';
 import { getCategories } from '../_helper/getCategories';
-import { bookActions } from '../action/bookActions';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 const MainPage = () => {
   const { bookList } = useSelector((state) => state.book);
   const isMobile = useMediaQuery('(max-width: 600px)');
-  const dispatch = useDispatch();
 
   if (!bookList) {
     return null;

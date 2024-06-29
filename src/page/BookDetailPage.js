@@ -5,13 +5,11 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import BookImage from '../components/BookDetailPage/BookImage';
 import BookBasicInfo from '../components/BookDetailPage/BookBasicInfo';
 import BookToCart from '../components/BookDetailPage/BookToCart';
-// import BookDetailInfo from '../components/BookDetailPage/BookDetailInfo';
 import AddressChange from '../components/BookDetailPage/AddressChange';
 import DeliveryEstimate from '../components/BookDetailPage/DeliveryEstimate';
 import { useDispatch, useSelector } from 'react-redux';
 import { bookActions } from '../action/bookActions';
 import Info3 from '../components/BookDetailPage/Info3';
-// import ClipLoader from 'react-spinners/ClipLoader';
 import { favoriteActions } from '../action/favoriteActions';
 
 const BookDetailPage = () => {
@@ -20,7 +18,6 @@ const BookDetailPage = () => {
   const { fullAddress, deliveryInfo } = useSelector((state) => state.order);
   const { selectedBook, getBooksLoading, otherBooksByAuthor } = useSelector((state) => state.book);
   const { bookid } = useParams();
-  const navigate = useNavigate();
   const { favorite } = useSelector((state) => state.favorite);
   const { user } = useSelector((state) => state.user);
 
