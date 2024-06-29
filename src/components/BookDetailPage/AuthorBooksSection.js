@@ -11,7 +11,7 @@ const AuthorBooksSection = ({ otherBooksByAuthor }) => {
       <Typography variant="h4">저자의 다른 책들</Typography>
       {otherBooksByAuthor.length !== 0 ? (
         isMobile ? (
-          <BooksCarousel bookList={otherBooksByAuthor} />
+          <BooksCarousel bookList={otherBooksByAuthor} moreButton={false} />
         ) : (
           <Grid container spacing={2} mt={2}>
             {otherBooksByAuthor.map((otherBook) => (

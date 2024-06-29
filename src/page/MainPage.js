@@ -55,11 +55,11 @@ const MainPage = () => {
           borderRadius: 2,
         }}>
         <Box sx={{ paddingTop: '20px' }}>
-          <BooksCarousel bookList={newSpecialBooks.slice(0, 10)} title={'화제의 신작'} isMobile={isMobile} />
+          <BooksCarousel bookList={newSpecialBooks.slice(0, 10)} title={'화제의 신작'} isMobile={isMobile} moreButton={true} />
         </Box>
         <Box sx={{ paddingTop: '20px' }}>
           {isMobile ? (
-            <BooksCarousel bookList={bestSeller.slice(0, 12)} categories={bestSellerCategories} title={'베스트 셀러'} isMobile={isMobile} />
+            <BooksCarousel bookList={bestSeller.slice(0, 12)} categories={bestSellerCategories} title={'베스트 셀러'} isMobile={isMobile} moreButton={true} />
           ) : (
             <BookContainer bookList={bestSeller.slice(0, 12)} categories={bestSellerCategories} title={'베스트 셀러'} />
           )}
@@ -69,7 +69,7 @@ const MainPage = () => {
         </Box>
         <Box sx={{ paddingTop: '20px' }}>
           {isMobile ? (
-            <BooksCarousel bookList={blogBestBooks.slice(0, 4)} title={'에디터 추천'} isMobile={isMobile} />
+            <BooksCarousel bookList={blogBestBooks.slice(0, 4)} title={'에디터 추천'} isMobile={isMobile} moreButton={true} />
           ) : (
             <BookContainer bookList={blogBestBooks.slice(0, 4)} title={'에디터 추천'} />
           )}
