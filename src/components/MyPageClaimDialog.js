@@ -121,7 +121,7 @@ const MyPageClaimDialog = ({ open, handleClose }) => {
                 selectedRequest?.items?.map((item) => (
                   <TableRow key={selectedRequest._id}>
                     <TableCell>{bookTitle}</TableCell>
-                    <TableCell>{item?.price}</TableCell>
+                    <TableCell>{currencyFormat(item?.price)}</TableCell>
                     <TableCell>{item?.qty}</TableCell>
                     <TableCell>{currencyFormat(item?.price * item?.qty)}</TableCell>
                   </TableRow>

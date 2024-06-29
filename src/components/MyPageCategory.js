@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, Link, Grid, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { useNavigate } from 'react-router';
-import { useSelector } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { userActions } from '../action/userActions';
 const MyPageCategory = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
   const userLevel = ['bronze', 'silver', 'gold', 'platinum'];
   const [openPopup, setOpenPopup] = useState(false);
+
+  useEffect(() => {
+    if (!user) {
+      dispatch(userActions.loginWithToken());
+    }
+  }, [dispatch]);
 
   const handleEventClick = () => {
     setOpenPopup(true);
@@ -63,13 +70,45 @@ const MyPageCategory = () => {
         </Box>
       </Grid>
 
+      {/* 모바일 카테고리 */}
+      <Grid container>
+        <Grid item xs={6}>
+          <Box>
+            {myShoppingList?.map((item, index) => (
+              <Box key={item._id} m={1} sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <Link href={item.link} underline="hover" color="inherit" key={index}>
+                  {item.list}
+                </Link>
+              </Box>
+            ))}
+          </Box>
+        </Grid>
+
+        <Grid item xs={6}>
+          <Box>
+            {myInfoList?.map((item, index) => (
+              <Box m={1} key={index}>
+                {item.link ? (
+                  <Link href={item.link} underline="hover" color="inherit">
+                    {item.list}
+                  </Link>
+                ) : (
+                  <Typography variant="body1" color="inherit" sx={{ cursor: 'pointer' }} onClick={item.action}>
+                    {item.list}
+                  </Typography>
+                )}
+              </Box>
+            ))}
+          </Box>
+        </Grid>
+      </Grid>
       {/* 나의 쇼핑 */}
       <Grid container>
         <Box mt={2} p={2} pl={3} pr={9} border={1} borderRadius={4} borderColor="grey.400">
           <Typography color="primary">나의 쇼핑</Typography>
           <Box>
             {myShoppingList?.map((item, index) => (
-              <Box m={1} sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <Box key={item._id} m={1} sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 <Link href={item.link} underline="hover" color="inherit" key={index}>
                   {item.list}
                 </Link>

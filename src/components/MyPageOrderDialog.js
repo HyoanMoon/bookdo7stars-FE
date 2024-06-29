@@ -66,7 +66,7 @@ const MyPageOrderDialog = ({ open, handleClose }) => {
                 selectedOrder?.items?.map((item) => (
                   <TableRow key={selectedOrder._id}>
                     <TableCell>{item?.bookId?.title}</TableCell>
-                    <TableCell>{item?.price}</TableCell>
+                    <TableCell>{currencyFormat(item?.price)}</TableCell>
                     <TableCell>{item?.qty}</TableCell>
                     <TableCell>{currencyFormat(item?.price * item?.qty)}</TableCell>
                   </TableRow>

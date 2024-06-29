@@ -42,8 +42,11 @@ const deleteFavorite = (id) => async (dispatch) => {
   }
 };
 
+const clearFavorite = () => ({ type: types.CLEAR_FAVORITE });
+
 export const favoriteActions = {
   getFavorite,
   addFavorite,
   deleteFavorite,
+  clearFavorite,
 };

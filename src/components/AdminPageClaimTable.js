@@ -24,7 +24,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const AdminPageClaimTable = ({ claimTableHead, requestList, handleOpenRequestDialog }) => {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   // 페이지네이션
   const handleChangePage = (event, newPage) => {
@@ -35,7 +35,12 @@ const AdminPageClaimTable = ({ claimTableHead, requestList, handleOpenRequestDia
     setPage(0);
   };
 
-  // console.log('requestList', requestList);
+  const cellStyle = {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    maxWidth: '150px',
+  };
 
   return (
     <>
@@ -46,7 +51,9 @@ const AdminPageClaimTable = ({ claimTableHead, requestList, handleOpenRequestDia
           <TableHead>
             <TableRow>
               {claimTableHead.map((head, index) => (
-                <TableCell key={index}>{head}</TableCell>
+                <TableCell style={cellStyle} key={index}>
+                  {head}
+                </TableCell>
               ))}
             </TableRow>
           </TableHead>
@@ -55,12 +62,12 @@ const AdminPageClaimTable = ({ claimTableHead, requestList, handleOpenRequestDia
             {requestList.length > 0 ? (
               requestList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((request, index) => (
                 <StyledTableRow key={request?._id} onClick={() => handleOpenRequestDialog(request)}>
-                  <StyledTableCell>{index + 1}</StyledTableCell>
-                  <StyledTableCell>{request?.orderNum}</StyledTableCell>
-                  <StyledTableCell>{request?.createdAt.slice(0, 10)}</StyledTableCell>
-                  <StyledTableCell>{request?.contact?.name}</StyledTableCell>
-                  <StyledTableCell>{request?.request?.requestType}</StyledTableCell>
-                  <StyledTableCell>{request?.request?.status}</StyledTableCell>
+                  <StyledTableCell style={cellStyle}>{index + 1}</StyledTableCell>
+                  <StyledTableCell style={cellStyle}>{request?.orderNum}</StyledTableCell>
+                  <StyledTableCell style={cellStyle}>{request?.createdAt.slice(0, 10)}</StyledTableCell>
+                  <StyledTableCell style={cellStyle}>{request?.contact?.name}</StyledTableCell>
+                  <StyledTableCell style={cellStyle}>{request?.request?.requestType}</StyledTableCell>
+                  <StyledTableCell style={cellStyle}>{request?.request?.status}</StyledTableCell>
                 </StyledTableRow>
               ))
             ) : (
