@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Container, Grid, Box, IconButton } from '@mui/material';
+import { Container, Grid, Box, IconButton, useMediaQuery } from '@mui/material';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import BookImage from '../components/BookDetailPage/BookImage';
 import BookBasicInfo from '../components/BookDetailPage/BookBasicInfo';
@@ -20,6 +20,7 @@ const BookDetailPage = () => {
   const { bookid } = useParams();
   const { favorite } = useSelector((state) => state.favorite);
   const { user } = useSelector((state) => state.user);
+  const isMobile = useMediaQuery('(max-width: 600px)');
 
   useEffect(() => {
     if (user) {
@@ -70,30 +71,32 @@ const BookDetailPage = () => {
             <Info3 selectedBook={selectedBook} otherBooksByAuthor={otherBooksByAuthor} />
           </Grid>
         </Grid>
-        <Box
-          sx={{
-            position: 'fixed',
-            bottom: 40,
-            right: 40,
-            zIndex: 1000,
-          }}>
-          <IconButton
-            onClick={scrollToTop}
+        {!isMobile && (
+          <Box
             sx={{
-              backgroundColor: 'primary.main',
-              color: '#fff',
-              '&:hover': { backgroundColor: '#d3ddbd' },
-              borderRadius: '50%',
-              width: 56,
-              height: 56,
-              '@media (max-width:600px)': {
-                width: 40, // Smaller width for mobile
-                height: 40, // Smaller height for mobile
-              },
+              position: 'fixed',
+              bottom: 40,
+              right: 40,
+              zIndex: 1000,
             }}>
-            <ArrowUpwardIcon />
-          </IconButton>
-        </Box>
+            <IconButton
+              onClick={scrollToTop}
+              sx={{
+                backgroundColor: 'primary.main',
+                color: '#fff',
+                '&:hover': { backgroundColor: '#d3ddbd' },
+                borderRadius: '50%',
+                width: 56,
+                height: 56,
+                '@media (max-width:600px)': {
+                  width: 40, // Smaller width for mobile
+                  height: 40, // Smaller height for mobile
+                },
+              }}>
+              <ArrowUpwardIcon />
+            </IconButton>
+          </Box>
+        )}
       </Container>
     </Box>
   );

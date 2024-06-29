@@ -74,30 +74,32 @@ const MainPage = () => {
             <BookContainer bookList={blogBestBooks.slice(0, 4)} title={'에디터 추천'} />
           )}
         </Box>
-        <Box
-          sx={{
-            position: 'fixed',
-            bottom: 40,
-            right: 40,
-            zIndex: 1000,
-          }}>
-          <IconButton
-            onClick={scrollToTop}
+        {!isMobile && (
+          <Box
             sx={{
-              backgroundColor: 'primary.main',
-              color: '#fff',
-              '&:hover': { backgroundColor: '#d3ddbd' },
-              borderRadius: '50%',
-              width: 56,
-              height: 56,
-              '@media (max-width:600px)': {
-                width: 40, // Smaller width for mobile
-                height: 40, // Smaller height for mobile
-              },
+              position: 'fixed',
+              bottom: 40,
+              right: 40,
+              zIndex: 1000,
             }}>
-            <ArrowUpwardIcon />
-          </IconButton>
-        </Box>
+            <IconButton
+              onClick={scrollToTop}
+              sx={{
+                backgroundColor: 'primary.main',
+                color: '#fff',
+                '&:hover': { backgroundColor: '#d3ddbd' },
+                borderRadius: '50%',
+                width: 56,
+                height: 56,
+                '@media (max-width:600px)': {
+                  width: 40, // Smaller width for mobile
+                  height: 40, // Smaller height for mobile
+                },
+              }}>
+              <ArrowUpwardIcon />
+            </IconButton>
+          </Box>
+        )}
       </Container>
     </Box>
   );
