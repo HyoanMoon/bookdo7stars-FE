@@ -70,7 +70,7 @@ const CartProductCard = ({ item, isSelected, onSelectItem, userLevel, deliveryAd
           </Box>
         </Box>
         <FormControl variant="outlined" size="small" style={{ width: isMobile ? '10%' : '15%' }}>
-          <CustomSelect onChange={(event) => handleQtyChange(item._id, event.target.value)} required defaultValue={item.qty}>
+          <CustomSelect onChange={(event) => handleQtyChange(item._id, event.target.value)} value={item.qty}>
             {[...Array(10).keys()].map((x) => (
               <MenuItem key={x + 1} value={x + 1} style={{ fontSize: isMobile ? '0.8rem' : '1rem' }}>
                 {x + 1}
