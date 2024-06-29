@@ -1,30 +1,18 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  IconButton,
-  Menu,
-  useMediaQuery,
-  useTheme,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Badge,
-  Button,
-  MenuItem,
-  Toolbar,
-} from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import PersonIcon from '@mui/icons-material/Person';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-
+import Box from '@mui/material/Box';
 import { bookActions } from '../../action/bookActions';
 import { categoryActions } from '../../action/categoryActions';
-import { userActions } from '../../action/userActions';
 import SearchBook from '../SearchBook';
+import { IconButton, Menu, useMediaQuery, useTheme, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Badge } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Toolbar from '@mui/material/Toolbar';
+import React, { useState } from 'react';
+import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
+import { userActions } from '../../action/userActions';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
 const logIn = '로그인';
 const logOut = '로그아웃';
@@ -192,50 +180,53 @@ const NavToolbar = () => {
       sx={{
         position: 'absolute',
       }}>
-      {user ? (
-        <>
-          <MenuItem
-            onClick={() => {
-              popupState.close();
-              navigate('/mypage');
-            }}>
-            마이페이지
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              popupState.close();
-              handleLogout();
-            }}>
-            {logOut}
-          </MenuItem>
-          {user.role === 'admin' && (
+      {user
+        ? [
             <MenuItem
+              key="mypage"
               onClick={() => {
                 popupState.close();
-                navigate('/admin/dashboard');
+                navigate('/mypage');
               }}>
-              관리자
-            </MenuItem>
-          )}
-        </>
-      ) : (
-        <>
-          <MenuItem
-            onClick={() => {
-              popupState.close();
-              navigate('/login');
-            }}>
-            {logIn}
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              popupState.close();
-              navigate('/register');
-            }}>
-            {register}
-          </MenuItem>
-        </>
-      )}
+              마이페이지
+            </MenuItem>,
+            <MenuItem
+              key="logout"
+              onClick={() => {
+                popupState.close();
+                handleLogout();
+              }}>
+              {logOut}
+            </MenuItem>,
+            user.role === 'admin' && (
+              <MenuItem
+                key="admin"
+                onClick={() => {
+                  popupState.close();
+                  navigate('/admin/dashboard');
+                }}>
+                관리자
+              </MenuItem>
+            ),
+          ]
+        : [
+            <MenuItem
+              key="login"
+              onClick={() => {
+                popupState.close();
+                navigate('/login');
+              }}>
+              {logIn}
+            </MenuItem>,
+            <MenuItem
+              key="register"
+              onClick={() => {
+                popupState.close();
+                navigate('/register');
+              }}>
+              {register}
+            </MenuItem>,
+          ]}
     </Menu>
   );
 
