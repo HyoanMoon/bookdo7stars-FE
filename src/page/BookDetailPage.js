@@ -57,6 +57,7 @@ const BookDetailPage = () => {
               fullAddress={fullAddress}
               deliveryInfo={deliveryInfo}
               deliveryAddress={address}
+              user={user}
             />
             <Box mt={3}>
               <Box display="flex" alignItems="center" sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5', padding: '8px', borderRadius: '4px' }}>
