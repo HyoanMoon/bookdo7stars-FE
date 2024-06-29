@@ -48,9 +48,6 @@ const MyPageOrderList = () => {
   const fields = ['orderAll', 'orderNum', 'orderBookTitle'];
   const isMobile = useMediaQuery('(max-width:600px)');
 
-  // console.log('myOrderList', myOrderList);
-  // console.log('user', user);
-
   useEffect(() => {
     dispatch(orderActions.getMyOrder());
   }, [user, dispatch]);

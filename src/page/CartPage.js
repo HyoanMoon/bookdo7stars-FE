@@ -1,11 +1,25 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Typography, Box, Button, Checkbox, FormControlLabel, TableContainer, Table, TableBody, TableCell, TableRow, Paper } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  TableContainer,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Paper,
+  ThemeProvider,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import CartProductCard from '../components/CartProductCard';
 import OrderReceipt from '../components/OrderReceipt';
-import '../style/cart.style.css';
 import { cartActions } from '../action/cartActions';
-import { ThemeProvider } from '@mui/material/styles';
 import theme from '../theme';
 import { Link, useNavigate } from 'react-router-dom';
 import { currencyFormat } from '../utils/number';
@@ -17,6 +31,8 @@ const CartPage = () => {
   const { cartList, user, deliveryAddress } = useSelector((state) => state.cart);
   const [selectedItems, setSelectedItems] = useState([]); // 선택된 상품을 상태로 관리
   const [selectedSortOption, setSelectedSortOption] = useState('카트넣기순');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // 모바일 화면 체크
 
   const sortCartList = (list, sortOption) => {
     switch (sortOption) {
@@ -97,7 +113,16 @@ const CartPage = () => {
 
   const handleCheckout = () => {
     navigate('/payment', {
-      state: { selectedCartList, finalTotalPrice, discountAmount, discountRate, shippingFee, pointsEarned, grandTotal, deliveryAddress },
+      state: {
+        selectedCartList,
+        finalTotalPrice,
+        discountAmount,
+        discountRate,
+        shippingFee,
+        pointsEarned,
+        grandTotal,
+        deliveryAddress,
+      },
     });
   };
 
@@ -105,7 +130,19 @@ const CartPage = () => {
     <ThemeProvider theme={theme}>
       <Container>
         {/* 유저 정보 박스 */}
-        <Box display="flex" flexDirection="column" alignItems="flex-start" ml={10} mr={10} p={2} pl={4} bgcolor="#f5f5f5" borderRadius="25px">
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'flex-start',
+            ml: '10',
+            mr: '10',
+            p: '2',
+            pl: '4',
+            bgcolor: '#f5f5f5',
+            borderRadius: '25px',
+          }}>
           <Typography variant="h6" pb={1}>
             반갑습니다 {user?.userName?.toUpperCase()}님!
           </Typography>
@@ -117,28 +154,36 @@ const CartPage = () => {
             입니다.
           </Typography>
         </Box>
-        <Box mb={4} display="flex" justifyContent="flex-end" mr={10}>
-          <SortMenu selectedSortOption={selectedSortOption} onSelectSortOption={handleSortOptionSelect} />
-        </Box>
-        {/* 무료 배송 정보 헤더 */}
 
+        {/* 무료 배송 정보 헤더 */}
         <Box display="flex" justifyContent="space-between" mb={2} mt={2} alignItems="center" p={1}>
           <Typography variant="h6">{recommend}</Typography>
+          <Box>
+            <SortMenu selectedSortOption={selectedSortOption} onSelectSortOption={handleSortOptionSelect} />
+          </Box>
         </Box>
-
         <Box display="flex" justifyContent="space-between" mt={2}>
           <Box flex={3} mb={4}>
             {/* 상품 정보 헤더 아래 박스 */}
-            <Box display="flex" justifyContent="space-between" mb={2} alignItems="center" p={1} bgcolor="#f5f5f5" borderRadius="4px">
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              mb={2}
+              alignItems="center"
+              p={1}
+              bgcolor="#f5f5f5"
+              borderRadius="4px"
+              sx={{ overflowX: 'auto' }} // 가로 스크롤 적용
+            >
               <FormControlLabel
                 control={<Checkbox checked={selectedItems.length === cartList.length} onChange={handleSelectAll} color="primary" />}
-                label="전체 선택"
+                label={<Typography style={{ fontSize: isMobile ? '0.7rem' : '1rem' }}>전체 선택</Typography>}
               />
-              <Typography variant="h6">상품 정보</Typography>
-              <Typography variant="h6">수량</Typography>
-              <Typography variant="h6">상품 금액</Typography>
-              <Typography variant="h6">배송 정보</Typography>
-              <Typography variant="h6">삭제</Typography>
+              <Typography style={{ fontSize: isMobile ? '0.7rem' : '1rem' }}>상품{'\n'}정보</Typography>
+              <Typography style={{ fontSize: isMobile ? '0.7rem' : '1rem' }}>수량</Typography>
+              <Typography style={{ fontSize: isMobile ? '0.7rem' : '1rem' }}>상품{'\n'}금액</Typography>
+              <Typography style={{ fontSize: isMobile ? '0.7rem' : '1rem' }}>배송{'\n'}정보</Typography>
+              <Typography style={{ fontSize: isMobile ? '0.7rem' : '1rem' }}>삭제</Typography>
             </Box>
             {sortedCartList.length > 0 ? (
               sortedCartList.map((item) => (
@@ -162,56 +207,71 @@ const CartPage = () => {
               </Box>
             )}
 
-            {selectedCartList.length > 0 && (
-              <TableContainer component={Paper} sx={{ mt: 4, bgcolor: '#f5f5f5', borderRadius: '10px' }}>
-                <Table>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>
-                        <Typography variant="body1">총 상품 금액:</Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography variant="body1">₩{currencyFormat(selectedTotalPrice)}</Typography>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <Typography variant="body1">할인 금액:</Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography variant="body1">₩{currencyFormat(discountAmount)}</Typography>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <Typography variant="body1">최종 금액:</Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography variant="body1">₩{currencyFormat(finalTotalPrice)}</Typography>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <Typography variant="body1">배송비 (10만원 이상 구매 시 무료):</Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography variant="body1">₩{finalTotalPrice > 100000 ? 0 : currencyFormat(2500)}</Typography>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <Typography variant="body1">총 적립액 (구매 금액의 5%):</Typography>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography variant="body1">₩{currencyFormat(finalTotalPrice * 0.05)}</Typography>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
+            {selectedCartList.length > 0 && ( // 모바일이 아닐 때만 테이블 표시
+              <Box sx={{ mt: 4, ml: 4, flex: 1 }}>
+                <TableContainer component={Paper} sx={{ bgcolor: '#f5f5f5', borderRadius: '10px' }}>
+                  <Table>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>
+                          <Typography variant="body1">총 상품 금액:</Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography variant="body1">₩{currencyFormat(selectedTotalPrice)}</Typography>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>
+                          <Typography variant="body1">할인 금액:</Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography variant="body1">₩{currencyFormat(discountAmount)}</Typography>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>
+                          <Typography variant="body1">최종 금액:</Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography variant="body1">₩{currencyFormat(finalTotalPrice)}</Typography>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>
+                          <Typography variant="body1">배송비 (10만원 이상 구매 시 무료):</Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography variant="body1">₩{finalTotalPrice > 100000 ? 0 : currencyFormat(2500)}</Typography>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>
+                          <Typography variant="body1">총 적립액 (구매 금액의 5%):</Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography variant="body1">₩{currencyFormat(pointsEarned)}</Typography>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
             )}
           </Box>
-          <Box flex={1} ml={3}>
+          {!isMobile && ( // 모바일이 아닐 때 OrderReceipt를 테이블 옆에 표시
+            <Box ml={4} flex={1}>
+              <OrderReceipt
+                cartList={selectedCartList}
+                finalTotalPrice={finalTotalPrice}
+                hasSelectedItems={selectedItems.length > 0}
+                handleCheckout={handleCheckout}
+                sticky={true} // Sticky prop 추가
+              />
+            </Box>
+          )}
+        </Box>
+        {isMobile && ( // 모바일일 때 OrderReceipt를 테이블 아래로 이동
+          <Box mt={4}>
             <OrderReceipt
               cartList={selectedCartList}
               finalTotalPrice={finalTotalPrice}
@@ -220,7 +280,7 @@ const CartPage = () => {
               sticky={true} // Sticky prop 추가
             />
           </Box>
-        </Box>
+        )}
       </Container>
     </ThemeProvider>
   );

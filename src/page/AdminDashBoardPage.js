@@ -78,8 +78,6 @@ function AdminDashBoardPage() {
     }
   }, [orderData]);
 
-  console.log(orderData, 'orderData');
-
   const orderStatusData = {
     labels: ['Preparing', 'Shipping', 'Delivered', 'Refund'],
     datasets: [

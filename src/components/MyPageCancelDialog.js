@@ -4,7 +4,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Typography,
   Table,
   TableBody,
   TableCell,
@@ -25,9 +24,6 @@ const MyPageCancelDialog = ({ open, handleClose }) => {
   const { selectedRequest } = useSelector((state) => state.order);
   const { myOrderList } = useSelector((state) => state.order);
   const [bookTitle, setBookTitle] = useState(null);
-
-  // console.log('selectedRequest', selectedRequest);
-  // console.log('myOrderList', myOrderList[0]?.items);
 
   useEffect(() => {
     dispatch(orderActions.getMyOrder());

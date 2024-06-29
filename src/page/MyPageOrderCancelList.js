@@ -38,9 +38,6 @@ const MyPageOrderCancelList = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const isMobile = useMediaQuery('(max-width:600px)');
 
-  // console.log('myOrderList', myOrderList);
-  // console.log('myRequestList', myRequestList);
-
   useEffect(() => {
     dispatch(orderActions.getMyRequest());
     dispatch(orderActions.getMyOrder());

@@ -71,7 +71,7 @@ const MyPageCategory = () => {
       </Grid>
 
       {/* 모바일 카테고리 */}
-      <Grid container>
+      {/* <Grid container>
         <Grid item xs={6}>
           <Box>
             {myShoppingList?.map((item, index) => (
@@ -101,7 +101,8 @@ const MyPageCategory = () => {
             ))}
           </Box>
         </Grid>
-      </Grid>
+      </Grid> */}
+
       {/* 나의 쇼핑 */}
       <Grid container>
         <Box mt={2} p={2} pl={3} pr={9} border={1} borderRadius={4} borderColor="grey.400">
