@@ -1,7 +1,5 @@
-import { ClickAwayListener, Fade, Grid, Paper, Typography } from '@mui/material';
-import React, { useCallback } from 'react';
-import { bookActions } from '../action/bookActions';
-import { categoryActions } from '../action/categoryActions';
+import React from 'react';
+import { Box, Typography, Paper } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Popper } from '@mui/base';
@@ -13,130 +11,104 @@ const CategoryPopOver = ({ handlePopperClose, secondAllSubCategories, thirdAllSu
   const encodeCategoryPath = (path) => encodeURIComponent(path);
   const params = useParams();
 
-  const clickSub3Category = useCallback(
-    (firstCategory, secondCategory, thirdCategory) => {
-      const newPath = [firstCategory, secondCategory, thirdCategory];
-      let categoryPath = newPath.join('>');
-      categoryPath = '국내도서>' + categoryPath;
-      const categoryid = encodeCategoryPath(categoryPath);
-      navigate(`/books/all/category/${categoryid}`);
-      handlePopperClose();
-    },
-    [navigate, handlePopperClose],
-  );
+  const clickSub3Category = (firstCategory, secondCategory, thirdCategory) => {
+    const newPath = [firstCategory, secondCategory, thirdCategory];
+    let categoryPath = newPath.join('>');
+    categoryPath = '국내도서>' + categoryPath;
+    const categoryid = encodeCategoryPath(categoryPath);
+    navigate(`/books/all/category/${categoryid}`);
+    handlePopperClose();
+  };
 
-  const clickSub2Category = useCallback(
-    (firstCategory, secondCategory) => {
-      const newPath = [firstCategory, secondCategory];
-      let categoryPath = newPath.join('>');
-      categoryPath = '국내도서>' + categoryPath;
-      const categoryid = encodeCategoryPath(categoryPath);
-      navigate(`/books/all/category/${categoryid}`);
-      handlePopperClose();
-    },
-    [navigate, handlePopperClose],
-  );
+  const clickSub2Category = (firstCategory, secondCategory) => {
+    const newPath = [firstCategory, secondCategory];
+    let categoryPath = newPath.join('>');
+    categoryPath = '국내도서>' + categoryPath;
+    const categoryid = encodeCategoryPath(categoryPath);
+    navigate(`/books/all/category/${categoryid}`);
+    handlePopperClose();
+  };
 
-  const clickSubCategory = useCallback(
-    (firstCategory) => {
-      const newPath = [firstCategory];
-      let categoryPath = newPath.join('>');
-      categoryPath = '국내도서>' + categoryPath;
-      const categoryid = encodeCategoryPath(categoryPath);
-      navigate(`/books/all/category/${categoryid}`);
-      handlePopperClose();
-    },
-    [navigate, handlePopperClose],
-  );
+  const clickSubCategory = (firstCategory) => {
+    const newPath = [firstCategory];
+    let categoryPath = newPath.join('>');
+    categoryPath = '국내도서>' + categoryPath;
+    const categoryid = encodeCategoryPath(categoryPath);
+    navigate(`/books/all/category/${categoryid}`);
+    handlePopperClose();
+  };
 
   return (
     <Popper id={id} open={open} anchorEl={anchorEl} placement="bottom-start" transition style={{ zIndex: 1500 }}>
       {({ TransitionProps }) => (
-        <Fade {...TransitionProps} timeout={350}>
-          <Paper
-            sx={{
-              width: '100%',
-              maxWidth: '1000px',
-              maxHeight: '500px',
-              overflowY: 'auto',
-              padding: '10px',
-              boxShadow: 3,
-              borderRadius: '8px',
-              minWidth: '200px',
-              minHeight: '200px',
-              backgroundColor: 'background.paper',
-              '@media (max-width: 600px)': {
-                maxWidth: '90%',
-                padding: '5px',
-              },
-            }}
-            {...TransitionProps}>
-            <ClickAwayListener onClickAway={() => handlePopperClose()}>
-              <Grid container spacing={2}>
-                {Object.keys(secondAllSubCategories).map((firstCategory, index) => (
-                  <Grid item xs={12} key={index} sx={{ paddingBottom: '5px' }}>
+        <Paper
+          sx={{
+            width: '100%',
+            maxWidth: '1000px',
+            maxHeight: '500px',
+            overflowY: 'auto',
+            padding: '10px',
+            boxShadow: 3,
+            borderRadius: '8px',
+            minWidth: '200px',
+            minHeight: '200px',
+            backgroundColor: 'background.paper',
+            '@media (max-width: 600px)': {
+              maxWidth: '90%',
+              padding: '5px',
+            },
+          }}
+          {...TransitionProps}>
+          <Box>
+            {Object.keys(secondAllSubCategories).map((firstCategory, index) => (
+              <Box key={index} sx={{ paddingBottom: '10px' }}>
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  onClick={() => clickSubCategory(firstCategory)}
+                  sx={{
+                    cursor: 'pointer',
+                    '&:hover': {
+                      color: 'primary.main',
+                    },
+                  }}>
+                  <strong>{firstCategory}</strong>
+                </Typography>
+                {secondAllSubCategories[firstCategory].map((secondCategory, idx) => (
+                  <Box key={idx} sx={{ paddingLeft: '10px', paddingBottom: '10px' }}>
                     <Typography
-                      variant="h6"
+                      variant="subtitle1"
                       gutterBottom
-                      onClick={() => clickSubCategory(firstCategory)}
+                      onClick={() => clickSub2Category(firstCategory, secondCategory)}
                       sx={{
                         cursor: 'pointer',
-                        display: 'inline-block',
                         '&:hover': {
                           color: 'primary.main',
                         },
                       }}>
-                      <strong>{firstCategory}</strong>
+                      <strong>{secondCategory}</strong>
                     </Typography>
-                    <Grid container spacing={1}>
-                      {secondAllSubCategories[firstCategory].map((secondCategory, idx) => (
-                        <Grid
-                          item
-                          xs={12}
-                          key={idx}
-                          sx={{
-                            paddingBottom: '5px',
-                          }}>
-                          <Typography
-                            variant="subtitle1"
-                            gutterBottom
-                            onClick={() => clickSub2Category(firstCategory, secondCategory)}
-                            sx={{
-                              cursor: 'pointer',
-                              display: 'inline-block',
-                              '&:hover': {
-                                color: 'primary.main',
-                              },
-                            }}>
-                            <strong>{secondCategory}</strong>
-                          </Typography>
-                          <Grid container spacing={1}>
-                            {thirdAllSubCategories[firstCategory][secondCategory].map((thirdCategory, idx) => (
-                              <Grid item xs={6} sm={4} md={3} key={idx}>
-                                <Typography
-                                  variant="body2"
-                                  onClick={() => clickSub3Category(firstCategory, secondCategory, thirdCategory)}
-                                  sx={{
-                                    cursor: 'pointer',
-                                    display: 'inline-block',
-                                    '&:hover': {
-                                      color: 'primary.main',
-                                    },
-                                  }}>
-                                  {thirdCategory}
-                                </Typography>
-                              </Grid>
-                            ))}
-                          </Grid>
-                        </Grid>
-                      ))}
-                    </Grid>
-                  </Grid>
+                    {thirdAllSubCategories[firstCategory][secondCategory].map((thirdCategory, idx) => (
+                      <Typography
+                        key={idx}
+                        variant="body2"
+                        onClick={() => clickSub3Category(firstCategory, secondCategory, thirdCategory)}
+                        sx={{
+                          cursor: 'pointer',
+                          paddingLeft: '20px',
+                          '&:hover': {
+                            color: 'primary.main',
+                          },
+                        }}>
+                        {thirdCategory}
+                      </Typography>
+                    ))}
+                  </Box>
                 ))}
-              </Grid>
-            </ClickAwayListener>
-          </Paper>
-        </Fade>
+              </Box>
+            ))}
+          </Box>
+        </Paper>
       )}
     </Popper>
   );
