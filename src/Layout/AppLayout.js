@@ -50,7 +50,7 @@ const AppLayout = ({ children }) => {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#3d643d',
+            backgroundColor: '#035036',
             height: '60px',
             p: 1,
             textAlign: 'center',

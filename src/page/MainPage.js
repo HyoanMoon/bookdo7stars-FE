@@ -1,15 +1,17 @@
 import React from 'react';
 import { Box, Container, useMediaQuery } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import BooksCarousel from '../components/BooksCarousel/BooksCarousel';
 import BookContainer from '../components/BookContainer/BookContainer';
 import CarouselSlide from '../components/CarouselSlide';
 import { getCategories } from '../_helper/getCategories';
+import { bookActions } from '../action/bookActions';
 
 const MainPage = () => {
   const { bookList } = useSelector((state) => state.book);
   const isMobile = useMediaQuery('(max-width: 600px)');
+  const dispatch = useDispatch();
 
   if (!bookList) {
     return null;
@@ -18,7 +20,8 @@ const MainPage = () => {
   const blogBestBooks = bookList.filter((book) => book.queryType === 'BlogBest');
   const bestSeller = bookList.filter((book) => book.queryType === 'BestSeller');
   const newSpecialBooks = bookList.filter((book) => book.queryType === 'ItemNewSpecial');
-  const newAllBooks = bookList.filter((book) => book.queryType === 'ItemNewAll');
+  const newAllBooks = bookList.filter((book) => book.queryType === 'ItemNewSpecial');
+  console.log(bookList.filter((book) => book.queryType === 'BlogBest'));
 
   const newAllBooksCategories = getCategories(newAllBooks);
   const bestSellerCategories = getCategories(bestSeller);

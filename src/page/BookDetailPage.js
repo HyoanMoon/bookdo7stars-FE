@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Container, Grid, Box, IconButton } from '@mui/material';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import BookImage from '../components/BookDetailPage/Book.image';
+import BookImage from '../components/BookDetailPage/BookImage';
 import BookBasicInfo from '../components/BookDetailPage/BookBasicInfo';
 import BookToCart from '../components/BookDetailPage/BookToCart';
 // import BookDetailInfo from '../components/BookDetailPage/BookDetailInfo';
