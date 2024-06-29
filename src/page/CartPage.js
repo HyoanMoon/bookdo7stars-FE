@@ -1,11 +1,27 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Typography, Box, Button, Checkbox, FormControlLabel, TableContainer, Table, TableBody, TableCell, TableRow, Paper } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  TableContainer,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Paper,
+  Grid,
+  useMediaQuery,
+  Hidden,
+} from '@mui/material';
 import CartProductCard from '../components/CartProductCard';
 import OrderReceipt from '../components/OrderReceipt';
 import '../style/cart.style.css';
 import { cartActions } from '../action/cartActions';
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider, useTheme } from '@mui/material/styles';
 import theme from '../theme';
 import { Link, useNavigate } from 'react-router-dom';
 import { currencyFormat } from '../utils/number';
@@ -15,8 +31,11 @@ const CartPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { cartList, user, deliveryAddress } = useSelector((state) => state.cart);
-  const [selectedItems, setSelectedItems] = useState([]); // 선택된 상품을 상태로 관리
+  const [selectedItems, setSelectedItems] = useState([]);
   const [selectedSortOption, setSelectedSortOption] = useState('카트넣기순');
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const sortCartList = (list, sortOption) => {
     switch (sortOption) {
@@ -41,14 +60,14 @@ const CartPage = () => {
 
   const handleSelectAll = (event) => {
     if (event.target.checked) {
-      setSelectedItems(cartList.map((item) => item._id)); // 전체 선택
+      setSelectedItems(cartList.map((item) => item._id));
     } else {
-      setSelectedItems([]); // 전체 선택 해제
+      setSelectedItems([]);
     }
   };
 
   const handleSelectItem = (itemId) => {
-    setSelectedItems((prevState) => (prevState.includes(itemId) ? prevState.filter((id) => id !== itemId) : [...prevState, itemId])); // 선택 해제 또는 추가
+    setSelectedItems((prevState) => (prevState.includes(itemId) ? prevState.filter((id) => id !== itemId) : [...prevState, itemId]));
   };
 
   const handleSortOptionSelect = (option) => {
@@ -104,49 +123,89 @@ const CartPage = () => {
   return (
     <ThemeProvider theme={theme}>
       <Container>
-        {/* 유저 정보 박스 */}
-        <Box display="flex" flexDirection="column" alignItems="flex-start" ml={10} mr={10} p={2} pl={4} bgcolor="#f5f5f5" borderRadius="25px">
-          <Typography variant="h6" pb={1}>
-            반갑습니다 {user?.userName?.toUpperCase()}님!
-          </Typography>
-          <Typography variant="body1">
-            {user?.userName?.toUpperCase()}님의 등급은{' '}
-            <Box component="span" fontWeight="bold" color="primary">
-              {user?.level?.toUpperCase()}
-            </Box>{' '}
-            입니다.
-          </Typography>
-        </Box>
-        <Box mb={4} display="flex" justifyContent="flex-end" mr={10}>
-          <SortMenu selectedSortOption={selectedSortOption} onSelectSortOption={handleSortOptionSelect} />
-        </Box>
-        {/* 무료 배송 정보 헤더 */}
-
-        <Box display="flex" justifyContent="space-between" mb={2} mt={2} alignItems="center" p={1}>
-          <Typography variant="h6">{recommend}</Typography>
-        </Box>
-
-        <Box display="flex" justifyContent="space-between" mt={2}>
-          <Box flex={3} mb={4}>
-            {/* 상품 정보 헤더 아래 박스 */}
-            <Box display="flex" justifyContent="space-between" mb={2} alignItems="center" p={1} bgcolor="#f5f5f5" borderRadius="4px">
+        <Grid container spacing={2} justifyContent="center" alignItems="flex-start">
+          <Grid item xs={12} sm={10} md={8}>
+            <Box display="flex" flexDirection="column" alignItems="flex-start" p={2} bgcolor="#f5f5f5" borderRadius="25px">
+              <Typography variant="h6" pb={1}>
+                반갑습니다 {user?.userName?.toUpperCase()}님!
+              </Typography>
+              <Typography variant="body1">
+                {user?.userName?.toUpperCase()}님의 등급은{' '}
+                <Box component="span" fontWeight="bold" color="primary">
+                  {user?.level?.toUpperCase()}
+                </Box>{' '}
+                입니다.
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={10} md={8} display="flex" justifyContent="flex-end">
+            <SortMenu selectedSortOption={selectedSortOption} onSelectSortOption={handleSortOptionSelect} />
+          </Grid>
+          <Grid item xs={12} sm={10} md={8} display="flex" justifyContent="space-between" alignItems="center">
+            <Typography variant="h6">{recommend}</Typography>
+          </Grid>
+          <Grid item xs={12} sm={10} md={8}>
+            <Box display="flex" justifyContent="space-between" alignItems="center" p={1} bgcolor="#f5f5f5" borderRadius="4px">
               <FormControlLabel
                 control={<Checkbox checked={selectedItems.length === cartList.length} onChange={handleSelectAll} color="primary" />}
-                label="전체 선택"
+                label={<Typography style={{ fontSize: isMobile ? '0.7rem' : '1rem' }}>전체 선택</Typography>}
               />
-              <Typography variant="h6">상품 정보</Typography>
-              <Typography variant="h6">수량</Typography>
-              <Typography variant="h6">상품 금액</Typography>
-              <Typography variant="h6">배송 정보</Typography>
-              <Typography variant="h6">삭제</Typography>
+              <Hidden smUp>
+                <Typography variant="h6" style={{ fontSize: '0.7rem', whiteSpace: 'pre-line', textAlign: 'center', marginLeft: '4px' }}>
+                  상품
+                  {'\n'}
+                  정보
+                </Typography>
+              </Hidden>
+              <Hidden smDown>
+                <Typography variant="h6" style={{ fontSize: '1rem', marginLeft: '8px' }}>
+                  상품 정보
+                </Typography>
+              </Hidden>
+              {/* <Typography variant="h6" style={{ fontSize: isMobile ? '0.7rem' : '1rem', marginLeft: isMobile ? '4px' : '8px' }}>
+                상품 정보
+              </Typography> */}
+              <Typography variant="h6" style={{ fontSize: isMobile ? '0.7rem' : '1rem', marginLeft: isMobile ? '4px' : '8px' }}>
+                수량
+              </Typography>
+              <Hidden smUp>
+                <Typography variant="h6" style={{ fontSize: '0.7rem', whiteSpace: 'pre-line', textAlign: 'center', marginLeft: '4px' }}>
+                  상품
+                  {'\n'}
+                  금액
+                </Typography>
+              </Hidden>
+              <Hidden smDown>
+                <Typography variant="h6" style={{ fontSize: '1rem', marginLeft: '8px' }}>
+                  상품 금액
+                </Typography>
+              </Hidden>
+              {/* <Typography variant="h6" style={{ fontSize: isMobile ? '0.7rem' : '1rem', marginLeft: isMobile ? '4px' : '8px' }}>
+                상품 금액
+              </Typography> */}
+              <Hidden smUp>
+                <Typography variant="h6" style={{ fontSize: '0.7rem', whiteSpace: 'pre-line', textAlign: 'center', marginLeft: '4px' }}>
+                  배송
+                  {'\n'}
+                  정보
+                </Typography>
+              </Hidden>
+              <Hidden smDown>
+                <Typography variant="h6" style={{ fontSize: '1rem', marginLeft: '8px' }}>
+                  배송 정보
+                </Typography>
+              </Hidden>
+              <Typography variant="h6" style={{ fontSize: isMobile ? '0.7rem' : '1rem', marginLeft: isMobile ? '4px' : '8px' }}>
+                삭제
+              </Typography>
             </Box>
             {sortedCartList.length > 0 ? (
               sortedCartList.map((item) => (
                 <CartProductCard
                   item={item}
                   key={item._id}
-                  isSelected={selectedItems.includes(item._id)} // 선택된 상태 전달
-                  onSelectItem={handleSelectItem} // 선택 상태 변경 함수 전달
+                  isSelected={selectedItems.includes(item._id)}
+                  onSelectItem={handleSelectItem}
                   userLevel={user.level}
                   deliveryAddress={deliveryAddress}
                 />
@@ -161,8 +220,9 @@ const CartPage = () => {
                 </Button>
               </Box>
             )}
-
-            {selectedCartList.length > 0 && (
+          </Grid>
+          {selectedCartList.length > 0 && (
+            <Grid item xs={12} sm={10} md={8}>
               <TableContainer component={Paper} sx={{ mt: 4, bgcolor: '#f5f5f5', borderRadius: '10px' }}>
                 <Table>
                   <TableBody>
@@ -209,18 +269,18 @@ const CartPage = () => {
                   </TableBody>
                 </Table>
               </TableContainer>
-            )}
-          </Box>
-          <Box flex={1} ml={3}>
+            </Grid>
+          )}
+          <Grid item xs={12} sm={10} md={8}>
             <OrderReceipt
               cartList={selectedCartList}
               finalTotalPrice={finalTotalPrice}
               hasSelectedItems={selectedItems.length > 0}
               handleCheckout={handleCheckout}
-              sticky={true} // Sticky prop 추가
+              sticky={true}
             />
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
       </Container>
     </ThemeProvider>
   );
