@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box, Typography } from '@mui/material';
-import { Line, Doughnut, Bar } from 'react-chartjs-2';
+import { Line, Pie, Bar, Doughnut } from 'react-chartjs-2';
 import 'chart.js/auto';
 import '../style/adminDashboardPageStyles.css';
 import AdminDashboardCard from '../components/AdminDashboardCard';
@@ -17,13 +17,6 @@ const theme = createTheme({
     fontFamily: 'IBM Plex Sans KR, sans-serif',
   },
 });
-
-const StatusCard = ({ title, count }) => (
-  <Paper style={{ padding: '16px', textAlign: 'center' }}>
-    <Typography variant="h6">{title}</Typography>
-    <Typography variant="h4">{count}</Typography>
-  </Paper>
-);
 
 function AdminDashBoardPage() {
   const dispatch = useDispatch();
@@ -210,22 +203,40 @@ function AdminDashBoardPage() {
   }).length;
   const inquiries = contacts.length;
 
+  const totalTasks = newOrders + refundOrders + pendingContacts + newSignups + inquiries;
+
+  const taskItems = [
+    { title: '신규 주문', count: newOrders },
+    { title: '환불 주문', count: refundOrders },
+    { title: '답변 대기 문의', count: pendingContacts },
+    { title: '신규 가입', count: newSignups },
+    { title: '문의', count: inquiries },
+  ];
+
   return (
     <ThemeProvider theme={theme}>
       <div className="root">
         <Container className="containerStyled" maxWidth="lg">
           <Box mb={4}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Box display="flex" justifyContent="space-between">
-                  <StatusCard title="신규 주문 건수" count={newOrders} />
-                  <StatusCard title="환불 주문 건수" count={refundOrders} />
-                  <StatusCard title="답변 대기 문의 건수" count={pendingContacts} />
-                  <StatusCard title="신규 가입 수" count={newSignups} />
-                  <StatusCard title="문의 수" count={inquiries} />
-                </Box>
+            <Paper elevation={3} sx={{ padding: 2 }}>
+              <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                  오늘의 할일
+                </Typography>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'red' }}>
+                  {totalTasks}
+                </Typography>
+              </Box>
+              <Grid container spacing={2}>
+                {taskItems.map((item, index) => (
+                  <Grid item key={index}>
+                    <Typography variant="body1">
+                      {item.title} {item.count}
+                    </Typography>
+                  </Grid>
+                ))}
               </Grid>
-            </Grid>
+            </Paper>
           </Box>
           <Grid container spacing={3}>
             {/* 매출 및 주문 상태 */}
