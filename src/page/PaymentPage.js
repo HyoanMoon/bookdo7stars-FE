@@ -226,9 +226,9 @@ const PaymentPage = () => {
                   return (
                     <TableRow key={item._id}>
                       <TableCell component="th" scope="row" sx={{ padding: isMobile ? '4px' : '16px' }}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <Box sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: 'center' }}>
                           <img src={item.bookId.cover} alt={item.bookId.title} width={isMobile ? 30 : 50} />
-                          <Typography variant="body2" sx={{ fontSize: isMobile ? '0.7rem' : '1rem' }}>
+                          <Typography variant="body2" sx={{ fontSize: isMobile ? '0.7rem' : '1rem', padding: '4px' }}>
                             {item.bookId.title}
                           </Typography>
                         </Box>
