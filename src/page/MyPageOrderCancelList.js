@@ -33,9 +33,6 @@ const MyPageOrderCancelList = () => {
   const [sortOrder, setSortOrder] = useState('recent');
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  // console.log('myOrderList', myOrderList);
-  // console.log('myRequestList', myRequestList);
-
   useEffect(() => {
     dispatch(orderActions.getMyRequest());
     dispatch(orderActions.getMyOrder());

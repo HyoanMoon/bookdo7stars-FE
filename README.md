@@ -1,70 +1,65 @@
-# Getting Started with Create React App
+# 📚북두칠성
+## 목차
+- [👀 프로젝트 소개](#프로젝트-소개)
+- [👨‍👩‍👧‍👦팀 소개](#팀-소개)
+- [🛠 기술 스택](#기술-스택)
+- [🔁 flow](#flow)
+- [💻구현 기능 & 화면 구성](#구현-기능--화면-구성)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+<a name="프로젝트-소개"></a>
+## 북두칠성
 
-In the project directory, you can run:
 
-### `npm start`
+<a name="팀-소개"></a>
+### 👥 팀 소개
+|  팀원  |        역할        |                담당 파트                 |                  깃허브 주소                  |
+| :----: | :----------------: | :--------------------------------------: | :-------------------------------------------: |
+| 근선 | 프로젝트 오너  |           마이페이지, 어드민 상품관리 및 주문관리          |  [geunseonkim](https://github.com/geunseonkim)  |
+| 효안 |   스크럼 마스터    | 장바구니,결제,어드민대시보드  |   [HyoanMoon](https://github.com/HyoanMoon)   |
+| 메이 |        팀원        |    메인배너, 푸터, 통합 검색, 검색결과 페이지, 로그인/회원가입, 디테일페이지, 연락처페이지    | [MayHyeyeonKim](https://github.com/MayHyeyeonKim) |
+|  헌준  |        팀원        | 메인, 깃헙, 데이타베이스, 카테고리, 헤더, 네브바, 북카드, 필터, 검색,   |    [hunjoonrhee](https://github.com/hunjoonrhee)    |
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 프로젝트 소개
+<table>
+  <tr>
+    <td>
+      <img src="" alt="북두칠성로고" width="100" />
+    </td>
+    <td>
+      - URL <a href="https://book-do-7-stars.netlify.app/" target="_blank">바로가기</a><br/>
+      - Figma <a href="https://www.figma.com/board/zrp9Df7zWs9mTP8ZsAxFiC/7CodeCrew?node-id=0-1&t=JvYN792QJ4msDyGj-0" target="_blank">바로가기</a>
+    </td>
+  </tr>
+</table>
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### 🗓️ 개발 기간 및 진행방식
 
-### `npm run build`
+- 개발 기간: 2024.06.16 ~ 2024.06.30
+- 진행 방식: 스탠드업 미팅, 2주 
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### ⛏ 기술스택 및 개발 환경
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+ <img width="570" alt="기술스택" src="">
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 서비스 소개
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### 주제
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 📱 구현 (모바일 버전)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 카테고리 및 검색 페이지
 
-## Learn More
+### 디테일 페이지
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🖥️ 반응형 구현 (데스크탑버전)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

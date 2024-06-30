@@ -43,9 +43,6 @@ const MyPageOrderList = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const fields = ['orderAll', 'orderNum', 'orderBookTitle'];
 
-  // console.log('myOrderList', myOrderList);
-  // console.log('user', user);
-
   useEffect(() => {
     dispatch(orderActions.getMyOrder());
   }, [user, dispatch]);

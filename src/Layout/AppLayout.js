@@ -19,10 +19,8 @@ const AppLayout = ({ children }) => {
   const isMobile = useMediaQuery('(max-width:600px)');
 
   useEffect(() => {
-    if (user) {
-      dispatch(userActions.loginWithToken());
-    }
-  }, [dispatch, user]);
+    dispatch(userActions.loginWithToken());
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -50,7 +48,7 @@ const AppLayout = ({ children }) => {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#3d643d',
+            backgroundColor: '#035036',
             height: '60px',
             p: 1,
             textAlign: 'center',

@@ -1,5 +1,7 @@
 import React from 'react';
 import { Box, Typography, Link } from '@mui/material';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { FaGithub, FaTwitter, FaInstagram } from 'react-icons/fa'; // Importing icons
 
 const Footer = () => {
   return (
@@ -13,12 +15,12 @@ const Footer = () => {
           marginTop: '20px',
           bottom: '0',
           width: '100%',
-          minHeight: '300px', // Set a minimum height
+          minHeight: '300px',
           '@media (max-width:600px)': {
             padding: '10px',
-            minHeight: '300px', // Adjust height for mobile
+            minHeight: '300px',
           },
-          overflow: 'auto', // Allow scrolling if content overflows
+          overflow: 'auto',
         }}>
         <Box
           sx={{
@@ -30,7 +32,7 @@ const Footer = () => {
           }}>
           <Box
             sx={{
-              order: { xs: 1, sm: 1 }, // Company section order
+              order: { xs: 1, sm: 1 },
               p: { xs: 1, sm: 2 },
               flex: 1,
             }}>
@@ -39,14 +41,14 @@ const Footer = () => {
               sx={{
                 mb: 3,
                 fontWeight: 'bold',
-                fontSize: { xs: '1rem', sm: '1.25rem' }, // Reduce font size for mobile
+                fontSize: { xs: '1rem', sm: '1.25rem' },
               }}>
               Company
             </Typography>
             <Typography
               variant="body2"
               sx={{
-                fontSize: { xs: '0.875rem', sm: '1rem' }, // Reduce font size for mobile
+                fontSize: { xs: '0.875rem', sm: '1rem' },
               }}>
               About Us
               <br />
@@ -57,7 +59,7 @@ const Footer = () => {
           </Box>
           <Box
             sx={{
-              order: { xs: 2, sm: 2 }, // Contact section order
+              order: { xs: 2, sm: 2 },
               p: { xs: 1, sm: 2 },
               flex: 1,
             }}>
@@ -66,14 +68,14 @@ const Footer = () => {
               sx={{
                 mb: 3,
                 fontWeight: 'bold',
-                fontSize: { xs: '1rem', sm: '1.25rem' }, // Reduce font size for mobile
+                fontSize: { xs: '1rem', sm: '1.25rem' },
               }}>
               Contact
             </Typography>
             <Typography
               variant="body2"
               sx={{
-                fontSize: { xs: '0.875rem', sm: '1rem' }, // Reduce font size for mobile
+                fontSize: { xs: '0.875rem', sm: '1rem' },
               }}>
               Email: bookdo7stars@book.com
               <br />
@@ -82,38 +84,54 @@ const Footer = () => {
               <Link href="/contact" color="inherit" underline="none">
                 Contact Us
               </Link>
+              <Box
+                sx={{
+                  display: { xs: 'flex', sm: 'none' },
+                  justifyContent: 'center',
+                  mt: 2,
+                }}>
+                <Link href="https://github.com/7CodeCrew" color="inherit" underline="none" sx={{ mx: 1 }}>
+                  <FaGithub size={24} />
+                </Link>
+                <Link href="https://twitter.com/7CodeCrew" color="inherit" underline="none" sx={{ mx: 1 }}>
+                  <FaTwitter size={24} />
+                </Link>
+                <Link href="https://instagram.com/7CodeCrew" color="inherit" underline="none" sx={{ mx: 1 }}>
+                  <FaInstagram size={24} />
+                </Link>
+              </Box>
             </Typography>
           </Box>
           <Box
             sx={{
-              order: { xs: 3, sm: 3 }, // Follow Us section order
+              order: { xs: 3, sm: 3 },
               p: { xs: 1, sm: 2 },
               flex: 1,
-              display: { xs: 'none', sm: 'block' }, // Hide Follow Us section on mobile
+              display: { xs: 'none', sm: 'block' },
             }}>
             <Typography
               variant="h6"
               sx={{
                 mb: 3,
                 fontWeight: 'bold',
-                fontSize: { xs: '1rem', sm: '1.25rem' }, // Reduce font size for mobile
+                fontSize: { xs: '1rem', sm: '1.25rem' },
               }}>
               Follow Us
             </Typography>
             <Typography
               variant="body2"
               sx={{
-                fontSize: { xs: '0.875rem', sm: '1rem' }, // Reduce font size for mobile
+                fontSize: { xs: '0.875rem', sm: '1rem' },
               }}>
               <Link href="https://github.com/7CodeCrew" color="inherit" underline="none">
                 Github
               </Link>
               <br />
-              <Link href="https://github.com/7CodeCrew" color="inherit" underline="none">
+              <Link href="https://twitter.com/7CodeCrew" color="inherit" underline="none">
                 Twitter
               </Link>
               <br />
-              <Link href="/contact2" color="inherit" underline="none">
+              <Link href="https://instagram.com/7CodeCrew" color="inherit" underline="none">
                 Instagram
               </Link>
             </Typography>

@@ -23,7 +23,6 @@ const NavToolbar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -251,7 +250,7 @@ const NavToolbar = () => {
           sx={{ cursor: 'pointer', padding: 1 }}>
           <img src="/logo.png" alt="로고 이미지" style={{ color: '#d3ddbd', borderRadius: '3px', height: isMobile ? '4rem' : isTablet ? '5rem' : '7rem' }} />
         </Box>
-        <Box sx={{ width: isMobile ? '90%' : isTablet ? '70%' : '60%', marginY: isMobile ? 2 : isTablet ? 1 : 0 }}>
+        <Box sx={{ width: isMobile ? '100%' : isTablet ? '80%' : '70%', marginY: isMobile ? 2 : isTablet ? 1 : 0 }}>
           <SearchBook
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
@@ -269,7 +268,7 @@ const NavToolbar = () => {
                   <IconButton color="primary" {...bindTrigger(popupState)}>
                     <PersonIcon />
                   </IconButton>
-                  <IconButton color="primary" onClick={() => navigate('/cart')}>
+                  <IconButton color="primary" onClick={handleCartClick}>
                     <Badge badgeContent={cartItemCount || 0} color="secondary">
                       <ShoppingCartIcon />
                     </Badge>

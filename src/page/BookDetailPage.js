@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Container, Grid, Box, IconButton } from '@mui/material';
+import { Container, Grid, Box, IconButton, useMediaQuery } from '@mui/material';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import BookImage from '../components/BookDetailPage/Book.image';
+import BookImage from '../components/BookDetailPage/BookImage';
 import BookBasicInfo from '../components/BookDetailPage/BookBasicInfo';
 import BookToCart from '../components/BookDetailPage/BookToCart';
-// import BookDetailInfo from '../components/BookDetailPage/BookDetailInfo';
 import AddressChange from '../components/BookDetailPage/AddressChange';
 import DeliveryEstimate from '../components/BookDetailPage/DeliveryEstimate';
 import { useDispatch, useSelector } from 'react-redux';
 import { bookActions } from '../action/bookActions';
 import Info3 from '../components/BookDetailPage/Info3';
-// import ClipLoader from 'react-spinners/ClipLoader';
 import { favoriteActions } from '../action/favoriteActions';
 
 const BookDetailPage = () => {
@@ -20,9 +18,9 @@ const BookDetailPage = () => {
   const { fullAddress, deliveryInfo } = useSelector((state) => state.order);
   const { selectedBook, getBooksLoading, otherBooksByAuthor } = useSelector((state) => state.book);
   const { bookid } = useParams();
-  const navigate = useNavigate();
   const { favorite } = useSelector((state) => state.favorite);
   const { user } = useSelector((state) => state.user);
+  const isMobile = useMediaQuery('(max-width: 600px)');
 
   useEffect(() => {
     if (user) {
@@ -59,6 +57,7 @@ const BookDetailPage = () => {
               fullAddress={fullAddress}
               deliveryInfo={deliveryInfo}
               deliveryAddress={address}
+              user={user}
             />
             <Box mt={3}>
               <Box display="flex" alignItems="center" sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5', padding: '8px', borderRadius: '4px' }}>
@@ -73,30 +72,32 @@ const BookDetailPage = () => {
             <Info3 selectedBook={selectedBook} otherBooksByAuthor={otherBooksByAuthor} />
           </Grid>
         </Grid>
-        <Box
-          sx={{
-            position: 'fixed',
-            bottom: 40,
-            right: 40,
-            zIndex: 1000,
-          }}>
-          <IconButton
-            onClick={scrollToTop}
+        {!isMobile && (
+          <Box
             sx={{
-              backgroundColor: '#608020',
-              color: '#fff',
-              '&:hover': { backgroundColor: '#d3ddbd' },
-              borderRadius: '50%',
-              width: 56,
-              height: 56,
-              '@media (max-width:600px)': {
-                width: 40, // Smaller width for mobile
-                height: 40, // Smaller height for mobile
-              },
+              position: 'fixed',
+              bottom: 40,
+              right: 40,
+              zIndex: 1000,
             }}>
-            <ArrowUpwardIcon />
-          </IconButton>
-        </Box>
+            <IconButton
+              onClick={scrollToTop}
+              sx={{
+                backgroundColor: 'primary.main',
+                color: '#fff',
+                '&:hover': { backgroundColor: '#d3ddbd' },
+                borderRadius: '50%',
+                width: 56,
+                height: 56,
+                '@media (max-width:600px)': {
+                  width: 40, // Smaller width for mobile
+                  height: 40, // Smaller height for mobile
+                },
+              }}>
+              <ArrowUpwardIcon />
+            </IconButton>
+          </Box>
+        )}
       </Container>
     </Box>
   );

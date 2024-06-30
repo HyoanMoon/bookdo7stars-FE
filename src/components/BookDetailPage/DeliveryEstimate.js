@@ -1,6 +1,7 @@
 import React from 'react';
+import { Typography } from '@mui/material';
 
-const DeliveryEstimate = ({ address }) => {
+const DeliveryEstimate = ({ address, isMobile }) => {
   const regionsFast = ['서울', '경기', '인천', '부산'];
   const regionsRegular = ['강원', '경북', '경남', '제주', '전남', '전북', '광주', '대구', '울산', '세종', '대전', '충남', '충북'];
 
@@ -18,16 +19,11 @@ const DeliveryEstimate = ({ address }) => {
 
   return (
     <div>
-      <p
-        style={{
-          ...deliveryStyle,
-          backgroundColor: 'white',
-          padding: '10px',
-          marginTop: '10px',
-          fontSize: 'small',
-        }}>
+      <Typography
+        variant="body2"
+        sx={{ ...deliveryStyle, backgroundColor: 'white', padding: '10px', marginTop: '10px', fontSize: isMobile ? '0.7rem' : '1rem' }}>
         {deliveryText}
-      </p>
+      </Typography>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Typography, Link, Container, Grid, Paper } from '@mui/material';
+import { Box, Typography, Link, Container, Grid } from '@mui/material';
 import MyPageCategory from '../components/MyPageCategory';
 import { useDispatch, useSelector } from 'react-redux';
 import { commentActions } from '../action/commentAction';
@@ -8,8 +8,6 @@ const MyPageMyReview = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { userComment } = useSelector((state) => state.comment);
-
-  // console.log('userComment', userComment);
 
   const comments = userComment?.comment || [];
 
