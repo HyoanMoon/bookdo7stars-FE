@@ -2,6 +2,7 @@ import React from 'react';
 import { Paper, Table, TableBody, TableContainer, TableHead, TablePagination, TableRow, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import { currencyFormat } from '../utils/number';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -24,7 +25,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const AdminPageProductTable = ({ bookList, bookTableHead, handleOpenEditDialog, handleDeleteProduct }) => {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   // 페이지네이션
   const handleChangePage = (event, newPage) => {
@@ -35,10 +36,17 @@ const AdminPageProductTable = ({ bookList, bookTableHead, handleOpenEditDialog, 
     setPage(0);
   };
 
+  const cellStyle = {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    maxWidth: '150px',
+  };
+
   return (
     <>
       {/* 상품 테이블 */}
-      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+      <Paper sx={{ width: '100%', overflow: 'hidden', marginBottom: '20px' }}>
         <TableContainer sx={{ maxHeight: 590 }}>
           {/* maxHeight: 440 */}
           <Table stickyHeader aria-label="sticky table">
@@ -56,29 +64,31 @@ const AdminPageProductTable = ({ bookList, bookTableHead, handleOpenEditDialog, 
               {bookList.length > 0 ? (
                 bookList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((book) => (
                   <StyledTableRow key={book._id}>
-                    <StyledTableCell component="th" scope="row">
+                    <StyledTableCell style={cellStyle} component="th" scope="row">
                       <img src={book.cover} alt={book.title} style={{ width: '50px', height: '50px' }} />
                     </StyledTableCell>
-                    <StyledTableCell>{book.isbn}</StyledTableCell>
-                    <StyledTableCell>
+                    <StyledTableCell style={cellStyle}>{book.isbn}</StyledTableCell>
+                    <StyledTableCell style={cellStyle}>
                       {book?.title.slice(0, 30)}
                       {book.title?.length > 30 ? '...' : ''}
                     </StyledTableCell>
-                    <StyledTableCell>
+                    <StyledTableCell style={cellStyle}>
                       {book?.author.slice(0, 10)}
                       {book.author?.length > 10 ? '...' : ''}
                     </StyledTableCell>
-                    <StyledTableCell>
+                    <StyledTableCell style={cellStyle}>
                       {book.stockStatus}
                       {book.stockStatus === '' ? '정상' : book.stockStatus}
                     </StyledTableCell>
-                    <StyledTableCell>{book.publisher}</StyledTableCell>
-                    <StyledTableCell>{book.priceStandard}</StyledTableCell>
+                    <StyledTableCell style={cellStyle}>{book.publisher}</StyledTableCell>
+                    <StyledTableCell style={cellStyle}>{currencyFormat(book.priceStandard)}</StyledTableCell>
 
                     {/* EDIT/DELETE 버튼 */}
-                    <StyledTableCell>
-                      <Button onClick={() => handleOpenEditDialog(book)}>Edit</Button>
-                      <Button onClick={() => handleDeleteProduct(book._id)}>Delete</Button>
+                    <StyledTableCell style={cellStyle}>
+                      <div>
+                        <Button onClick={() => handleOpenEditDialog(book)}>Edit</Button>
+                        <Button onClick={() => handleDeleteProduct(book._id)}>Delete</Button>
+                      </div>
                     </StyledTableCell>
                   </StyledTableRow>
                 ))

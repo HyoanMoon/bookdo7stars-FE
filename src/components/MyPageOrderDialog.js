@@ -13,14 +13,32 @@ import {
   Button,
   TableContainer,
   Paper,
+  useMediaQuery,
 } from '@mui/material';
 import { currencyFormat } from '../utils/number';
 import { useSelector } from 'react-redux';
+import { styled } from '@mui/material/styles';
+import { tableCellClasses } from '@mui/material/TableCell';
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.primary.light,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const cellStyle = {
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  maxWidth: '150px',
+};
 
 const MyPageOrderDialog = ({ open, handleClose }) => {
   const { selectedOrder } = useSelector((state) => state.order);
-
-  // console.log('selectedOrder', selectedOrder);
 
   return (
     <Dialog open={open} onClose={handleClose}>
@@ -30,34 +48,34 @@ const MyPageOrderDialog = ({ open, handleClose }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>주문번호</TableCell>
-                <TableCell>주문일자</TableCell>
-                <TableCell>이메일</TableCell>
-                <TableCell>주소</TableCell>
-                <TableCell>연락처</TableCell>
+                <TableCell style={cellStyle}>주문번호</TableCell>
+                <TableCell style={cellStyle}>주문일자</TableCell>
+                <TableCell style={cellStyle}>이메일</TableCell>
+                <TableCell style={cellStyle}>주소</TableCell>
+                <TableCell style={cellStyle}>연락처</TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody>
               <TableRow>
-                <TableCell>{selectedOrder?.orderNum}</TableCell>
-                <TableCell>{selectedOrder?.createdAt.slice(0, 10)}</TableCell>
-                <TableCell>{selectedOrder?.contact?.email}</TableCell>
-                <TableCell>{selectedOrder?.shipTo?.address1 + '' + selectedOrder?.shipTo?.address2}</TableCell>
-                <TableCell>{selectedOrder?.contact?.phone}</TableCell>
+                <TableCell style={cellStyle}>{selectedOrder?.orderNum}</TableCell>
+                <TableCell style={cellStyle}>{selectedOrder?.createdAt.slice(0, 10)}</TableCell>
+                <TableCell style={cellStyle}>{selectedOrder?.contact?.email}</TableCell>
+                <TableCell style={cellStyle}>{selectedOrder?.shipTo?.address1 + '' + selectedOrder?.shipTo?.address2}</TableCell>
+                <TableCell style={cellStyle}>{selectedOrder?.contact?.phone}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
 
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} sx={{ mt: 1 }}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>도서명</TableCell>
-                <TableCell>권당 가격</TableCell>
-                <TableCell>권수</TableCell>
-                <TableCell>총 가격</TableCell>
+                <StyledTableCell style={cellStyle}>도서명</StyledTableCell>
+                <StyledTableCell style={cellStyle}>권당 가격</StyledTableCell>
+                <StyledTableCell style={cellStyle}>권수</StyledTableCell>
+                <StyledTableCell style={cellStyle}>총 가격</StyledTableCell>
               </TableRow>
             </TableHead>
 
@@ -65,13 +83,13 @@ const MyPageOrderDialog = ({ open, handleClose }) => {
               {selectedOrder?.items?.length > 0 &&
                 selectedOrder?.items?.map((item) => (
                   <TableRow key={selectedOrder._id}>
-                    <TableCell>{item?.bookId?.title}</TableCell>
-                    <TableCell>{item?.price}</TableCell>
-                    <TableCell>{item?.qty}</TableCell>
-                    <TableCell>{currencyFormat(item?.price * item?.qty)}</TableCell>
+                    <TableCell style={cellStyle}>{item?.bookId?.title}</TableCell>
+                    <TableCell style={cellStyle}>{currencyFormat(item?.price)}</TableCell>
+                    <TableCell style={cellStyle}>{item?.qty}</TableCell>
+                    <TableCell style={cellStyle}>{currencyFormat(item?.price * item?.qty)}</TableCell>
                   </TableRow>
                 ))}
-              <TableCell>총 주문액: {currencyFormat(selectedOrder?.totalPrice)}</TableCell>
+              <TableCell style={cellStyle}>총 주문액: {currencyFormat(selectedOrder?.totalPrice)}</TableCell>
             </TableBody>
           </Table>
         </TableContainer>

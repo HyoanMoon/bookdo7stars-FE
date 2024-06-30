@@ -3,6 +3,7 @@ import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } 
 import { useDispatch, useSelector } from 'react-redux';
 import { bookActions } from '../action/bookActions';
 import CloudImageUpload from '../utils/CloudImageUpload';
+import { currencyFormat } from '../utils/number';
 
 const AdminPageProductDialog = ({ open, editBook, setEditBook, setOpenDialog }) => {
   const initialBookState = {

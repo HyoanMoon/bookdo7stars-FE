@@ -24,6 +24,8 @@ function favoriteReducer(state = initialState, action) {
     case types.GET_FAVORITE_FAIL:
     case types.DELETE_FAVORITE_FAIL:
       return { ...state, loading: false, error: payload };
+    case types.CLEAR_FAVORITE:
+      return { ...state, loading: false, favorite: [] };
     default:
       return state;
   }

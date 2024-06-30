@@ -18,6 +18,7 @@ import {
   TableRow,
   Paper,
   Link,
+  useMediaQuery,
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -25,6 +26,7 @@ import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../action/userActions';
 import { orderActions } from '../action/orderActions';
+import useDebouncedResizeObserver from '../hooks/useDebouncedResizeObserver';
 
 const UserInfoPage = () => {
   const navigate = useNavigate();
@@ -34,6 +36,14 @@ const UserInfoPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [sensitiveInfo, setSensitiveInfo] = useState(false);
   const [openSensitive, setOpenSensitive] = useState(false);
+  // const isMobile = useMediaQuery('(max-width:600px)');
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
+
+  const handleResize = () => {
+    setIsMobile(window.innerWidth < 600);
+  };
+
+  useDebouncedResizeObserver(handleResize, 200);
 
   useEffect(() => {
     dispatch(orderActions.getMyOrder());
@@ -132,32 +142,50 @@ const UserInfoPage = () => {
   };
 
   return (
-    <div style={{ backgroundColor: '#f8f9fa', minHeight: '100vh', marginTop: '10px' }}>
+    <div style={{ backgroundColor: '#f8f9fa', minHeight: '100vh', marginTop: isMobile ? '0' : '10px' }}>
       <Container align="center">
         {/* 상단 */}
-        <Grid container justifyContent="space-between" alignItems="center">
-          <Grid item>북두칠성 로고</Grid>
-          <Grid item>
-            <Typography variant="h6">회원정보</Typography>
+        <Grid container sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: isMobile ? '16px' : '0' }}>
+          <Grid item xs={4} md={4}>
+            <Typography variant="h6" color="primary" sx={{ fontSize: isMobile ? '1.4rem' : '1.5rem', textAlign: 'left', fontWeight: 'bold' }}>
+              북두칠성
+            </Typography>
           </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => {
-                navigate('/');
-                dispatch(userActions.logout());
-              }}>
-              로그아웃
-            </Button>
-            <Button variant="contained" color="secondary" onClick={() => navigate('/mypage')}>
-              마이페이지
-            </Button>
+          <Grid item xs={4} md={4}>
+            <Typography variant="h6" sx={{ fontSize: isMobile ? '1rem' : 'h6' }}>
+              회원정보
+            </Typography>
           </Grid>
+          {isMobile ? (
+            <Grid item xs={4} md={4} sx={{ textAlign: 'right' }}>
+              <Button variant="contained" color="secondary" onClick={() => navigate('/')} sx={{ fontSize: '0.8rem', padding: '6px 12px', marginLeft: '7px' }}>
+                메인페이지
+              </Button>
+            </Grid>
+          ) : (
+            <Grid item xs={4} md={4} sx={{ textAlign: 'right' }}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => {
+                  navigate('/');
+                  dispatch(userActions.logout());
+                }}>
+                로그아웃
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => navigate('/mypage')}
+                sx={{ fontSize: '0.8rem', padding: '6px 12px', marginLeft: '7px' }}>
+                마이페이지
+              </Button>
+            </Grid>
+          )}
         </Grid>
 
         {/* 하단 */}
-        <Grid mt={3} p={7} border={1} borderRadius={1} borderColor="grey.200" bgcolor="#ffffff">
+        <Grid mt={isMobile ? 2 : 3} p={isMobile ? 2 : 7} border={1} borderRadius={1} borderColor="grey.200" bgcolor="#ffffff">
           {openSensitive ? (
             ''
           ) : (
@@ -189,10 +217,10 @@ const UserInfoPage = () => {
                     <TableCell>이름</TableCell>
                     <TableCell>
                       <Grid container spacing={2}>
-                        <Grid item xs={9}>
+                        <Grid item xs={12} md={9}>
                           <TextField fullWidth value={sensitiveInfo ? user?.userName : coverName(user?.userName)} InputProps={{ readOnly: true }} />
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid item xs={12} md={3}>
                           <Typography variant="subtitle2">
                             * 이름을 변경하시려면 북두칠성으로
                             <Link href="/contact" color="primary">
@@ -302,7 +330,7 @@ const UserInfoPage = () => {
             </TableContainer>
           </Box>
         </Grid>
-        <Grid m={5}>
+        <Grid mt={5} sx={{ textAlign: 'center' }}>
           <Button variant="contained" color="secondary" onClick={handleInfoChange}>
             회원정보 수정
           </Button>

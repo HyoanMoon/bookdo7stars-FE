@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Box, TextField, Button, Grid, Select, MenuItem, InputLabel } from '@mui/material';
+import { Box, TextField, Button, Grid, Select, MenuItem, InputLabel, useMediaQuery } from '@mui/material';
 import { format, isValid, startOfDay, endOfDay } from 'date-fns';
 import DateFilter from './DateFilter';
+import { display } from '@mui/system';
 
 const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery, resetSearch }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [selectedOption, setSelectedOption] = useState('orderNum');
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -27,11 +29,10 @@ const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery, resetSearch }) =
   return (
     <Box ml={2} mb={4}>
       <Grid container spacing={2}>
-        <InputLabel sx={{ mt: 2, height: '4ch' }}>조회 기간</InputLabel>
+        <InputLabel sx={{ mt: 2, height: isMobile ? {} : '4ch' }}>조회 기간</InputLabel>
         <DateFilter startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} />
-
         {/* 세부 주문 검색 */}
-        <InputLabel sx={{ height: '4ch' }}>상세 조건</InputLabel>
+        <InputLabel sx={{ height: isMobile ? '3ch' : '4ch', marginTop: isMobile ? 1 : 0 }}>상세 조건</InputLabel>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={2}>
             <Select
@@ -58,13 +59,22 @@ const AdminPageOrderSearchBox = ({ searchQuery, setSearchQuery, resetSearch }) =
           </Grid>
 
           {/* 검색 버튼 */}
-          <Grid item xs={12} sm={8}>
-            <Button variant="contained" color="primary" fullWidth sx={{ ml: 1, width: '30ch', height: '55px' }} onClick={handleSearch}>
-              Search
-            </Button>
-            <Button variant="contained" color="primary" fullWidth sx={{ ml: 1, width: '30ch', height: '55px' }} onClick={resetSearch}>
-              Reset
-            </Button>
+          <Grid item xs={12} sm={8} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Grid item xs={6}>
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                sx={{ marginLeft: isMobile ? 0 : 1, width: isMobile ? '100%' : '30ch', height: '55px' }}
+                onClick={handleSearch}>
+                Search
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button variant="contained" color="primary" fullWidth sx={{ ml: -13, width: isMobile ? '100%' : '30ch', height: '55px' }} onClick={resetSearch}>
+                Reset
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

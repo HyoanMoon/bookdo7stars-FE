@@ -14,6 +14,9 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
+  useMediaQuery,
+  TableContainer,
+  Paper,
 } from '@mui/material';
 import MyPageCategory from '../components/MyPageCategory';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,6 +24,7 @@ import { orderActions } from '../action/orderActions';
 import { useNavigate } from 'react-router';
 import MyPageCancelDialog from '../components/MyPageCancelDialog';
 import * as types from '../constants/order.constants';
+import { currencyFormat } from '../utils/number';
 
 const MyPageOrderCancelList = () => {
   const dispatch = useDispatch();
@@ -32,6 +36,7 @@ const MyPageOrderCancelList = () => {
   const [oldChecked, setOldChecked] = useState(false);
   const [sortOrder, setSortOrder] = useState('recent');
   const [dialogOpen, setDialogOpen] = useState(false);
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   useEffect(() => {
     dispatch(orderActions.getMyRequest());
@@ -71,9 +76,16 @@ const MyPageOrderCancelList = () => {
     setDialogOpen(false);
   };
 
+  const cellStyle = {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    maxWidth: '150px',
+  };
+
   return (
     <Container>
-      <Box p={3}>
+      <Box sx={isMobile ? {} : { p: 3 }}>
         <Grid container mb={1} style={{ fontSize: '15px' }}>
           <Link href="/" underline="hover" color="inherit">
             welcome
@@ -92,18 +104,38 @@ const MyPageOrderCancelList = () => {
             </Link>
           </Typography>
         </Grid>
-        <Grid container>
-          <Typography variant="subtitle1">{user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
-        </Grid>
+        {isMobile ? (
+          <>
+            <Grid container mb={1} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+              <Typography variant="subtitle2"> {user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
+            </Grid>
+
+            <Grid container mb={2} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+              <Typography variant="subtitle2" display="inline">
+                나의 북두칠성 등급:
+              </Typography>
+              <Box display="inline" ml={1}>
+                <Typography variant="subtitle2" border={1} borderRadius={4} borderColor="primary.light" bgcolor="primary.light" color="white" p="2px">
+                  {user?.level}
+                </Typography>
+              </Box>
+            </Grid>
+          </>
+        ) : (
+          <Grid container>
+            <Typography variant="subtitle1">{user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
+          </Grid>
+        )}
 
         <Grid container>
           {/* 마이페이지 좌측 카테고리 */}
-          <Grid item md={3}>
+          <Grid item xs={12} md={3}>
             <MyPageCategory />
           </Grid>
+
           {/* 마이페이지 우측 정보 */}
           <Grid item md={9}>
-            <Box mt={2} ml={2} mb={4}>
+            <Box mt={2} sx={isMobile ? {} : { ml: 3, mb: 4 }}>
               <Grid container mb={2}>
                 <Grid item xs={12}>
                   {/* <Typography variant="body1" mb={1}>
@@ -135,27 +167,27 @@ const MyPageOrderCancelList = () => {
 
               {/* 주문 내역 테이블 */}
               <Typography variant="h6">취소한 주문 내역</Typography>
-              <Box>
+              <TableContainer component={Paper} sx={{ mt: isMobile ? 1 : 0, overflowX: 'auto', maxWidth: isMobile ? '400px' : '100%' }}>
                 <Table>
                   {/* 테이블 헤드 */}
                   <TableHead>
-                    <TableCell>접수일자</TableCell>
-                    <TableCell>주문내역</TableCell>
-                    <TableCell>총주문액</TableCell>
-                    <TableCell>요청사항</TableCell>
-                    <TableCell>처리상태</TableCell>
-                    <TableCell>다시주문</TableCell>
+                    <TableCell style={cellStyle}>접수일자</TableCell>
+                    <TableCell style={cellStyle}>주문내역</TableCell>
+                    <TableCell style={cellStyle}>총주문액</TableCell>
+                    <TableCell style={cellStyle}>요청사항</TableCell>
+                    <TableCell style={cellStyle}>처리상태</TableCell>
+                    <TableCell style={cellStyle}>다시주문</TableCell>
                   </TableHead>
 
                   {/* 테이블 바디 */}
                   <TableBody>
                     {sortedMyOrderList?.length > 0 ? (
                       sortedMyOrderList
-                        .filter((item) => item.request.requestType !== ('반품' || '교환'))
+                        .filter((item) => item.request.requestType == '취소')
                         .map((item, index) => (
                           <TableRow key={index} onClick={() => handleOpenDialog(item)}>
-                            <TableCell>{item.createdAt.slice(0, 10)}</TableCell>
-                            <TableCell>
+                            <TableCell style={cellStyle}>{item.createdAt.slice(0, 10)}</TableCell>
+                            <TableCell style={{ ...cellStyle, cursor: 'pointer' }}>
                               {`${
                                 (myOrderList.length > 0 &&
                                   myOrderList
@@ -172,10 +204,10 @@ const MyPageOrderCancelList = () => {
                                 '제목 없음'
                               }`}
                             </TableCell>
-                            <TableCell>{item.totalPrice}</TableCell>
-                            <TableCell>{item.request.requestType}</TableCell>
-                            <TableCell>{item.request.status}</TableCell>
-                            <TableCell>
+                            <TableCell style={cellStyle}>{currencyFormat(item.totalPrice)}</TableCell>
+                            <TableCell style={cellStyle}>{item.request.requestType}</TableCell>
+                            <TableCell style={cellStyle}>{item.request.status}</TableCell>
+                            <TableCell style={cellStyle}>
                               <Button
                                 variant="contained"
                                 color="secondary"
@@ -198,10 +230,10 @@ const MyPageOrderCancelList = () => {
                     )}
                   </TableBody>
                 </Table>
-              </Box>
+              </TableContainer>
 
               {/* 안내 사항 */}
-              <Box mt={1}>
+              <Box sx={{ mt: isMobile ? 3 : 1, mb: isMobile ? 4 : 0 }}>
                 <Typography variant="subtitle2">{'- 주문내역에서 주문취소를 선택한 내역이 확인됩니다.'}</Typography>
                 <Typography variant="subtitle2">{'- 이동을 클릭하시면 취소한 도서 상품을 확인 하실수 있습니다.'}</Typography>
                 <Typography variant="subtitle2">
