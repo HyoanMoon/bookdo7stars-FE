@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper } from '@mui/material';
 import { KeyboardArrowDown as KeyboardArrowDownIcon, KeyboardArrowUp as KeyboardArrowUpIcon } from '@mui/icons-material';
 
-const MyPageMyReviewTable = () => {
+const MyPageMyReviewTable = ({ style }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userComment } = useSelector((state) => state.comment);
@@ -44,17 +44,17 @@ const MyPageMyReviewTable = () => {
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
-              <TableCell />
-              <TableCell>도서명</TableCell>
-              <TableCell>저자</TableCell>
-              <TableCell>출판사</TableCell>
-              <TableCell>리뷰수</TableCell>
-              <TableCell>작성일</TableCell>
+              <TableCell style={style} />
+              <TableCell style={style}>도서명</TableCell>
+              <TableCell style={style}>저자</TableCell>
+              <TableCell style={style}>출판사</TableCell>
+              <TableCell style={style}>리뷰수</TableCell>
+              <TableCell style={style}>작성일</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {uniqueBooks.map((book) => (
-              <Row key={book._id} book={book} comments={comments.filter((cmt) => cmt.bookId._id === book._id)} navigate={navigate} />
+              <Row style={style} key={book._id} book={book} comments={comments.filter((cmt) => cmt.bookId._id === book._id)} navigate={navigate} />
             ))}
             {comments.length === 0 && (
               <TableRow>
@@ -70,7 +70,7 @@ const MyPageMyReviewTable = () => {
   );
 };
 
-const Row = ({ book, comments, navigate }) => {
+const Row = ({ book, comments, navigate, style }) => {
   const [open, setOpen] = useState(false);
   const handleBookClick = () => {
     navigate(`/book/${book._id}`);
@@ -79,34 +79,36 @@ const Row = ({ book, comments, navigate }) => {
   return (
     <>
       <TableRow>
-        <TableCell>
+        <TableCell style={style}>
           <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row" onClick={handleBookClick} sx={{ cursor: 'pointer' }}>
+        <TableCell style={style} component="th" scope="row" onClick={handleBookClick} sx={{ cursor: 'pointer' }}>
           {book.title}
         </TableCell>
-        <TableCell>{book.author}</TableCell>
-        <TableCell>{book.publisher}</TableCell>
-        <TableCell>{comments.length}</TableCell>
-        <TableCell>{new Date(comments[0].createdAt).toLocaleDateString()}</TableCell>
+        <TableCell style={style}>{book.author}</TableCell>
+        <TableCell style={style}>{book.publisher}</TableCell>
+        <TableCell style={style}>{comments.length}</TableCell>
+        <TableCell style={style}>{new Date(comments[0].createdAt).toLocaleDateString()}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
-              <Typography variant="h6" gutterBottom component="div">
+              <Typography style={style} variant="h6" gutterBottom component="div">
                 리뷰내역
               </Typography>
               <Table size="small" aria-label="reviews">
                 <TableBody>
                   {comments.map((comment) => (
                     <TableRow key={comment._id}>
-                      <TableCell component="th" scope="row">
+                      <TableCell style={style} component="th" scope="row">
                         {new Date(comment.createdAt).toLocaleString()}
                       </TableCell>
-                      <TableCell colSpan={3}>{comment.content}</TableCell>
+                      <TableCell style={style} colSpan={3}>
+                        {comment.content}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

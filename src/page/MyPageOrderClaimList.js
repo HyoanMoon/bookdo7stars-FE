@@ -14,6 +14,9 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
+  useMediaQuery,
+  TableContainer,
+  Paper,
 } from '@mui/material';
 import MyPageCategory from '../components/MyPageCategory';
 import MyPageClaimDialog from '../components/MyPageClaimDialog';
@@ -21,6 +24,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { orderActions } from '../action/orderActions';
 import * as types from '../constants/order.constants';
+import { currencyFormat } from '../utils/number';
 
 const MyPageOrderClaimList = () => {
   const dispatch = useDispatch();
@@ -32,6 +36,7 @@ const MyPageOrderClaimList = () => {
   const [oldChecked, setOldChecked] = useState(false);
   const [sortOrder, setSortOrder] = useState('recent');
   const [dialogOpen, setDialogOpen] = useState(false);
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   useEffect(() => {
     dispatch(orderActions.getMyRequest());
@@ -71,9 +76,16 @@ const MyPageOrderClaimList = () => {
     setDialogOpen(false);
   };
 
+  const cellStyle = {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    maxWidth: '150px',
+  };
+
   return (
     <Container>
-      <Box p={3}>
+      <Box sx={isMobile ? {} : { p: 3 }}>
         <Grid container mb={1} style={{ fontSize: '15px' }}>
           <Link href="/" underline="hover" color="inherit">
             welcome
@@ -92,31 +104,67 @@ const MyPageOrderClaimList = () => {
             </Link>
           </Typography>
         </Grid>
-        <Grid container>
-          <Typography variant="subtitle1">{user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
-        </Grid>
+        {isMobile ? (
+          <>
+            <Grid container mb={1} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+              <Typography variant="subtitle2"> {user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
+            </Grid>
+
+            <Grid container mb={2} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+              <Typography variant="subtitle2" display="inline">
+                나의 북두칠성 등급:
+              </Typography>
+              <Box display="inline" ml={1}>
+                <Typography variant="subtitle2" border={1} borderRadius={4} borderColor="primary.light" bgcolor="primary.light" color="white" p="2px">
+                  {user?.level}
+                </Typography>
+              </Box>
+            </Grid>
+          </>
+        ) : (
+          <Grid container>
+            <Typography variant="subtitle1">{user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
+          </Grid>
+        )}
 
         <Grid container>
           {/* 마이페이지 좌측 카테고리 */}
-          <Grid item md={3}>
+          <Grid item xs={12} md={3}>
             <MyPageCategory />
           </Grid>
           {/* 마이페이지 우측 정보 */}
           <Grid item md={9}>
-            <Box mt={2} ml={2} mb={4}>
-              <Grid container alignItems="center" mb={2}>
-                <Typography variant="subtitle2">구매하셨던 상품의 반품/교환/추가배송 신청 및 내역을 조회하실 수 있습니다.</Typography>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  fullWidth
-                  sx={{ ml: 1, width: '25ch', height: '30px', borderRadius: '20px' }}
-                  onClick={handleClaim}>
-                  <Typography variant="subtitle2" color="white">
-                    반품/교환/취소 신청하기
+            <Box mt={2} sx={isMobile ? {} : { ml: 3, mb: 4 }}>
+              {isMobile ? (
+                <Grid container alignItems="center" mb={2}>
+                  <Typography ml={1} variant="subtitle2">
+                    구매하셨던 상품의 반품 및 교환, 취소신청을 하실 수 있습니다.
                   </Typography>
-                </Button>
-              </Grid>
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    sx={{ width: '100%', height: '30px', borderRadius: '20px', marginTop: '10px', borderColor: 'primary.main', opacity: '70%' }}
+                    onClick={handleClaim}>
+                    <Typography variant="subtitle2" color="white">
+                      반품/교환/취소 신청하기
+                    </Typography>
+                  </Button>
+                </Grid>
+              ) : (
+                <Grid container alignItems="center" mb={2}>
+                  <Typography variant="subtitle2">구매하셨던 상품의 반품 및 교환, 취소신청 및 내역을 조회하실 수 있습니다.</Typography>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    sx={{ width: '100%', height: '30px', borderRadius: '20px', marginTop: '10px', borderColor: 'primary.main', opacity: '70%' }}
+                    onClick={handleClaim}>
+                    <Typography variant="subtitle2" color="white">
+                      반품/교환/취소 신청하기
+                    </Typography>
+                  </Button>
+                </Grid>
+              )}
 
               {/* 정렬기준 */}
               <FormGroup style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
@@ -132,26 +180,28 @@ const MyPageOrderClaimList = () => {
 
               {/* 주문 내역 테이블 */}
               <Typography variant="h6">반품/교환 신청내역</Typography>
-              <Box>
+              <TableContainer component={Paper} sx={{ mt: isMobile ? 1 : 0, overflowX: 'auto', maxWidth: isMobile ? '400px' : '100%' }}>
                 <Table>
                   {/* 테이블 헤드 */}
                   <TableHead>
-                    <TableCell>접수일자</TableCell>
-                    <TableCell>주문내역</TableCell>
-                    <TableCell>총주문액</TableCell>
-                    <TableCell>요청사항</TableCell>
-                    <TableCell>처리상태</TableCell>
+                    <TableRow>
+                      <TableCell style={cellStyle}>접수일자</TableCell>
+                      <TableCell style={cellStyle}>주문내역</TableCell>
+                      <TableCell style={cellStyle}>총주문액</TableCell>
+                      <TableCell style={cellStyle}>요청사항</TableCell>
+                      <TableCell style={cellStyle}>처리상태</TableCell>
+                    </TableRow>
                   </TableHead>
 
                   {/* 테이블 바디 */}
                   <TableBody>
                     {sortedMyOrderList?.length > 0 ? (
                       sortedMyOrderList
-                        .filter((item) => item.request.requestType !== '취소')
+                        .filter((item) => item.request.requestType == ('반품' || '교환'))
                         .map((item, index) => (
                           <TableRow key={index} onClick={() => handleOpenDialog(item)}>
-                            <TableCell>{item.createdAt.slice(0, 10)}</TableCell>
-                            <TableCell>
+                            <TableCell style={cellStyle}>{item.createdAt.slice(0, 10)}</TableCell>
+                            <TableCell style={{ ...cellStyle, cursor: 'pointer' }}>
                               {`${
                                 (myOrderList.length > 0 &&
                                   myOrderList
@@ -168,9 +218,9 @@ const MyPageOrderClaimList = () => {
                                 '제목 없음'
                               }`}
                             </TableCell>
-                            <TableCell>{item.totalPrice}</TableCell>
-                            <TableCell>{item.request.requestType}</TableCell>
-                            <TableCell>{item.request.status}</TableCell>
+                            <TableCell style={cellStyle}>{currencyFormat(item.totalPrice)}</TableCell>
+                            <TableCell style={cellStyle}>{item.request.requestType}</TableCell>
+                            <TableCell style={cellStyle}>{item.request.status}</TableCell>
                           </TableRow>
                         ))
                     ) : (
@@ -182,10 +232,10 @@ const MyPageOrderClaimList = () => {
                     )}
                   </TableBody>
                 </Table>
-              </Box>
+              </TableContainer>
 
               {/* 안내 사항 */}
-              <Box mt={3} border={1} borderColor="grey.300" p={2} borderRadius={1} maxWidth={800}>
+              <Box mt={3} border={1} borderColor="grey.300" p={2} borderRadius={1} sx={isMobile ? { maxWidth: 400 } : { maxWidth: 800 }}>
                 <Typography variant="body1">
                   <Typography variant="subtitle2">1. 신청안내</Typography>
                   <ul>
@@ -265,19 +315,30 @@ const MyPageOrderClaimList = () => {
               <Typography variant="subtitle2" gutterBottom mt={3} ml={1} color="red">
                 {'아래의 경우는 1:1문의나 고객만족센터(1544-3800)로 문의해주세요.'}
               </Typography>
-              <ul>
-                <li>
-                  <Typography variant="body2">{'접수한 내역이 취소 또는 변경이 불가능한 경우'}</Typography>
-                </li>
-                <li>
-                  <Typography variant="body2">{'업체 배송 상품/직수입 외서/ 해외 배송 주문'}</Typography>
-                </li>
-                <li>
+
+              {isMobile ? (
+                <Box border={1} borderColor="grey.300" p={2} sx={{ mb: isMobile ? 5 : 0 }}>
+                  <Typography variant="body2">접수한 내역이 취소 또는 변경이 불가능한 경우</Typography>
+                  <Typography variant="body2">업체 배송 상품/직수입 외서/ 해외 배송 주문</Typography>
                   <Typography variant="body2">
-                    {'매장에서 픽업 서비스로 수령받은 상품은 매장에서 교환/반품/환불 처리는 불가하며, 고객센터 연락 후 택배사를 이용해야 합니다.'}
+                    매장에서 픽업 서비스로 수령받은 상품은 매장에서 교환/반품/환불 처리는 불가하며, 고객센터 연락 후 택배사를 이용해야 합니다.
                   </Typography>
-                </li>
-              </ul>
+                </Box>
+              ) : (
+                <ul>
+                  <li>
+                    <Typography variant="body2">{'접수한 내역이 취소 또는 변경이 불가능한 경우'}</Typography>
+                  </li>
+                  <li>
+                    <Typography variant="body2">{'업체 배송 상품/직수입 외서/ 해외 배송 주문'}</Typography>
+                  </li>
+                  <li>
+                    <Typography variant="body2">
+                      {'매장에서 픽업 서비스로 수령받은 상품은 매장에서 교환/반품/환불 처리는 불가하며, 고객센터 연락 후 택배사를 이용해야 합니다.'}
+                    </Typography>
+                  </li>
+                </ul>
+              )}
             </Box>
           </Grid>
         </Grid>

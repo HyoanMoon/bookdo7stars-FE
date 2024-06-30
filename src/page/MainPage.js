@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Container, IconButton, useMediaQuery } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -7,14 +7,23 @@ import BookContainer from '../components/BookContainer/BookContainer';
 import CarouselSlide from '../components/CarouselSlide';
 import { getCategories } from '../_helper/getCategories';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import { favoriteActions } from '../action/favoriteActions';
 
 const MainPage = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
   const { bookList } = useSelector((state) => state.book);
   const isMobile = useMediaQuery('(max-width: 600px)');
 
   if (!bookList) {
     return null;
   }
+
+  useEffect(() => {
+    if (!user) {
+      dispatch(favoriteActions.clearFavorite());
+    }
+  }, [dispatch, user]);
 
   const blogBestBooks = bookList.filter((book) => book.queryType === 'BlogBest');
   const bestSeller = bookList.filter((book) => book.queryType === 'BestSeller');

@@ -14,10 +14,23 @@ import {
   TableContainer,
   Paper,
   TextField,
+  useMediaQuery,
 } from '@mui/material';
 import { currencyFormat } from '../utils/number';
 import { useDispatch, useSelector } from 'react-redux';
 import { orderActions } from '../action/orderActions';
+import { styled } from '@mui/material/styles';
+import { tableCellClasses } from '@mui/material/TableCell';
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.primary.light,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
 
 const MyPageClaimDialog = ({ open, handleClose }) => {
   const dispatch = useDispatch();
@@ -25,9 +38,6 @@ const MyPageClaimDialog = ({ open, handleClose }) => {
   const { selectedRequest } = useSelector((state) => state.order);
   const { myOrderList } = useSelector((state) => state.order);
   const [bookTitle, setBookTitle] = useState(null);
-
-  // console.log('selectedRequest', selectedRequest);
-  // console.log('myOrderList', myOrderList[0]?.items);
 
   useEffect(() => {
     dispatch(orderActions.getMyOrder());
@@ -45,49 +55,56 @@ const MyPageClaimDialog = ({ open, handleClose }) => {
     }
   }, [selectedRequest, myOrderList]);
 
+  const cellStyle = {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    maxWidth: '150px',
+  };
+
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>주문 상세 정보</DialogTitle>
+      <DialogTitle>반품 및 교환 내역</DialogTitle>
       <DialogContent dividers>
         {/* 주문정보 */}
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>주문번호</TableCell>
-                <TableCell>주문일자</TableCell>
-                <TableCell>이메일</TableCell>
-                <TableCell>주소</TableCell>
-                <TableCell>연락처</TableCell>
+                <TableCell style={cellStyle}>주문번호</TableCell>
+                <TableCell style={cellStyle}>주문일자</TableCell>
+                <TableCell style={cellStyle}>이메일</TableCell>
+                <TableCell style={cellStyle}>주소</TableCell>
+                <TableCell style={cellStyle}>연락처</TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody>
               <TableRow>
-                <TableCell>{selectedRequest?.orderNum}</TableCell>
-                <TableCell>{selectedRequest?.createdAt.slice(0, 10)}</TableCell>
-                <TableCell>{selectedRequest?.contact?.email}</TableCell>
-                <TableCell>{selectedRequest?.shipTo?.address1 + '' + selectedRequest?.shipTo?.address2}</TableCell>
-                <TableCell>{selectedRequest?.contact?.phone}</TableCell>
+                <TableCell style={cellStyle}>{selectedRequest?.orderNum}</TableCell>
+                <TableCell style={cellStyle}>{selectedRequest?.createdAt.slice(0, 10)}</TableCell>
+                <TableCell style={cellStyle}>{selectedRequest?.contact?.email}</TableCell>
+                <TableCell style={cellStyle}>{selectedRequest?.shipTo?.address1 + '' + selectedRequest?.shipTo?.address2}</TableCell>
+                <TableCell style={cellStyle}>{selectedRequest?.contact?.phone}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
 
         {/* 요청정보 */}
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} sx={{ mt: 1 }}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>요청일자</TableCell>
-                <TableCell>요청사항</TableCell>
+                <TableCell style={cellStyle}>요청일자</TableCell>
+                <TableCell style={cellStyle}>요청사항</TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody>
               <TableRow>
-                <TableCell>{selectedRequest?.createdAt.slice(0, 10)}</TableCell>
-                <TableCell>{selectedRequest?.request?.requestType}</TableCell>
+                <TableCell style={cellStyle}>{selectedRequest?.createdAt.slice(0, 10)}</TableCell>
+                <TableCell style={cellStyle}>{selectedRequest?.request?.requestType}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -109,10 +126,10 @@ const MyPageClaimDialog = ({ open, handleClose }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>도서명</TableCell>
-                <TableCell>권당 가격</TableCell>
-                <TableCell>권수</TableCell>
-                <TableCell>총 가격</TableCell>
+                <StyledTableCell style={cellStyle}>도서명</StyledTableCell>
+                <StyledTableCell style={cellStyle}>권당 가격</StyledTableCell>
+                <StyledTableCell style={cellStyle}>권수</StyledTableCell>
+                <StyledTableCell style={cellStyle}>총 가격</StyledTableCell>
               </TableRow>
             </TableHead>
 
@@ -120,13 +137,13 @@ const MyPageClaimDialog = ({ open, handleClose }) => {
               {selectedRequest?.items?.length > 0 &&
                 selectedRequest?.items?.map((item) => (
                   <TableRow key={selectedRequest._id}>
-                    <TableCell>{bookTitle}</TableCell>
-                    <TableCell>{item?.price}</TableCell>
-                    <TableCell>{item?.qty}</TableCell>
-                    <TableCell>{currencyFormat(item?.price * item?.qty)}</TableCell>
+                    <TableCell style={cellStyle}>{bookTitle}</TableCell>
+                    <TableCell style={cellStyle}>{currencyFormat(item?.price)}</TableCell>
+                    <TableCell style={cellStyle}>{item?.qty}</TableCell>
+                    <TableCell style={cellStyle}>{currencyFormat(item?.price * item?.qty)}</TableCell>
                   </TableRow>
                 ))}
-              <TableCell>총 주문액: {currencyFormat(selectedRequest?.totalPrice)}</TableCell>
+              <TableCell style={cellStyle}>총 주문액: {currencyFormat(selectedRequest?.totalPrice)}</TableCell>
             </TableBody>
           </Table>
         </TableContainer>

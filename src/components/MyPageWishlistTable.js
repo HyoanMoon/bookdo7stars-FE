@@ -25,13 +25,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const MyPageWishlistTable = () => {
+const MyPageWishlistTable = ({ style }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const favoriteTableHead = ['', '도서명', '저자', '출판사', '출간일'];
   const { favorite } = useSelector((state) => state.favorite);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   useEffect(() => {
     dispatch(favoriteActions.getFavorite());
@@ -55,7 +55,9 @@ const MyPageWishlistTable = () => {
           <TableHead>
             <TableRow>
               {favoriteTableHead.map((head, index) => (
-                <TableCell key={index}>{head}</TableCell>
+                <TableCell style={style} key={index}>
+                  {head}
+                </TableCell>
               ))}
             </TableRow>
           </TableHead>
@@ -64,14 +66,14 @@ const MyPageWishlistTable = () => {
           <TableBody>
             {favorite?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
               <StyledTableRow key={item?._id}>
-                <StyledTableCell>{index + 1}</StyledTableCell>
-                <StyledTableCell>
+                <StyledTableCell style={style}>{index + 1}</StyledTableCell>
+                <StyledTableCell style={style}>
                   {item?.title.slice(0, 20)}
                   {item?.title.slice(0, 20).length > 20 ? '...' : ''}
                 </StyledTableCell>
-                <StyledTableCell>{item?.author}</StyledTableCell>
-                <StyledTableCell>{item?.publisher}</StyledTableCell>
-                <StyledTableCell>{item?.pubDate.slice(0, 10)}</StyledTableCell>
+                <StyledTableCell style={style}>{item?.author}</StyledTableCell>
+                <StyledTableCell style={style}>{item?.publisher}</StyledTableCell>
+                <StyledTableCell style={style}>{item?.pubDate.slice(0, 10)}</StyledTableCell>
               </StyledTableRow>
             ))}
             {favorite.length === 0 && (

@@ -17,6 +17,7 @@ import {
   TextField,
   Button,
   Paper,
+  useMediaQuery,
 } from '@mui/material';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,54 +27,98 @@ const AccountDeletionPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
+  const { myOrderList } = useSelector((state) => state.order);
   const [password, setPassword] = useState('');
+  const isMobile = useMediaQuery('(max-width:600px)');
 
-  const handleGoToLogout = () => {
-    navigate('/');
-    dispatch(userActions.logout());
-  };
-  const handleGoToMyPage = () => {
-    navigate('/mypage');
-  };
+  console.log('myOrderList', myOrderList);
 
   const handleDeleteAccount = () => {
     dispatch(userActions.deleteUser(user._id, password, navigate));
+  };
+
+  const cellStyle = {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    maxWidth: '150px',
   };
 
   return (
     <div style={{ backgroundColor: '#f8f9fa', minHeight: '100vh', marginTop: '10px' }}>
       <Container align="center">
         {/* 상단 */}
-        <Grid sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Grid item sx={4} md={4}>
-            북두칠성 로고
+        <Grid container sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: isMobile ? '16px' : '0' }}>
+          <Grid item xs={4} md={4}>
+            <Typography variant="h6" color="primary" sx={{ fontSize: isMobile ? '1.4rem' : '1.5rem', textAlign: 'left', fontWeight: 'bold' }}>
+              북두칠성
+            </Typography>
           </Grid>
-          <Grid item sx={4} md={4}>
-            <Typography variant="h6">회원탈퇴</Typography>
+          <Grid item xs={4} md={4}>
+            <Typography variant="h6" sx={{ fontSize: isMobile ? '1rem' : 'h6' }}>
+              회원탈퇴
+            </Typography>
           </Grid>
-          <Grid item sx={4} md={4}>
-            <Button variant="contained" color="secondary" onClick={handleGoToLogout}>
-              로그아웃
-            </Button>
-            <Button variant="contained" color="secondary" onClick={handleGoToMyPage}>
-              마이페이지
-            </Button>
-          </Grid>
+          {isMobile ? (
+            <Grid item xs={4} md={4} sx={{ textAlign: 'right' }}>
+              <Button variant="contained" color="secondary" onClick={() => navigate('/')} sx={{ fontSize: '0.8rem', padding: '6px 12px', marginLeft: '7px' }}>
+                메인페이지
+              </Button>
+            </Grid>
+          ) : (
+            <Grid item xs={4} md={4} sx={{ textAlign: 'right' }}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => {
+                  navigate('/');
+                  dispatch(userActions.logout());
+                }}>
+                로그아웃
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => navigate('/mypage')}
+                sx={{ fontSize: '0.8rem', padding: '6px 12px', marginLeft: '7px' }}>
+                마이페이지
+              </Button>
+            </Grid>
+          )}
         </Grid>
 
         {/* 하단 */}
-        <Grid sx={{ mt: 3 }}>
-          <Box align="left" p={8} border={1} borderRadius={1} borderColor="grey.400" sx={{ backgroundColor: '#ffffff' }}>
-            <Container maxWidth="md" style={{ marginTop: '20px' }}>
-              <Typography variant="h5" gutterBottom>
+        <Grid
+          sx={{
+            mt: isMobile ? 2 : 3,
+          }}
+          p={isMobile ? 2 : 7}
+          border={1}
+          borderRadius={1}
+          borderColor="grey.200"
+          bgcolor="#ffffff">
+          <Box
+            sx={{
+              p: isMobile ? 2 : 8,
+              border: 1,
+              borderRadius: 1,
+              borderColor: 'grey.400',
+              backgroundColor: '#ffffff',
+              textAlign: isMobile ? 'center' : 'left',
+            }}>
+            <Container
+              maxWidth="md"
+              style={{
+                marginTop: isMobile ? '10px' : '20px',
+              }}>
+              <Typography variant={isMobile ? 'h6' : 'h6'} marginBottom={isMobile ? '10px' : ''} sx={{ fontSize: isMobile ? '1.1rem' : '1.4rem' }} gutterBottom>
                 아래 내용을 꼭 확인해 주세요.
               </Typography>
-
               <Box p={3} mb={4} border={1} borderColor="grey.300" bgcolor="#f8f9fa">
-                <Typography variant="h6" color="error" gutterBottom>
+                <Typography variant={isMobile ? 'subtitle2' : 'h6'} color="error" sx={{ fontSize: isMobile ? '1rem' : '1.3rem' }} gutterBottom>
                   회원정보 및 계좌내역 삭제
                 </Typography>
-                <Typography variant="subtitle2" color="error" gutterBottom>
+                <Typography variant={isMobile ? 'body2' : 'subtitle2'} color="error" gutterBottom>
                   회원탈퇴 즉시 회원정보는 모두 삭제되며, 재가입시에도 복원되지 않습니다.
                 </Typography>
                 <Typography variant="body2" gutterBottom>
@@ -101,18 +146,16 @@ const AccountDeletionPage = () => {
                   </Link>
                 </Typography>
               </Box>
-
               <Box p={3} mb={4} border={1} borderColor="grey.300" bgcolor="#f8f9fa">
-                <Typography variant="h6" gutterBottom>
+                <Typography variant={isMobile ? 'subtitle2' : 'h6'} sx={{ fontSize: isMobile ? '1rem' : '1.3rem' }} gutterBottom>
                   1개월간 회원 재가입 제한
                 </Typography>
                 <Typography variant="body2" gutterBottom>
                   회원탈퇴 후, 1개월간은 회원 재가입이 불가능합니다.
                 </Typography>
               </Box>
-
               <Box p={3} mb={4} border={1} borderColor="grey.300" bgcolor="#f8f9fa">
-                <Typography variant="h6" gutterBottom>
+                <Typography variant={isMobile ? 'subtitle2' : 'h6'} sx={{ fontSize: isMobile ? '1rem' : '1.3rem' }} gutterBottom>
                   탈퇴 후 정보보관
                 </Typography>
                 <Typography variant="body2" gutterBottom>
@@ -132,10 +175,9 @@ const AccountDeletionPage = () => {
                   - 소비자의 불만 또는 분쟁처리에 관한 기록 : 3년
                 </Typography>
               </Box>
-
               <Box p={3} mb={4} border={1} borderColor="grey.300" bgcolor="#f8f9fa">
-                <Typography variant="h6" gutterBottom>
-                  본인인증을 위해 탈퇴를 하시려면{' '}
+                <Typography variant={isMobile ? 'subtitle2' : 'h6'} sx={{ fontSize: isMobile ? '1rem' : '1.3rem' }} gutterBottom>
+                  본인인증을 위해 탈퇴를 하시려면
                   <Link href="/contact" color="primary">
                     1:1 문의
                   </Link>
@@ -145,62 +187,73 @@ const AccountDeletionPage = () => {
                   본인인증 문의 없이 탈퇴할 경우, 30일 이내 재가입(인증)이 불가능합니다.
                 </Typography>
                 <Grid container justifyContent="flex-end">
-                  <Button variant="contained" color="secondary">
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    sx={{ width: isMobile ? '100%' : {}, mt: isMobile ? 2 : 0 }}
+                    onClick={() => {
+                      navigate('/contact');
+                    }}>
                     본인인증 1:1문의하기
                   </Button>
                 </Grid>
               </Box>
-
               <Box p={3} mb={4} border={1} borderColor="grey.300" bgcolor="#f8f9fa">
-                <Typography variant="h6" component="div" gutterBottom>
+                <Typography variant={isMobile ? 'subtitle2' : 'h6'} sx={{ fontSize: isMobile ? '1rem' : '1.3rem' }} component="div" gutterBottom>
                   회원님의 정보 내역을 확인해 주세요.
                 </Typography>
                 <Typography variant="body2" color="textSecondary" gutterBottom>
                   회원 탈퇴 후 주문정보 및 계좌내역은 모두 삭제됩니다. <br />
-                  YES포인트, YES상품권, 예치금 등은 탈퇴 전 모두 잔여금액 소진을 권해드립니다.
+                  북두칠성 포인트, 북두칠성 상품권, 예치금 등은 탈퇴 전 모두 잔여금액 소진을 권해드립니다.
                 </Typography>
-                <TableContainer component={Paper} style={{ marginTop: '10px', marginBottom: '40px', width: '600px' }}>
+                <TableContainer
+                  component={Paper}
+                  sx={{
+                    marginTop: isMobile ? '0' : '10px',
+                    marginBottom: isMobile ? '10px' : '40px',
+                    width: isMobile ? '100%' : '600px',
+                  }}>
                   <Table>
                     <TableHead>
                       <TableRow>
-                        <TableCell>진행중인 주문</TableCell>
-                        <TableCell>예치금</TableCell>
-                        <TableCell>쿠폰</TableCell>
-                        <TableCell>포인트</TableCell>
-                        <TableCell>상품권</TableCell>
-                        <TableCell>쿠폰</TableCell>
+                        <TableCell style={cellStyle}>진행중인 주문</TableCell>
+                        <TableCell style={cellStyle}>예치금</TableCell>
+                        <TableCell style={cellStyle}>쿠폰</TableCell>
+                        <TableCell style={cellStyle}>포인트</TableCell>
+                        <TableCell style={cellStyle}>상품권</TableCell>
+                        <TableCell style={cellStyle}>쿠폰</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       <TableRow>
-                        <TableCell>0건</TableCell>
-                        <TableCell>0원</TableCell>
-                        <TableCell>0장</TableCell>
-                        <TableCell>0원</TableCell>
-                        <TableCell>0원</TableCell>
-                        <TableCell>0장</TableCell>
+                        <TableCell style={cellStyle}>{myOrderList?.length}건</TableCell>
+                        <TableCell style={cellStyle}>0원</TableCell>
+                        <TableCell style={cellStyle}>0장</TableCell>
+                        <TableCell style={cellStyle}>0원</TableCell>
+                        <TableCell style={cellStyle}>0원</TableCell>
+                        <TableCell style={cellStyle}>0장</TableCell>
                       </TableRow>
                     </TableBody>
                   </Table>
                 </TableContainer>
-                <Typography mt={2} variant="body1" gutterBottom>
+                <Typography sx={{ mt: isMobile ? 4 : 2 }} variant="body1" gutterBottom>
                   어떤 점이 불편하셨나요?
                 </Typography>
                 <RadioGroup name="complaint" style={{ marginBottom: '30px' }}>
                   <Grid>
-                    <Grid item xs={12} md={4}>
-                      <FormControlLabel value="상품정보 부족" control={<Radio />} label="상품정보 부족" />
+                    <Grid item xs={12} md={4} sx={{ textAlign: isMobile ? 'left' : 'center' }}>
+                      <FormControlLabel sx={{ fontSize: isMobile ? '0.8rem' : {} }} value="상품정보 부족" control={<Radio />} label="상품정보 부족" />
                       <FormControlLabel value="상품가격 불만" control={<Radio />} label="상품가격 불만" />
                       <FormControlLabel value="배송서비스 불만" control={<Radio />} label="배송서비스 불만" />
                       <FormControlLabel value="교환/환불/반품 불만" control={<Radio />} label="교환/환불/반품 불만" />
                     </Grid>
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={4} sx={{ textAlign: isMobile ? 'left' : 'center' }}>
                       <FormControlLabel value="상품 및 콘텐츠 검색 불편" control={<Radio />} label="상품 및 콘텐츠 검색 불편" />
                       <FormControlLabel value="사이트 불편" control={<Radio />} label="사이트 불편" />
                       <FormControlLabel value="회원혜택 부족" control={<Radio />} label="회원혜택 부족" />
                       <FormControlLabel value="상담원 응대 불친절" control={<Radio />} label="상담원 응대 불친절" />
                     </Grid>
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={4} sx={{ textAlign: isMobile ? 'left' : 'center' }}>
                       <FormControlLabel value="시스템 오류" control={<Radio />} label="시스템 오류" />
                       <FormControlLabel value="북두칠성 이용안함" control={<Radio />} label="예스24 이용안함" />
                       <FormControlLabel value="개인정보 및 보안 우려" control={<Radio />} label="개인정보 및 보안 우려" />

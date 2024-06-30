@@ -2,6 +2,7 @@ import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
+import { currencyFormat } from '../utils/number';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -24,7 +25,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const AdminPageOrderTable = ({ orderTableHead, orderList, handleOpenOrderDialog }) => {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   // 페이지네이션
   const handleChangePage = (event, newPage) => {
@@ -33,6 +34,13 @@ const AdminPageOrderTable = ({ orderTableHead, orderList, handleOpenOrderDialog 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+
+  const cellStyle = {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    maxWidth: '150px',
   };
 
   return (
@@ -44,7 +52,9 @@ const AdminPageOrderTable = ({ orderTableHead, orderList, handleOpenOrderDialog 
           <TableHead>
             <TableRow>
               {orderTableHead.map((head, index) => (
-                <TableCell key={index}>{head}</TableCell>
+                <TableCell style={cellStyle} key={index}>
+                  {head}
+                </TableCell>
               ))}
             </TableRow>
           </TableHead>
@@ -55,21 +65,21 @@ const AdminPageOrderTable = ({ orderTableHead, orderList, handleOpenOrderDialog 
             {orderList.length > 0 ? (
               orderList?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order, index) => (
                 <StyledTableRow key={order?._id} onClick={() => handleOpenOrderDialog(order)}>
-                  <StyledTableCell>{index + 1}</StyledTableCell>
-                  <StyledTableCell>{order?.orderNum}</StyledTableCell>
-                  <StyledTableCell>{order?.createdAt.slice(0, 10)}</StyledTableCell>
-                  <StyledTableCell>{order?.contact?.name}</StyledTableCell>
+                  <StyledTableCell style={cellStyle}>{index + 1}</StyledTableCell>
+                  <StyledTableCell style={cellStyle}>{order?.orderNum}</StyledTableCell>
+                  <StyledTableCell style={cellStyle}>{order?.createdAt.slice(0, 10)}</StyledTableCell>
+                  <StyledTableCell style={cellStyle}>{order?.contact?.name}</StyledTableCell>
                   {order.items.length > 0 ? (
-                    <StyledTableCell>
+                    <StyledTableCell style={cellStyle}>
                       {order.items[0]?.bookId.title}
                       {order.items.length > 1 && `외 ${order.items.length - 1}개`}
                     </StyledTableCell>
                   ) : (
-                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell style={cellStyle}></StyledTableCell>
                   )}
-                  <StyledTableCell>{order?.shipTo?.address1}</StyledTableCell>
-                  <StyledTableCell>{order?.totalPrice}</StyledTableCell>
-                  <StyledTableCell>{order?.status}</StyledTableCell>
+                  <StyledTableCell style={cellStyle}>{order?.shipTo?.address1}</StyledTableCell>
+                  <StyledTableCell style={cellStyle}>{currencyFormat(order?.totalPrice)}</StyledTableCell>
+                  <StyledTableCell style={cellStyle}>{order?.status}</StyledTableCell>
                 </StyledTableRow>
               ))
             ) : (

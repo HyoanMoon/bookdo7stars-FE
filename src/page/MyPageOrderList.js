@@ -17,6 +17,9 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
+  useMediaQuery,
+  TableContainer,
+  Paper,
 } from '@mui/material';
 import MyPageCategory from '../components/MyPageCategory';
 import MyPageOrderDialog from '../components/MyPageOrderDialog';
@@ -26,6 +29,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { orderActions } from '../action/orderActions';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import * as types from '../constants/order.constants';
+import { currencyFormat } from '../utils/number';
 
 const MyPageOrderList = () => {
   const dispatch = useDispatch();
@@ -42,6 +46,7 @@ const MyPageOrderList = () => {
   const [sortOrder, setSortOrder] = useState('recent');
   const [dialogOpen, setDialogOpen] = useState(false);
   const fields = ['orderAll', 'orderNum', 'orderBookTitle'];
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   useEffect(() => {
     dispatch(orderActions.getMyOrder());
@@ -122,9 +127,16 @@ const MyPageOrderList = () => {
     setDialogOpen(false);
   };
 
+  const cellStyle = {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    maxWidth: '150px',
+  };
+
   return (
     <Container>
-      <Box p={3}>
+      <Box sx={isMobile ? {} : { p: 3 }}>
         <Grid container mb={1} style={{ fontSize: '15px' }}>
           <Link href="/" underline="hover" color="inherit">
             welcome
@@ -143,18 +155,45 @@ const MyPageOrderList = () => {
             </Link>
           </Typography>
         </Grid>
-        <Grid container>
-          <Typography variant="subtitle1">{user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
-        </Grid>
+        {isMobile ? (
+          <>
+            <Grid container mb={1} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+              <Typography variant="subtitle2"> {user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
+            </Grid>
+
+            <Grid container mb={2} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+              <Typography variant="subtitle2" display="inline">
+                나의 북두칠성 등급:
+              </Typography>
+              <Box display="inline" ml={1}>
+                <Typography
+                  variant="subtitle2"
+                  border={1}
+                  borderRadius={2}
+                  borderColor="primary.light"
+                  bgcolor="primary.light"
+                  color="white"
+                  sx={{ fontSize: isMobile ? '0.8rem' : '1.3rem', p: '3px' }}>
+                  {user?.level}
+                </Typography>
+              </Box>
+            </Grid>
+          </>
+        ) : (
+          <Grid container>
+            <Typography variant="subtitle1">{user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
+          </Grid>
+        )}
 
         <Grid container>
           {/* 마이페이지 좌측 카테고리 */}
-          <Grid item md={3}>
+          <Grid item xs={12} md={3}>
             <MyPageCategory />
           </Grid>
+
           {/* 마이페이지 우측 정보 */}
-          <Grid item md={9}>
-            <Box mt={2} ml={2} mb={4}>
+          <Grid item xs={12} md={9}>
+            <Box mt={2} sx={isMobile ? {} : { ml: 3, mb: 4 }}>
               <Typography variant="subtitle2" ml={1} mb={1}>
                 최근 5년간 주문내역을 조회하실 수 있습니다.
               </Typography>
@@ -181,17 +220,27 @@ const MyPageOrderList = () => {
                       placeholder="내용을 입력해주세요."
                       InputLabelProps={{ shrink: true, style: { top: 0 } }}
                       InputProps={{ style: { height: '40px', padding: '0 14px' } }}
-                      sx={{ width: '150px', height: '40px' }}
+                      sx={{ width: isMobile ? '100%' : '300px', height: '40px' }}
                       onChange={(event) => setSearchQuery({ ...searchQuery, [selectedOption]: event.target.value })}
                     />
                   </Grid>
 
                   {/* 검색 버튼 */}
-                  <Grid item xs={12} md={8}>
-                    <Button variant="contained" color="primary" fullWidth sx={{ ml: 3, width: '10ch', height: '40px' }} onClick={handleSearch}>
+                  <Grid item xs={12} md={8} align="right">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                      sx={{ marginLeft: isMobile ? 0 : 0, width: '10ch', height: '40px' }}
+                      onClick={handleSearch}>
                       조회
                     </Button>
-                    <Button variant="contained" color="primary" fullWidth sx={{ ml: 1, width: '10ch', height: '40px' }} onClick={resetSearch}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                      sx={{ marginLeft: isMobile ? 2 : 1, width: '10ch', height: '40px' }}
+                      onClick={resetSearch}>
                       초기화
                     </Button>
                   </Grid>
@@ -199,33 +248,49 @@ const MyPageOrderList = () => {
               </Grid>
 
               {/* 광고 짧은 배너 */}
-              <Typography sx={{ backgroundColor: 'primary.main', color: 'white' }} mt={2} p={1} border={1} borderRadius={4} align="center">
+              <Typography
+                sx={{
+                  backgroundColor: 'primary.main',
+                  color: 'white',
+                  typography: isMobile ? 'subtitle2' : '',
+                  mt: isMobile ? 3 : 1,
+                }}
+                mt={2}
+                p={1}
+                border={1}
+                borderRadius={4}
+                align="center">
                 구매하신 책, 다 읽으셨다면 정가대비 최대 50% 지급받고 북두칠성에 판매하세요!
               </Typography>
 
               {/* 정렬기준 */}
-              <FormGroup style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
-                <FormControlLabel
-                  control={<Checkbox checked={recentChecked} onChange={handleRecentChange} />}
-                  label={<Typography variant="body2">최근순</Typography>}
-                />
-                <FormControlLabel
-                  control={<Checkbox checked={oldChecked} onChange={handleOldChange} />}
-                  label={<Typography variant="body2">오래된순</Typography>}
-                />
-              </FormGroup>
+              <Box sx={{ mt: isMobile ? 1 : 0 }}>
+                {' '}
+                <FormGroup style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+                  <FormControlLabel
+                    control={<Checkbox checked={recentChecked} onChange={handleRecentChange} />}
+                    label={<Typography variant="body2">최근순</Typography>}
+                  />
+                  <FormControlLabel
+                    control={<Checkbox checked={oldChecked} onChange={handleOldChange} />}
+                    label={<Typography variant="body2">오래된순</Typography>}
+                  />
+                </FormGroup>
+              </Box>
 
               {/* 주문 내역 테이블 */}
               <Typography variant="h6">주문 내역/배송 상태</Typography>
-              <Box>
+              <TableContainer component={Paper} sx={{ mt: isMobile ? 1 : 0 }}>
                 <Table>
                   {/* 테이블 헤드 */}
                   <TableHead>
-                    <TableCell>주문번호</TableCell>
-                    <TableCell>주문일자</TableCell>
-                    <TableCell>주문내역</TableCell>
-                    <TableCell>총주문액</TableCell>
-                    <TableCell>주문상태</TableCell>
+                    <TableRow>
+                      <TableCell style={cellStyle}>주문번호</TableCell>
+                      <TableCell style={cellStyle}>주문일자</TableCell>
+                      <TableCell style={cellStyle}>주문내역</TableCell>
+                      <TableCell style={cellStyle}>총주문액</TableCell>
+                      <TableCell style={cellStyle}>주문상태</TableCell>
+                    </TableRow>
                   </TableHead>
 
                   {/* 테이블 바디 */}
@@ -233,27 +298,29 @@ const MyPageOrderList = () => {
                     {sortedMyOrderList?.length > 0 &&
                       sortedMyOrderList?.map((item) => (
                         <TableRow key={item._id} onClick={() => handleOpenDialog(item)}>
-                          <TableCell>{item.orderNum}</TableCell>
-                          <TableCell>{item.createdAt.slice(0, 10)}</TableCell>
-                          <TableCell>
+                          <TableCell style={{ ...cellStyle, cursor: 'pointer' }}>{item.orderNum}</TableCell>
+                          <TableCell style={cellStyle}>{item.createdAt.slice(0, 10)}</TableCell>
+                          <TableCell style={cellStyle}>
                             {item?.items
                               ?.map((item) => item.bookId?.title)
                               .join(', ')
                               .slice(0, 25)}
                             {item?.items?.map((item) => item.bookId?.title).join(', ').length > 25 ? '...' : ''}
                           </TableCell>
-                          <TableCell>{item.totalPrice}</TableCell>
-                          <TableCell>{item.status}</TableCell>
+                          <TableCell style={cellStyle}>{currencyFormat(item.totalPrice)}</TableCell>
+                          <TableCell style={cellStyle}>{item.status}</TableCell>
                         </TableRow>
                       ))}
                   </TableBody>
                 </Table>
-              </Box>
+              </TableContainer>
 
-              <Typography variant="subtitle2" mt={2}>
+              <Typography variant="subtitle2" sx={{ mt: isMobile ? 3 : 2 }}>
+                - 주문번호를 클릭하시면 주문상세내역을 확인하실수 있습니다.
+              </Typography>
+              <Typography variant="subtitle2" sx={{ mb: isMobile ? 4 : 0 }}>
                 - 발송 전 주문은 주문상세내역에서 주문취소, 배송 주소 변경(국내배송만 해당) 이 가능합니다.
               </Typography>
-              <Typography variant="subtitle2">- 주문번호를 클릭하시면 주문상세내역을 확인하실수 있습니다.</Typography>
             </Box>
           </Grid>
         </Grid>

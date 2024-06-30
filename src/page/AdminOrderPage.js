@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Grid, Box, Paper, Tabs, Tab } from '@mui/material';
+import { Container, Grid, Box, Paper, Tabs, Tab, useMediaQuery } from '@mui/material';
 import AdminPageOrderSearchBox from '../components/AdminPageOrderSearchBox';
 import AdminPageOrderTable from '../components/AdminPageOrderTable';
 import AdminPageOrderDialog from '../components/AdminPageOrderDialog';
@@ -15,14 +15,15 @@ const AdminOrderPage = () => {
   const navigate = useNavigate();
   const [openDialog, setOpenDialog] = useState(false);
   const [openRequestDialog, setOpenRequestDialog] = useState(false);
-  const orderTableHead = ['', '주문번호', '주문일자', '구매자', '도서명', '주소', '총주문액', '주문상태'];
+  const orderTableHead = ['', '주문번호', '주문일자', '구매자', '도서명', '주소', '총 주문액', '주문상태'];
   const claimTableHead = ['', '주문번호', '주문일자', '구매자', '요청사항', '처리상태'];
-  const orderDialogTableHead = ['ID', '도서명', '권당 가격', '수량', '전체 가격'];
+  const orderDialogTableHead = ['ID', '도서명', '권당 가격', '권수', '총 가격'];
   const { orderList } = useSelector((state) => state.order);
   const { requestList } = useSelector((state) => state.order);
   const [query, setQuery] = useSearchParams();
   const fields = ['orderNum', 'userName'];
   const [tabIndex, setTabIndex] = useState(0);
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue);
@@ -87,10 +88,10 @@ const AdminOrderPage = () => {
   return (
     <Container>
       <Grid container>
-        <Grid item xs={11} md={11}>
+        <Grid item xs={12} md={12}>
           <AdminPageOrderSearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} resetSearch={resetSearch} />
 
-          <Box p={3}>
+          <Box sx={{ width: '100%' }}>
             <Paper square>
               <Tabs value={tabIndex} indicatorColor="primary" textColor="primary" onChange={handleTabChange} aria-label="admin tabs" variant="fullWidth">
                 <Tab label="주문 관리" />
