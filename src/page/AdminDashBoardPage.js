@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box, Typography } from '@mui/material';
-import { Line, Pie, Bar, Doughnut } from 'react-chartjs-2';
+import { Container, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box, Typography, Tabs, Tab } from '@mui/material';
+import { Line, Bar, Doughnut } from 'react-chartjs-2';
 import 'chart.js/auto';
 import '../style/adminDashboardPageStyles.css';
 import AdminDashboardCard from '../components/AdminDashboardCard';
@@ -23,6 +23,8 @@ function AdminDashBoardPage() {
   const [openUserModal, setOpenUserModal] = useState(false);
   const [openAdminModal, setOpenAdminModal] = useState(false);
   const [newAdmin, setNewAdmin] = useState({ userName: '', email: '', password: '', role: 'admin' });
+  const [selectedTab, setSelectedTab] = useState(0);
+  const orderTableHead = ['주문번호', '주문일자', '구매자', '도서명', '총 주문액'];
 
   // Redux 상태에서 데이터 가져오기
   const adminData = useSelector((state) => state.user.users);
@@ -51,13 +53,18 @@ function AdminDashBoardPage() {
   }, [adminData]);
 
   // 월별 매출 계산 함수
-  const calculateMonthlySales = (orders) => {
+  const calculateMonthlySales = (orderData) => {
     const sales = Array(12).fill(0); // 12개월을 0으로 초기화
-    orders.forEach((order) => {
+    orderData.forEach((order) => {
       const date = new Date(order.createdAt);
       const month = date.getMonth(); // 0이 1월
       sales[month] += order.totalPrice;
     });
+
+    // 3월과 4월의 가짜 매출 데이터 추가
+    sales[2] += 50000; // 3월 매출
+    sales[3] += 70000; // 4월 매출
+
     return sales;
   };
 
@@ -143,6 +150,10 @@ function AdminDashBoardPage() {
     ],
   };
 
+  // 가짜 가입자 수 데이터 추가
+  signupData.datasets[0].data[1] += 5; // 3월 가입자 수
+  signupData.datasets[0].data[2] += 10; // 4월 가입자 수
+
   const salesData = {
     labels: monthNames,
     datasets: [
@@ -199,6 +210,8 @@ function AdminDashBoardPage() {
   const pendingContacts = requestList.filter((request) => request.request.status === '대기 중').length;
   const refundOrders = orderData.filter((order) => order.status === '환불').length;
   const newOrders = orderData.filter((order) => order.status === '준비 중').length;
+  const shippingCounts = orderData.filter((order) => order.status === '배송 중').length;
+  const deliveredCounts = orderData.filter((order) => order.status === '배송완료').length;
   const newSignups = localUserData.filter((user) => {
     const date = new Date(user.createdAt);
     return date.getFullYear() === currentYear && date.getMonth() === currentMonth;
@@ -214,6 +227,25 @@ function AdminDashBoardPage() {
     { title: '신규 가입', count: newSignups },
     { title: '문의', count: inquiries },
   ];
+
+  const handleTabChange = (event, newValue) => {
+    setSelectedTab(newValue);
+  };
+
+  const filteredOrderData = orderData?.filter((order) => {
+    switch (selectedTab) {
+      case 0:
+        return order.status === '준비 중';
+      case 1:
+        return order.status === '배송 중';
+      case 2:
+        return order.status === '배송완료';
+      case 3:
+        return order.status === '환불';
+      default:
+        return true;
+    }
+  });
 
   return (
     <ThemeProvider theme={theme}>
@@ -259,22 +291,30 @@ function AdminDashBoardPage() {
               <AdminDashboardCard title="고객 문의" content={<ContactTable contacts={contacts} />} />
             </Grid>
 
-            {/* 주문 상태 및 사용자 관련 */}
+            <Grid item xs={12}>
+              <AdminDashboardCard
+                title="주문 상태"
+                content={
+                  <>
+                    <Tabs value={selectedTab} onChange={handleTabChange} aria-label="order status tabs">
+                      <Tab label={`준비 중 (${newOrders})`} />
+                      <Tab label={`배송 중 (${shippingCounts})`} />
+                      <Tab label={`배송완료 (${deliveredCounts})`} />
+                      <Tab label={`환불 (${refundOrders})`} />
+                    </Tabs>
+                    <StatusTable orderTableHead={orderTableHead} orderData={filteredOrderData} />
+                  </>
+                }
+              />
+            </Grid>
+
             <Grid item xs={12} md={6}>
-              <AdminDashboardCard title="주문 상태" content={<Doughnut data={orderStatusData} />} />
+              <AdminDashboardCard title="사용자 권한 관리" content={userCardContent} onClick={handleClickOpenUserModal} />
             </Grid>
             <Grid item xs={12} md={6}>
-              <Box>
-                <Grid container spacing={4}>
-                  <Grid item xs={12}>
-                    <AdminDashboardCard title="사용자 권한 관리" content={userCardContent} onClick={handleClickOpenUserModal} />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <AdminDashboardCard title="어드민 권한 관리" content={adminCardContent} onClick={handleClickOpenAdminModal} />
-                  </Grid>
-                </Grid>
-              </Box>
+              <AdminDashboardCard title="어드민 권한 관리" content={adminCardContent} onClick={handleClickOpenAdminModal} />
             </Grid>
+
             <UserPermissionsModal
               open={openUserModal}
               handleClose={handleCloseUserModal}
@@ -304,30 +344,62 @@ function AdminDashBoardPage() {
   );
 }
 
+const cellStyle = {
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  maxWidth: '150px',
+};
+
 // ContactTable 컴포넌트
 const ContactTable = ({ contacts }) => (
   <TableContainer component={Paper}>
     <Table>
       <TableHead>
         <TableRow>
-          <TableCell>고객 이름</TableCell>
-          <TableCell>상품 사진</TableCell>
-          <TableCell>문의 내용</TableCell>
-          <TableCell>문의 날짜</TableCell>
-          <TableCell>답변 상태</TableCell>
+          <TableCell style={cellStyle}>고객 이름</TableCell>
+          <TableCell style={cellStyle}>상품 사진</TableCell>
+          <TableCell style={cellStyle}>문의 내용</TableCell>
+          <TableCell style={cellStyle}>문의 날짜</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
         {contacts.map((contact) => (
           <TableRow key={contact._id}>
-            <TableCell>{contact.userId.userName}</TableCell>
-            <TableCell>
+            <TableCell style={cellStyle}>{contact.userId.userName}</TableCell>
+            <TableCell style={cellStyle}>
               {' '}
               <img src={contact.image} alt={contact.inquiryContent} style={{ width: '70px', height: '50px' }} />
             </TableCell>
-            <TableCell>{contact.inquiryContent}</TableCell>
-            <TableCell>{contact.createdAt.slice(5, 10)}</TableCell>
-            <TableCell>{contact.status}</TableCell>
+            <TableCell style={cellStyle}>{contact.inquiryContent}</TableCell>
+            <TableCell style={cellStyle}>{contact.createdAt.slice(5, 10)}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer>
+);
+
+const StatusTable = ({ orderTableHead, orderData }) => (
+  <TableContainer component={Paper}>
+    <Table>
+      <TableHead>
+        <TableRow>
+          {orderTableHead?.map((head, index) => (
+            <TableCell style={cellStyle} key={index}>
+              {head}
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {orderData?.map((order) => (
+          <TableRow key={order._id}>
+            <TableCell style={cellStyle}>{order.orderNum}</TableCell>
+            <TableCell style={cellStyle}>{order.createdAt.slice(5, 10)}</TableCell>
+            <TableCell style={cellStyle}>{order.contact.name}</TableCell>
+            <TableCell style={cellStyle}>{order.items.map((item) => item.bookId.title).join(', ')}</TableCell>
+            <TableCell style={cellStyle}>{order.totalPrice}</TableCell>
           </TableRow>
         ))}
       </TableBody>
