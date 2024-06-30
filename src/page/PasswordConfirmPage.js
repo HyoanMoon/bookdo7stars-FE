@@ -66,18 +66,19 @@ const PasswordConfirmPage = () => {
       <Container align="center">
         {/* 상단 */}
         <Grid container sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: isMobile ? '16px' : '0' }}>
-          <Grid item xs={4} md={4} sx={{ fontSize: '1rem' }}>
-            북두칠성 로고
+          <Grid item xs={4} md={4}>
+            <Typography variant="h6" color="primary" sx={{ fontSize: isMobile ? '1.4rem' : '1.5rem', textAlign: 'left', fontWeight: 'bold' }}>
+              북두칠성
+            </Typography>
           </Grid>
           <Grid item xs={4} md={4}>
             <Typography variant="h6" sx={{ fontSize: isMobile ? '1rem' : 'h6' }}>
               비밀번호 재확인
             </Typography>
           </Grid>
-
           {isMobile ? (
             <Grid item xs={4} md={4} sx={{ textAlign: 'right' }}>
-              <Button variant="contained" color="secondary" onClick={handleGoToMain} sx={{ fontSize: '0.8rem', padding: '6px 12px', marginLeft: '7px' }}>
+              <Button variant="contained" color="secondary" onClick={() => navigate('/')} sx={{ fontSize: '0.8rem', padding: '6px 12px', marginLeft: '7px' }}>
                 메인페이지
               </Button>
             </Grid>
@@ -86,11 +87,17 @@ const PasswordConfirmPage = () => {
               <Button
                 variant="contained"
                 color="secondary"
-                onClick={handleGoToLogout}
-                sx={{ fontSize: '0.8rem', marginRight: isMobile ? '8px' : '0', padding: '6px 12px' }}>
+                onClick={() => {
+                  navigate('/');
+                  dispatch(userActions.logout());
+                }}>
                 로그아웃
               </Button>
-              <Button variant="contained" color="secondary" onClick={handleGoToMyPage} sx={{ fontSize: '0.8rem', padding: '6px 12px', marginLeft: '7px' }}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => navigate('/mypage')}
+                sx={{ fontSize: '0.8rem', padding: '6px 12px', marginLeft: '7px' }}>
                 마이페이지
               </Button>
             </Grid>

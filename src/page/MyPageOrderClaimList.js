@@ -104,9 +104,28 @@ const MyPageOrderClaimList = () => {
             </Link>
           </Typography>
         </Grid>
-        <Grid container>
-          <Typography variant="subtitle1">{user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
-        </Grid>
+        {isMobile ? (
+          <>
+            <Grid container mb={1} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+              <Typography variant="subtitle2"> {user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
+            </Grid>
+
+            <Grid container mb={2} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+              <Typography variant="subtitle2" display="inline">
+                나의 북두칠성 등급:
+              </Typography>
+              <Box display="inline" ml={1}>
+                <Typography variant="subtitle2" border={1} borderRadius={4} borderColor="primary.light" bgcolor="primary.light" color="white" p="2px">
+                  {user?.level}
+                </Typography>
+              </Box>
+            </Grid>
+          </>
+        ) : (
+          <Grid container>
+            <Typography variant="subtitle1">{user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
+          </Grid>
+        )}
 
         <Grid container>
           {/* 마이페이지 좌측 카테고리 */}
@@ -123,9 +142,8 @@ const MyPageOrderClaimList = () => {
                   </Typography>
                   <Button
                     variant="contained"
-                    color="secondary"
                     fullWidth
-                    sx={{ width: '100%', height: '30px', borderRadius: '20px', marginTop: '10px' }}
+                    sx={{ width: '100%', height: '30px', borderRadius: '20px', marginTop: '10px', borderColor: 'primary.main', opacity: '70%' }}
                     onClick={handleClaim}>
                     <Typography variant="subtitle2" color="white">
                       반품/교환/취소 신청하기
@@ -137,9 +155,9 @@ const MyPageOrderClaimList = () => {
                   <Typography variant="subtitle2">구매하셨던 상품의 반품 및 교환, 취소신청 및 내역을 조회하실 수 있습니다.</Typography>
                   <Button
                     variant="contained"
-                    color="secondary"
+                    color="primary"
                     fullWidth
-                    sx={{ ml: 1, width: '25ch', height: '30px', borderRadius: '20px' }}
+                    sx={{ width: '100%', height: '30px', borderRadius: '20px', marginTop: '10px', borderColor: 'primary.main', opacity: '70%' }}
                     onClick={handleClaim}>
                     <Typography variant="subtitle2" color="white">
                       반품/교환/취소 신청하기
@@ -179,11 +197,11 @@ const MyPageOrderClaimList = () => {
                   <TableBody>
                     {sortedMyOrderList?.length > 0 ? (
                       sortedMyOrderList
-                        .filter((item) => item.request.requestType !== '취소')
+                        .filter((item) => item.request.requestType == ('반품' || '교환'))
                         .map((item, index) => (
                           <TableRow key={index} onClick={() => handleOpenDialog(item)}>
                             <TableCell style={cellStyle}>{item.createdAt.slice(0, 10)}</TableCell>
-                            <TableCell style={cellStyle}>
+                            <TableCell style={{ ...cellStyle, cursor: 'pointer' }}>
                               {`${
                                 (myOrderList.length > 0 &&
                                   myOrderList

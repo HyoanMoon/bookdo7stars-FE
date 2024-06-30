@@ -67,9 +67,28 @@ const MyShoppingPage = () => {
             </Link>
           </Typography>
         </Grid>
-        <Grid container>
-          <Typography variant="subtitle1">{user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
-        </Grid>
+        {isMobile ? (
+          <>
+            <Grid container mb={1} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+              <Typography variant="subtitle2"> {user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
+            </Grid>
+
+            <Grid container mb={2} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+              <Typography variant="subtitle2" display="inline">
+                나의 북두칠성 등급:
+              </Typography>
+              <Box display="inline" ml={1}>
+                <Typography variant="subtitle2" border={1} borderRadius={4} borderColor="primary.light" bgcolor="primary.light" color="white" p="2px">
+                  {user?.level}
+                </Typography>
+              </Box>
+            </Grid>
+          </>
+        ) : (
+          <Grid container>
+            <Typography variant="subtitle1">{user?.userName}님 오늘도 즐겁고 행복한 하루 보내세요.</Typography>
+          </Grid>
+        )}
 
         <Grid container>
           {/* 마이페이지 좌측 카테고리 */}
@@ -101,6 +120,7 @@ const MyShoppingPage = () => {
                       <TableCell style={cellStyle}>비고</TableCell>
                     </TableRow>
                   </TableHead>
+
                   <TableBody>
                     {myOrderList.length > 0 &&
                       myOrderList.map((item) => (
