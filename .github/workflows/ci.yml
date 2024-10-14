@@ -1,0 +1,46 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+      - main  # main 브랜치로 푸쉬할 때만 실행
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run tests
+      run: npm test
+
+    - name: Build project
+      run: npm run build
+
+    - name: Notify Slack on Success
+      if: success()  # 성공 시 실행
+      uses: 8398a7/action-slack@v3
+      with:
+        status: success
+        text: '빌드와 테스트가 성공했습니다! 🎉'
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}  # Slack Webhook URL은 시크릿으로 관리
+
+    - name: Notify Slack on Failure
+      if: failure()  # 실패 시 실행
+      uses: 8398a7/action-slack@v3
+      with:
+        status: failure
+        text: '빌드 또는 테스트가 실패했습니다. 🚨'
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
