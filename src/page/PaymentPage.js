@@ -324,7 +324,7 @@ const PaymentPage = () => {
           </Box>
           <Box mt={4}>
             <Typography variant={isMobile ? 'h6' : 'h5'} gutterBottom>
-              결제 정보
+              결제 정보!
             </Typography>
             <FormControl component="fieldset" fullWidth margin="normal">
               <RadioGroup row value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
