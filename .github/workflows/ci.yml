@@ -32,7 +32,7 @@ jobs:
 
       - name: Save Test Results
         if: always() # 항상 실행
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: test-results
           path: ./reports/
