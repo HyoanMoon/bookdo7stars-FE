@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="1" failures="0" errors="0" skipped="0">
+  <testsuite name="" timestamp="2024-11-27T02:13:25" time="2.026" tests="1" failures="0" errors="0" skipped="0">
+    <properties>
+      <property name="specId" value="0"/>
+      <property name="suiteName" value="회원가입 페이지 테스트"/>
+      <property name="capabilities" value="chrome.131_0_6778_86.mac"/>
+      <property name="file" value="file://./webdriverio-test/test/specs/userRegistration.e2e.js"/>
+    </properties>
+    <testcase classname="chrome.131_0_6778_86.mac.회원가입_페이지_테스트" name="" time="2.025">
+      <system-out><![CDATA[
+COMMAND: POST /session/f18288eba9152e48fc43afe1f1e6793e/element/f.716A76C82462C6F7B8106D0704D17853.d.0D0F536E41EA54992BA474DC62D35BE1.e.3/clear - {}
+RESULT: {}
+COMMAND: POST /session/f18288eba9152e48fc43afe1f1e6793e/element/f.716A76C82462C6F7B8106D0704D17853.d.0D0F536E41EA54992BA474DC62D35BE1.e.3/value - {"text":"테스트 유저"}
+RESULT: {"text":"테스트 유저"}
+COMMAND: POST /session/f18288eba9152e48fc43afe1f1e6793e/element/f.716A76C82462C6F7B8106D0704D17853.d.0D0F536E41EA54992BA474DC62D35BE1.e.5/clear - {}
+RESULT: {}
+COMMAND: POST /session/f18288eba9152e48fc43afe1f1e6793e/element/f.716A76C82462C6F7B8106D0704D17853.d.0D0F536E41EA54992BA474DC62D35BE1.e.5/value - {"text":"testuser@example.com"}
+RESULT: {"text":"testuser@example.com"}
+COMMAND: POST /session/f18288eba9152e48fc43afe1f1e6793e/element/f.716A76C82462C6F7B8106D0704D17853.d.0D0F536E41EA54992BA474DC62D35BE1.e.6/clear - {}
+RESULT: {}
+COMMAND: POST /session/f18288eba9152e48fc43afe1f1e6793e/element/f.716A76C82462C6F7B8106D0704D17853.d.0D0F536E41EA54992BA474DC62D35BE1.e.6/value - {"text":"TestPassword123!"}
+RESULT: {"text":"TestPassword123!"}
+COMMAND: POST /session/f18288eba9152e48fc43afe1f1e6793e/element/f.716A76C82462C6F7B8106D0704D17853.d.0D0F536E41EA54992BA474DC62D35BE1.e.7/clear - {}
+RESULT: {}
+COMMAND: POST /session/f18288eba9152e48fc43afe1f1e6793e/element/f.716A76C82462C6F7B8106D0704D17853.d.0D0F536E41EA54992BA474DC62D35BE1.e.7/value - {"text":"TestPassword123!"}
+RESULT: {"text":"TestPassword123!"}
+COMMAND: POST /session/f18288eba9152e48fc43afe1f1e6793e/element/f.716A76C82462C6F7B8106D0704D17853.d.0D0F536E41EA54992BA474DC62D35BE1.e.8/clear - {}
+RESULT: {}
+COMMAND: POST /session/f18288eba9152e48fc43afe1f1e6793e/element/f.716A76C82462C6F7B8106D0704D17853.d.0D0F536E41EA54992BA474DC62D35BE1.e.8/value - {"text":"서울시 강남구"}
+RESULT: {"text":"서울시 강남구"}
+COMMAND: POST /session/f18288eba9152e48fc43afe1f1e6793e/element/f.716A76C82462C6F7B8106D0704D17853.d.0D0F536E41EA54992BA474DC62D35BE1.e.9/clear - {}
+RESULT: {}
+COMMAND: POST /session/f18288eba9152e48fc43afe1f1e6793e/element/f.716A76C82462C6F7B8106D0704D17853.d.0D0F536E41EA54992BA474DC62D35BE1.e.9/value - {"text":"010-1234-5678"}
+RESULT: {"text":"010-1234-5678"}
+COMMAND: POST /session/f18288eba9152e48fc43afe1f1e6793e/element/f.716A76C82462C6F7B8106D0704D17853.d.0D0F536E41EA54992BA474DC62D35BE1.e.10/click - {}
+RESULT: {}
+COMMAND: POST /session/f18288eba9152e48fc43afe1f1e6793e/element/f.716A76C82462C6F7B8106D0704D17853.d.0D0F536E41EA54992BA474DC62D35BE1.e.32/click - {}
+RESULT: {}
+COMMAND: DELETE /session/f18288eba9152e48fc43afe1f1e6793e - {}
+RESULT: {}
+]]></system-out>
+    </testcase>
+  </testsuite>
+</testsuites>

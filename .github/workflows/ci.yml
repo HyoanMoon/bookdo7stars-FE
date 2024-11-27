@@ -3,44 +3,54 @@ name: Node.js CI
 on:
   push:
     branches:
-      - main  # main 브랜치로 푸쉬할 때만 실행
+      - main
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Run tests
-      run: npm test
+      - name: Run WebDriverIO tests
+        run: npm test
+        env:
+          LOG_LEVEL: debug
 
-    - name: Build project
-      run: npm run build
+      - name: Build project
+        if: success() # 테스트 성공 시 빌드 실행
+        run: npm run build
 
-    - name: Notify Slack on Success
-      if: success()  # 성공 시 실행
-      uses: 8398a7/action-slack@v3
-      with:
-        status: success
-        text: '빌드와 테스트가 성공했습니다! 🎉'
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}  # Slack Webhook URL은 시크릿으로 관리
+      - name: Save Test Results
+        if: always() # 항상 실행
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: ./reports/
 
-    - name: Notify Slack on Failure
-      if: failure()  # 실패 시 실행
-      uses: 8398a7/action-slack@v3
-      with:
-        status: failure
-        text: '빌드 또는 테스트가 실패했습니다. 🚨'
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Notify Slack on Success
+        if: success()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: success
+          text: '빌드와 테스트(WebDriverIO)가 성공했습니다! 🎉'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Notify Slack on Failure
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          text: '빌드 또는 WebDriverIO 테스트가 실패했습니다. 🚨'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
