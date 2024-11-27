@@ -3,53 +3,49 @@ name: Node.js CI
 on:
   push:
     branches:
-      - main # main 브랜치로 푸시될 때 실행
+      - main
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      # 코드 체크아웃
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      # Node.js 설정
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '18'
 
-      # Chrome 관련 종속성 설치
-      - name: Install Dependencies for Chrome
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libnss3 libgconf-2-4 libxss1 libappindicator1 libindicator7 fonts-liberation xdg-utils
-
-      # npm 의존성 설치
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm install
 
-      # WebDriverIO 테스트 실행
-      - name: Run WebDriverIO Tests
+      - name: Start Test Server
+        run: npm start &
+        env:
+          PORT: 3000
+
+      - name: Wait for server to be ready
+        run: |
+          timeout 30s bash -c 'until curl -s http://localhost:3000 > /dev/null; do sleep 1; done'
+
+      - name: Run WebDriverIO tests
         run: npm test
         env:
           LOG_LEVEL: debug
 
-      # 빌드 실행 (테스트 성공 시)
-      - name: Build Project
-        if: success() # 테스트 성공 시만 실행
+      - name: Build project
+        if: success()
         run: npm run build
 
-      # 테스트 결과 저장
       - name: Save Test Results
-        if: always() # 항상 실행
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: test-results
           path: ./reports/
 
-      # 성공 시 슬랙 알림
       - name: Notify Slack on Success
         if: success()
         uses: 8398a7/action-slack@v3
@@ -59,7 +55,6 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-      # 실패 시 슬랙 알림
       - name: Notify Slack on Failure
         if: failure()
         uses: 8398a7/action-slack@v3
