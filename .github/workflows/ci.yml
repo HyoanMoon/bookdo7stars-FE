@@ -22,18 +22,21 @@ jobs:
         run: npm install
 
       - name: Start Test Server
-        run: npm start &
+        run: |
+          nohup npm start > server.log 2>&1 &
         env:
           PORT: 3000
 
+      - name: Display Server Logs (Debugging Only)
+        if: failure()
+        run: cat server.log
+
       - name: Wait for server to be ready
         run: |
-          timeout 30s bash -c 'until curl -s http://localhost:3000 > /dev/null; do sleep 1; done'
+          timeout 60s bash -c 'until curl -s http://localhost:3000 > /dev/null; do sleep 1; done'
 
       - name: Run WebDriverIO tests
         run: npm test
-        env:
-          LOG_LEVEL: debug
 
       - name: Build project
         if: success()
@@ -63,3 +66,7 @@ jobs:
           text: '빌드 또는 WebDriverIO 테스트가 실패했습니다. 🚨'
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Stop Test Server
+        if: always()
+        run: kill $(lsof -t -i:3000)

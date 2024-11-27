@@ -19,10 +19,10 @@ module.exports.config = {
       browserName: 'chrome', // 사용 브라우저: 크롬
       'goog:chromeOptions': {
         args: [
-          '--headless', // 헤드리스 모드로 실행 (GUI 없음)
-          '--disable-gpu', // GPU 비활성화
-          '--no-sandbox', // 샌드박스 모드 비활성화 (권한 문제 해결)
-          '--disable-dev-shm-usage', // /dev/shm 파티션 문제 해결
+          '--headless=new', // 최신 크롬에서 권장되는 옵션
+          '--disable-gpu',
+          '--no-sandbox',
+          '--disable-dev-shm-usage',
         ],
       },
     },
