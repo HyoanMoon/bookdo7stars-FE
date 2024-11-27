@@ -1,0 +1,28 @@
+{
+  "name": "webdriverio-test",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@wdio/cli": "^9.4.0",
+    "dotenv": "^16.4.5",
+    "wdio-chromedriver-service": "^8.1.1",
+    "webdriverio": "^9.4.0"
+  },
+  "devDependencies": {
+    "@testing-library/webdriverio": "^3.2.1",
+    "@wdio/local-runner": "^9.4.0",
+    "@wdio/mocha-framework": "^9.2.8",
+    "@wdio/spec-reporter": "^9.2.14",
+    "@wdio/visual-service": "^6.2.2",
+    "chromedriver": "^131.0.1",
+    "wdio-slack-service": "^2.0.9"
+  }
+}
